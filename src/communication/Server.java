@@ -34,6 +34,7 @@ public class Server {
             public void run() {
                 try {
                     serverSocket = new ServerSocket(port);
+                    System.out.println(serverSocket.getInetAddress());
                     System.out.println("Waiting for clients to connect...");
                     while (true) {
                         Socket clientSocket = serverSocket.accept();
@@ -63,5 +64,8 @@ public class Server {
 	
 	synchronized public void addClient(ServiceClient c){
 		this.client.add(c);
+	}
+	   public static void main (String[] args){
+		   new Server();
 	}
 }

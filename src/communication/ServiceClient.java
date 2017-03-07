@@ -16,13 +16,13 @@ public class ServiceClient implements Runnable{
 	private PrintWriter output;
 	private BufferedReader input;
 	private Server server;
-	private boolean hasQuit; // To stop listening and stop the thread
+	private boolean isConnected; // To stop listening and stop the thread
 	private boolean isWaiting;
 	
 	public ServiceClient(Socket s, Server server) {
 		this.socket = s;
 		this.server = server;
-		this.hasQuit = false;
+		this.isConnected = true;
 		
 		try {
 			output = new PrintWriter(socket.getOutputStream());
@@ -40,7 +40,7 @@ public class ServiceClient implements Runnable{
 		@Override
 		public void run() {
 			try {
-				while(!hasQuit){
+				while(isConnected){
 					readFromJoueur();
 				}
 			} catch (Exception e) {
@@ -65,13 +65,18 @@ public class ServiceClient implements Runnable{
 			String[] msgs = msg.split("/");
 			String cmd = msgs[0];
 			 
-			if (Protocole.CONNEXION.toString().equals(cmd)) {
+			if (Protocole.CONNEXION.name().equals(cmd)) {
 				try{
 					this.pseudo = msgs[1];
+					System.out.println("Connexion de " + this.pseudo);
 				}catch (Exception e) {
 					System.err.println("Aucun pseudonyme fournis.");
 				}
-			} else if (Protocole.TROUVE.toString().equals(cmd)){
+			}else if(Protocole.SORT.name().equals(cmd)){
+				isConnected = false;
+				System.out.println("Déonnexion de " + this.pseudo);
+			}
+			else if (Protocole.TROUVE.name().equals(cmd)){
 				
 			}
 
@@ -139,12 +144,12 @@ public class ServiceClient implements Runnable{
 
 
 		public boolean isHasQuit() {
-			return hasQuit;
+			return isConnected;
 		}
 
 
 		public void setHasQuit(boolean hasQuit) {
-			this.hasQuit = hasQuit;
+			this.isConnected = hasQuit;
 		}
 
 

@@ -25,7 +25,11 @@ public enum Protocole {
 	},
 	
 	// deconnexion
-	SORT,
+	SORT{
+		public String toString(){
+			return "SORT";
+		}
+	},
 	DECONNEXION,
 	
 	// debut partie
