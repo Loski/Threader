@@ -1,5 +1,7 @@
 package communication;
 
+import java.util.Arrays;
+
 public class Plateau {
 	
 	public static int taille_plateau = 15;
@@ -14,5 +16,20 @@ public class Plateau {
 				 plateau[i][j] = char_empty;
 			 }
 		 }
+	}
+
+	@Override
+	public String toString() {
+		String s ="";
+		for(int i = 0; i < taille_plateau; i++){
+			for(int j = 0; j < taille_plateau; j++){
+				s += this.plateau[i][j];
+			}
+		}
+		return s;
+	}
+	
+	   public static void main (String[] args){
+		   System.out.println(new Plateau(15));
 	}
 }

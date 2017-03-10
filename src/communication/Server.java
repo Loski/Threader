@@ -7,28 +7,47 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class Server {
+import protocole.Protocole;
+import protocole.ProtocoleCreator;
+
+public class Server implements Communication {
 	
 	
 	public final static int port = 2017;
 	private ServerSocket serverSocket;
-	private ArrayList<ServiceClient> client;
+	private ArrayList<ServiceClient> clients;
     private ExecutorService pool;
+    private Session session;
     
     
 	public Server(){
-		this.client = new ArrayList<>();
-		this.pool = Executors.newFixedThreadPool(4); 
+		this.clients = new ArrayList<>();
+		this.pool = Executors.newFixedThreadPool(4);
+		this.session = new Session(clients, this);
 		this.startServer();
 	}
 	
 	synchronized public int getNbClients(){
-		return client.size();
+		return clients.size();
+	}
+	
+	/**
+	 * Envoie un message à tous les joueurs
+	 * @param message à envoyer
+	 */
+	public void sendToAll(String message){
+		for(ServiceClient sc:this.clients){
+			try {
+				sc.sendMessage(message);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	
-	public void startServer(){
-		
+	public void startServer(){	
 		Runnable serverTask = new Runnable() {
             @Override
             public void run() {
@@ -51,7 +70,7 @@ public class Server {
         					e.printStackTrace();
         				}
         			}
-        }
+                }
             }
         };
         Thread serverThread = new Thread(serverTask);
@@ -59,13 +78,108 @@ public class Server {
 	}
 
 	synchronized public void removeJoueur(ServiceClient c) {
-		this.client.remove(c);
+		this.clients.remove(c);
+		// Fin session??
+		this.deconnexion(c);
 	}
 	
 	synchronized public void addClient(ServiceClient c){
-		this.client.add(c);
+		this.clients.add(c);
+		bienvenue(c);
 	}
-	   public static void main (String[] args){
+	
+	public static void main (String[] args){
 		   new Server();
 	}
+	
+	@Override
+	public void bienvenue(ServiceClient sc){
+		try {
+			sc.sendMessage(ProtocoleCreator.create(Protocole.BIENVENUE, this.session.toString()));
+			System.out.println("Bienvenue à " + sc.getPseudo());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	@Override
+	public void deconnexion(ServiceClient sc) {
+		// TODO Auto-generated method stub
+		this.sendToAll(ProtocoleCreator.create(Protocole.DECONNEXION, sc.getPseudo()));	
+	}
+	
+	@Override
+	public void debutSession() {
+		this.sendToAll(ProtocoleCreator.create(Protocole.SESSION));
+		
+	}
+
+	@Override
+	public void vainqueur() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void tour() {
+		// TODO Auto-generated method stub
+		this.sendToAll(ProtocoleCreator.create(Protocole.TOUR, this.session.getPlateau().toString(), this.session.getTirageCourant()));
+	}
+
+	@Override
+	public void rValide() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void rInValide() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void rATrouve(ServiceClient sc) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void rFin() {
+		// TODO Auto-generated method stub
+		this.sendToAll(ProtocoleCreator.create(Protocole.RFIN));
+	}
+
+	@Override
+	public void sValide() {
+		this.sendToAll(ProtocoleCreator.create(Protocole.SVALIDE));
+	}
+
+	@Override
+	public void sFin() {
+		this.sendToAll(ProtocoleCreator.create(Protocole.SFIN));
+	}
+
+	@Override
+	public void sInvalide() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void bilan() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void refus(ServiceClient sc) {
+		try {
+			sc.sendMessage(ProtocoleCreator.create(Protocole.REFUS));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 }

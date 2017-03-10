@@ -18,11 +18,14 @@ public class ServiceClient implements Runnable{
 	private Server server;
 	private boolean isConnected; // To stop listening and stop the thread
 	private boolean isWaiting;
+	private boolean isAuthentified;
 	
 	public ServiceClient(Socket s, Server server) {
+		
 		this.socket = s;
 		this.server = server;
 		this.isConnected = true;
+		this.isAuthentified = false;
 		
 		try {
 			output = new PrintWriter(socket.getOutputStream());
@@ -35,7 +38,14 @@ public class ServiceClient implements Runnable{
 			System.out.println("(Joueur) : Obtiention inputStream de "+pseudo+" impossible.");
 		}
 	}
-
+	
+	
+	 	public void sendMessage(String message) throws IOException{
+			this.output.println(message);
+			if(this.output.checkError()){
+				throw new IOException("erreur d'envoie de donnée pour "+this.pseudo);
+			}
+		}
 
 		@Override
 		public void run() {
@@ -67,16 +77,21 @@ public class ServiceClient implements Runnable{
 			 
 			if (Protocole.CONNEXION.name().equals(cmd)) {
 				try{
-					this.pseudo = msgs[1];
-					System.out.println("Connexion de " + this.pseudo);
+					if(!this.isAuthentified){
+						this.pseudo = msgs[1];
+						this.isAuthentified = true;
+						System.out.println("Connexion de " + this.pseudo);
+					}else{
+						System.out.println("Tentative de reconnexion" + this.pseudo);
+					}
 				}catch (Exception e) {
 					System.err.println("Aucun pseudonyme fournis.");
 				}
-			}else if(Protocole.SORT.name().equals(cmd)){
+			}else if(Protocole.SORT.name().equals(cmd) && isAuthentified){
 				isConnected = false;
-				System.out.println("Déonnexion de " + this.pseudo);
+				this.server.removeJoueur(this);
 			}
-			else if (Protocole.TROUVE.name().equals(cmd)){
+			else if (Protocole.TROUVE.name().equals(cmd) && isAuthentified){
 				
 			}
 
@@ -140,16 +155,6 @@ public class ServiceClient implements Runnable{
 
 		public void setServer(Server server) {
 			this.server = server;
-		}
-
-
-		public boolean isHasQuit() {
-			return isConnected;
-		}
-
-
-		public void setHasQuit(boolean hasQuit) {
-			this.isConnected = hasQuit;
 		}
 
 
