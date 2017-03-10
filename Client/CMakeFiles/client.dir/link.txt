@@ -1,0 +1,1 @@
+/usr/bin/cc     CMakeFiles/client.dir/src/main.o CMakeFiles/client.dir/src/connexion.o CMakeFiles/client.dir/src/scabble.o CMakeFiles/client.dir/src/transmission.o  -o dist/Debug/GNU-Linux/client -rdynamic -pthread 

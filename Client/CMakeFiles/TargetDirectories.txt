@@ -1,0 +1,3 @@
+/home/maxime/NetBeansProjects/Client/CMakeFiles/rebuild_cache.dir
+/home/maxime/NetBeansProjects/Client/CMakeFiles/edit_cache.dir
+/home/maxime/NetBeansProjects/Client/CMakeFiles/client.dir

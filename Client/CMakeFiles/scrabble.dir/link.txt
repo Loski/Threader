@@ -1,0 +1,1 @@
+/usr/bin/cc     CMakeFiles/scrabble.dir/src/main.o CMakeFiles/scrabble.dir/src/connexion.o CMakeFiles/scrabble.dir/src/scabble.o CMakeFiles/scrabble.dir/src/transmission.o  -o dist/Debug/GNU-Linux/scrabble -rdynamic -pthread 
