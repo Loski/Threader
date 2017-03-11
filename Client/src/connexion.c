@@ -7,6 +7,7 @@
 #include "../include/transmission.h"
 #include "../include/scrabble.h"
 #include "../include/joueur.h"
+#include "../include/connexion.h"
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -37,9 +38,10 @@ socket_t connexion_socket(const char* ip){
     return my_socket;
 }
 
-bool connexion_joueur(JoueurClient * joueur){
+int connexion_joueur(JoueurClient * joueur){
     char message[255] = CONNEXION;
     strcat(message, joueur->p_joueur->username);
+    strcat(message, "/\n");
     printf("Je me connecte : %s\n", message);
     return sendMessage(joueur->socket, message);
 }
@@ -48,8 +50,6 @@ void *thread_input(void* arg){
     printf("je rentre");
     if(arg != NULL){
         Session * session = (Session *) arg;
-        printf("%d", session->p_client->socket);
-        printf("%s", session->p_client->p_joueur->username);
         while(session->p_client->socket!=0){
             char buffer[1024];
             int n = 0;
@@ -59,7 +59,9 @@ void *thread_input(void* arg){
                 exit(0);
             }
             buffer[n] = '\0';
-            printf("%s", buffer);
+            
+            puts(buffer);
+            handle_event(buffer, session);
         }   
     }
 }
@@ -74,54 +76,59 @@ void initThread(Session * session){
    }
    //pthread_create(session->p_joueur->p_output, NULL, thread_output, (void *)(session));
 }
-bool deconnexion_joueur(JoueurClient *joueur){
+int deconnexion_joueur(JoueurClient *joueur){
     char message[255] = "SORT/";
     strcat(message, joueur->p_joueur->username);
     if(sendMessage(joueur->socket, message)!=0)
         closesocket(joueur->socket);
     else
-        exit(-1);
+        return -1;
     return 1;
 }
 
-void handle_event(char * message_recu, Session * session){
-    char *saveptr1, *token;
-    token = strtok_r(message_recu, DELIMITOR, &saveptr1);
-    if(strcmp(token, TOUR ) == 0){
-        printf("%s",token);
-    }else if(strcmp(token, BIENVENUE) == 0){
-        printf("Bienvenue !!");
-        char * placement = strtok_r(NULL, DELIMITOR, &saveptr1);
-        char * tirage = strtok_r(NULL, DELIMITOR, &saveptr1);
-        char * joueurs = strtok_r(NULL, DELIMITOR, &saveptr1);
+int handle_event(char * message_recu, Session * session){
+    
+    char **pp_message = NULL, *protocole = NULL;
+    int count = split(message_recu, '/', &pp_message);
+    if(count < 0)
+        return -1;
+    protocole = pp_message[0];
+    if(strcmp(protocole, TOUR ) == 0){
+        printf("%s",protocole);
+    }else if(strcmp(protocole, BIENVENUE) == 0){
+        if(count < 4)
+            return -1;
+        char * placement = pp_message[1];
+        char * tirage = pp_message[2];
+        char * joueurs = pp_message[3];
         init_session(session, placement, tirage, joueurs);
     }
-    else if(strcmp(token, DECONNEXION) == 0){
+    else if(strcmp(protocole, DECONNEXION) == 0){
         
-    }else if(strcmp(token, TROUVE) == 0){
+    }else if(strcmp(protocole, TROUVE) == 0){
         
-    }else if(strcmp(token, RVALIDE) == 0){
+    }else if(strcmp(protocole, RVALIDE) == 0){
         
-    }else if(strcmp(token, RINVALIDE) == 0){
+    }else if(strcmp(protocole, RINVALIDE) == 0){
         
-    }else if(strcmp(token, RATROUVE) == 0){
+    }else if(strcmp(protocole, RATROUVE) == 0){
         
-    }else if(strcmp(token, RFIN) == 0){
+    }else if(strcmp(protocole, RFIN) == 0){
         
-    }else if(strcmp(token, SVALIDE) == 0){
+    }else if(strcmp(protocole, SVALIDE) == 0){
         
-    }else if(strcmp(token, SINVALIDE) == 0){
+    }else if(strcmp(protocole, SINVALIDE) == 0){
         
-    }else if(strcmp(token, SFIN) == 0){
+    }else if(strcmp(protocole, SFIN) == 0){
         
-    }else if(strcmp(token, BILAN) == 0){
+    }else if(strcmp(protocole, BILAN) == 0){
         
-    }else if(strcmp(token, VAINQUEUR) == 0){
+    }else if(strcmp(protocole, VAINQUEUR) == 0){
         
-    }else if(strcmp(token, SESSION) == 0){
+    }else if(strcmp(protocole, SESSION) == 0){
         
     }else{
-        printf("bad param");
+        printf("bad param for handler");
     }
     
 }
