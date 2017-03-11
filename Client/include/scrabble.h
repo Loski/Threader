@@ -34,7 +34,7 @@ struct Session{
 
 int chercher_joueur(char * nom_joueur, Session * session);
 void bind_joueur_to_session(JoueurClient * joueur, Session * session);
-void init_session(Session * session, char * placement, char * tirage, char * liste_joueur);
+int init_session(Session * session, char * placement, char * tirage, char * liste_joueur);
 void initThread(Session * session);
 
 

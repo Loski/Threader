@@ -15,12 +15,13 @@
 #define CONNEXION_H
 
 #include "joueur.h"
+#include "scrabble.h"
 
 int connexion_socket(const char * ip);
-bool connexion_joueur(JoueurClient * client);
-bool deconnexion_joueur(JoueurClient client);
+int connexion_joueur(JoueurClient * client);
+int deconnexion_joueur(JoueurClient * client);
 socket_t connexion_socket(const char* ip);
-
+int handle_event(char * message_recu, Session * session);
 
 #endif /* CONNEXION_H */
 

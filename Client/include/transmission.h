@@ -19,8 +19,7 @@
 
 void analyse(char * message);
 bool sendMessage(socket_t socket, char * message);
-extern char *strtok_r(char *, const char *, char **);
-
+int split (const char *str, char c, char ***arr);
 //reception
 #define TOUR "TOUR"
 #define BIENVENUE "BIENVENUE"
