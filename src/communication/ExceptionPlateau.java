@@ -1,10 +1,10 @@
 package communication;
 
 public class ExceptionPlateau extends Exception{
-
-	public ExceptionPlateau() {
+	String code_erreur;
+	public ExceptionPlateau(String string, String code_errors) {
 		super();
-		// TODO Auto-generated constructor stub
+		this.code_erreur = code_errors;
 	}
 
 	public ExceptionPlateau(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {

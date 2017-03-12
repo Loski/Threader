@@ -3,6 +3,7 @@ package communication;
 public interface Communication {
 	
 	// For all clients
+	public void connecte(ServiceClient sc);
 	public void deconnexion(ServiceClient sc);
 	public void debutSession();
 	public void vainqueur();
@@ -17,7 +18,7 @@ public interface Communication {
 	public void bilan();
 	
 	//For only one client
-	void refus(ServiceClient sc);
-	void bienvenue(ServiceClient sc);
+	public void refus(ServiceClient sc);
+	public void bienvenue(ServiceClient sc);
 
 }

@@ -9,9 +9,9 @@ public class Session implements Runnable {
 	public final static int TAILLE_TIRAGE = 7;
 
 	// temps en mlsecondes pour chaque phase
-	public final static int PHASE_DE_RECHERCHE = 5 * 60 * 100;
-	public final static int PHASE_DE_SOUMISSION = 2 * 60 * 100;
-	public final static int PHASE_DE_RESULTAT = 10 * 100;
+	public final static int PHASE_DE_RECHERCHE = 30 * 1 *1000; //30sec => need 5mn
+	public final static int PHASE_DE_SOUMISSION = 30 * 1000; //30 seco >need 2mn
+	public final static int PHASE_DE_RESULTAT = 10 * 1000; //10sec
 	public final static int STEP_RECHERCHE = 1;
 	public final static int STEP_SOUMISSION = 2;
 	public final static int STEP_RESULTAT = 3;
@@ -19,7 +19,7 @@ public class Session implements Runnable {
 
 	private Alphabet tirage;
 	private PlateauServer plateau;
-	private List<ServiceClient> joueurs; // Référence tous les joueurs de la
+	private List<ServiceClient> joueurs; // Rï¿½fï¿½rence tous les joueurs de la
 											// session, actif ou non
 	private int tour;
 	private Server server;
@@ -45,7 +45,7 @@ public class Session implements Runnable {
 				case STEP_RECHERCHE:
 					this.server.tour();
 					try {
-						Thread.sleep(PHASE_DE_RECHERCHE);
+						wait(PHASE_DE_RECHERCHE);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

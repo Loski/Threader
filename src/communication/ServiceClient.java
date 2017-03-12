@@ -42,8 +42,9 @@ public class ServiceClient implements Runnable{
 	
 	 	public void sendMessage(String message) throws IOException{
 			this.output.println(message);
+			System.out.println(message + " to : \t" + this.getPseudo());
 			if(this.output.checkError()){
-				throw new IOException("erreur d'envoie de donnée pour "+this.pseudo);
+				throw new IOException("erreur d'envoie de donnï¿½e pour "+this.pseudo);
 			}
 		}
 
@@ -70,7 +71,7 @@ public class ServiceClient implements Runnable{
 				if(msg==null) msg = "";
 			}
 			
-			System.out.println("(SERVER) ReadFromJoueur reçoit : "+ msg);
+			System.out.println("(SERVER) ReadFromJoueur reï¿½oit : "+ msg);
 			
 			String[] msgs = msg.split("/");
 			String cmd = msgs[0];
@@ -81,6 +82,7 @@ public class ServiceClient implements Runnable{
 						this.pseudo = msgs[1];
 						this.isAuthentified = true;
 						System.out.println("Connexion de " + this.pseudo);
+						this.server.addClient(this);
 					}else{
 						System.out.println("Tentative de reconnexion" + this.pseudo);
 					}

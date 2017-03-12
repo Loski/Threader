@@ -16,13 +16,11 @@ public class Server implements Communication {
 	public final static int port = 2017;
 	private ServerSocket serverSocket;
 	private ArrayList<ServiceClient> clients;
-    private ExecutorService pool;
     private Session session;
     
     
 	public Server(){
 		this.clients = new ArrayList<>();
-		this.pool = Executors.newFixedThreadPool(4);
 		this.session = new Session(clients, this);
 		this.startServer();
 	}
@@ -32,8 +30,8 @@ public class Server implements Communication {
 	}
 	
 	/**
-	 * Envoie un message à tous les joueurs
-	 * @param message à envoyer
+	 * Envoie un message ï¿½ tous les joueurs
+	 * @param message ï¿½ envoyer
 	 */
 	public void sendToAll(String message){
 		for(ServiceClient sc:this.clients){
@@ -83,9 +81,10 @@ public class Server implements Communication {
 		this.deconnexion(c);
 	}
 	
-	synchronized public void addClient(ServiceClient c){
-		this.clients.add(c);
-		bienvenue(c);
+	synchronized public void addClient(ServiceClient sc){
+		this.clients.add(sc);
+		bienvenue(sc);
+		connecte(sc);
 	}
 	
 	public static void main (String[] args){
@@ -96,9 +95,10 @@ public class Server implements Communication {
 	public void bienvenue(ServiceClient sc){
 		try {
 			sc.sendMessage(ProtocoleCreator.create(Protocole.BIENVENUE, this.session.toString()));
-			System.out.println("Bienvenue à " + sc.getPseudo());
+			System.out.println("Bienvenue Ã  " + sc.getPseudo());
+			if(clients.size() == 1)
+				new Thread(this.session).start();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -111,7 +111,6 @@ public class Server implements Communication {
 	@Override
 	public void debutSession() {
 		this.sendToAll(ProtocoleCreator.create(Protocole.SESSION));
-		
 	}
 
 	@Override
@@ -180,6 +179,13 @@ public class Server implements Communication {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void connecte(ServiceClient sc) {
+		// TODO Auto-generated method stub
+		this.sendToAll(ProtocoleCreator.create(Protocole.CONNECTE, sc.getPseudo()));
+		
 	}
 
 }
