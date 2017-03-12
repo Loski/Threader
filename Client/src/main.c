@@ -22,19 +22,6 @@
 #include "../include/joueur.h"
 #include "../include/scrabble.h"
 
-void initClient(JoueurClient * client,  char * name){
-    client->input = 0;
-    client->output = 0;
-    client->socket = -1;
-    client->p_joueur = malloc(sizeof(Joueur));
-    initJoueur(client->p_joueur, name);
-}
-
-void initJoueur(Joueur * joueur,  char *name){
-    joueur->score = 50;
-    joueur->username = malloc(sizeof(char) * (1 + strlen(name)));
-    strcpy(joueur->username, name);
-}
 
 /*
 void setName(JoueurClient * client, char * name){
