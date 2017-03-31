@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <pthread.h>
-
+#include <unistd.h>
 int init_session(Session * session, char * placement, char * tirage, char * liste_joueur){    
     refresh_game(session, placement, tirage);
     char **score = NULL;
@@ -65,12 +65,13 @@ void *thread_input(void* arg){
             int n = 0;
             if((n = recv(session->p_client->socket, buffer, 1024, 0)) < 0)
             {
-                printf("error");
-                exit(0);
+                printf("error. Socket dead?");
+                //exit(0);
             }
             buffer[n] = '\0';
             handle_event(buffer, session);
             puts(buffer);
+            sleep(10);
         }   
     }
 }

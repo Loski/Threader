@@ -1,0 +1,567 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"bu",
+				"button_connexion"
+			],
+			[
+				"inpu",
+				"input"
+			],
+			[
+				"conn",
+				"connexion\t(connexion.c)"
+			],
+			[
+				"in",
+				"inputText"
+			],
+			[
+				"b",
+				"button_connexion"
+			],
+			[
+				"p_mai",
+				"p_main_container"
+			],
+			[
+				"create",
+				"createInputText\t(window.c)"
+			],
+			[
+				"p_m",
+				"p_main_container"
+			],
+			[
+				"ini",
+				"init_main_container\t(window.c)"
+			],
+			[
+				"GTK",
+				"GtkWidget"
+			],
+			[
+				"gt",
+				"gtk_widget_show\t(main.c)"
+			],
+			[
+				"my",
+				"myUe"
+			],
+			[
+				"fin",
+				"findIndex"
+			],
+			[
+				"li",
+				"listeUe"
+			],
+			[
+				"consol",
+				"console.log\t(app.js)"
+			],
+			[
+				"que",
+				"question"
+			],
+			[
+				"ques",
+				"questions"
+			],
+			[
+				"nom",
+				"nom_joueur"
+			],
+			[
+				"p",
+				"p_liste_joueur"
+			],
+			[
+				"prin",
+				"printf                                       - [#int#]printf(<#const char *restrict __format, ...#>)"
+			],
+			[
+				"print",
+				"print_joueur"
+			],
+			[
+				"Joue",
+				"Joueur                                       - Joueur"
+			],
+			[
+				"ch",
+				"chercherJoueur"
+			],
+			[
+				"chan",
+				"change_tirage"
+			],
+			[
+				"inc",
+				"include"
+			],
+			[
+				"bool",
+				"boolean"
+			],
+			[
+				"to",
+				"token"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "src/main.c",
+			"settings":
+			{
+				"buffer_size": 1421,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/window.c",
+			"settings":
+			{
+				"buffer_size": 1679,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "include/gui.h",
+			"settings":
+			{
+				"buffer_size": 410,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/connexion.c",
+			"settings":
+			{
+				"buffer_size": 1508,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "Packages/Makefile/Make.sublime-build",
+	"build_system_choices":
+	[
+		[
+			[
+				[
+					"Packages/C++/C++ Single File.sublime-build",
+					""
+				],
+				[
+					"Packages/C++/C++ Single File.sublime-build",
+					"Run"
+				],
+				[
+					"Packages/User/c.sublime-build",
+					""
+				]
+			],
+			[
+				"Packages/User/c.sublime-build",
+				""
+			]
+		],
+		[
+			[
+				[
+					"Packages/Makefile/Make.sublime-build",
+					""
+				],
+				[
+					"Packages/Makefile/Make.sublime-build",
+					"Clean"
+				]
+			],
+			[
+				"Packages/Makefile/Make.sublime-build",
+				"Clean"
+			]
+		]
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 172.0,
+		"last_filter": "insta",
+		"selected_items":
+		[
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"packa",
+				"Package Control: List Packages"
+			],
+			[
+				"instal",
+				"Package Control: Advanced Install Package"
+			],
+			[
+				"in",
+				"Package Control: Install Local Dependency"
+			],
+			[
+				"insc",
+				"Package Control: Install Local Dependency"
+			],
+			[
+				"ins",
+				"Package Control: Satisfy Dependencies"
+			],
+			[
+				"bui",
+				"Build: New Build System"
+			],
+			[
+				"buil",
+				"Build: Cancel"
+			],
+			[
+				"upp",
+				"Convert Case: Upper Case"
+			]
+		],
+		"width": 485.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/home/maxime/Documents/workspace/Threader/Client",
+		"/home/maxime/Documents/workspace/Threader/Client/include",
+		"/home/maxime/Documents/workspace/Threader/Client/src"
+	],
+	"file_history":
+	[
+		"/home/maxime/.config/sublime-text-3/Packages/ClangAutoComplete/ClangAutoComplete.sublime-settings",
+		"/home/maxime/.config/sublime-text-3/Packages/User/ClangAutoComplete.sublime-settings",
+		"/home/maxime/Documents/workspace/Threader/Client/src/client.c",
+		"/var/www/html/Clickeur/templates/ues.html",
+		"/var/www/html/Clickeur/templates/questionsListe.html",
+		"/var/www/html/Clickeur/templates/sessions.html",
+		"/var/www/html/Clickeur/js/modules/questionnaire/questionnaire.js",
+		"/var/www/html/Clickeur/css/style.css",
+		"/var/www/html/Clickeur/js/app.js",
+		"/var/www/html/Clickeur/js/modules/sessionModule/sessions.js",
+		"/home/maxime/Documents/workspace/Threader/Client/src/main.c",
+		"/home/maxime/Documents/workspace/Threader/Client/include/transmission.h",
+		"/home/maxime/Documents/workspace/Threader/Client/src/scabble.c",
+		"/home/maxime/Documents/workspace/Threader/Client/src/joueur.c",
+		"/home/maxime/Documents/workspace/Threader/Client/include/joueur.h",
+		"/home/maxime/Documents/workspace/Threader/Client/include/scrabble.h",
+		"/home/maxime/Documents/workspace/Threader/Client/include/connexion.h",
+		"/home/maxime/Documents/workspace/Threader/Client/src/connexion.c",
+		"/var/www/html/Clickeur/templates/sessionForm.html",
+		"/var/www/html/Clickeur/templates/ajouterSession.html",
+		"/var/www/html/Clickeur/templates/ajouterQuestion.html",
+		"/var/www/html/Clickeur/index.html",
+		"/var/www/html/Clickeur/templates/dashboard.html",
+		"/home/maxime/APS/Yylex.java",
+		"/home/maxime/APS/calc.lex",
+		"/home/maxime/APS/calc.y",
+		"/home/maxime/APS/Node.java",
+		"/home/maxime/cps/build.xml",
+		"/home/maxime/cps/src/bridge/contracts/LimitedRoadContract.java",
+		"/home/maxime/cps/src/bridge/contracts/LightContract.java"
+	],
+	"find":
+	{
+		"height": 23.0
+	},
+	"find_in_files":
+	{
+		"height": 90.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"for(int i = 0; i < TAILLE_TIRAGE; i++){\n            session->tirage[i] = tirage[i];\n        }",
+			"string",
+			"con",
+			"qcm",
+			"center",
+			"^"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"folders":
+	[
+		{
+			"path": "/var/www/html/Clickeur/css"
+		},
+		{
+			"path": "/var/www/html/Clickeur"
+		},
+		{
+			"path": "/home/maxime/Documents/workspace/Threader/Client"
+		}
+	],
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "src/main.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1421,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1421,
+								1421
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C Improved/C Improved.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 392.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "src/window.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1679,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1677,
+								1677
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C Improved/C Improved.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 126.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "include/gui.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 410,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								336,
+								336
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 3,
+					"file": "src/connexion.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1508,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1378,
+								1378
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C Improved/C Improved.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 126.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 34.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			0.571428571429,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 217.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "Packages/User/c.sublime-build",
+	"project": "",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 246.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

@@ -40,11 +40,11 @@ public class ServiceClient implements Runnable{
 	}
 	
 	
-	 	public void sendMessage(String message) throws IOException{
+	 	public void sendMessage(String message){
 			this.output.println(message);
 			System.out.println(message + " to : \t" + this.getPseudo());
 			if(this.output.checkError()){
-				throw new IOException("erreur d'envoie de donn�e pour "+this.pseudo);
+				isConnected = false;
 			}
 		}
 
@@ -69,6 +69,7 @@ public class ServiceClient implements Runnable{
 					e.printStackTrace();
 				}
 				if(msg==null) msg = "";
+			
 			}
 			
 			System.out.println("(SERVER) ReadFromJoueur re�oit : "+ msg);

@@ -6,6 +6,10 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.FileHandler;
+import java.util.logging.Formatter;
+import java.util.logging.Handler;
+import java.util.logging.Logger;
 
 import protocole.Protocole;
 import protocole.ProtocoleCreator;
@@ -17,11 +21,20 @@ public class Server implements Communication {
 	private ServerSocket serverSocket;
 	private ArrayList<ServiceClient> clients;
     private Session session;
-    
+    public static Logger logger = Logger.getLogger(Server.class.getName());
+    public final static Object obj = new Object();
     
 	public Server(){
 		this.clients = new ArrayList<>();
 		this.session = new Session(clients, this);
+		Handler fh = null; 
+		try {
+			fh = new FileHandler("TestLogging.log");
+		} catch (SecurityException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		logger.addHandler(fh);
 		this.startServer();
 	}
 	
@@ -30,17 +43,12 @@ public class Server implements Communication {
 	}
 	
 	/**
-	 * Envoie un message � tous les joueurs
-	 * @param message � envoyer
+	 * Envoie un message à tous les joueurs
+	 * @param message à envoyer
 	 */
 	public void sendToAll(String message){
 		for(ServiceClient sc:this.clients){
-			try {
-				sc.sendMessage(message);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			sc.sendMessage(message);
 		}
 	}
 	
@@ -51,14 +59,14 @@ public class Server implements Communication {
             public void run() {
                 try {
                     serverSocket = new ServerSocket(port);
-                    System.out.println(serverSocket.getInetAddress());
-                    System.out.println("Waiting for clients to connect...");
+                    logger.config("IP address : "+ serverSocket.getInetAddress());
+                    logger.info("Waiting for clients to connect...");
                     while (true) {
                         Socket clientSocket = serverSocket.accept();
                         new Thread(new ServiceClient(clientSocket, Server.this)).start();
                     }
                 } catch (IOException e) {
-                    System.err.println("Unable to process client request");
+                    logger.severe("Unable to process client request");
                     e.printStackTrace();
                 }finally {
         			if(serverSocket!=null && !serverSocket.isClosed()){
@@ -75,13 +83,15 @@ public class Server implements Communication {
         serverThread.start();
 	}
 
-	synchronized public void removeJoueur(ServiceClient c) {
-		this.clients.remove(c);
+	synchronized public void removeJoueur(ServiceClient sc) {
+		logger.info(sc.getPseudo() + " leaving the server.");
+		this.clients.remove(sc);
 		// Fin session??
-		this.deconnexion(c);
+		this.deconnexion(sc);
 	}
 	
 	synchronized public void addClient(ServiceClient sc){
+		logger.info(sc.getPseudo() + " entering the server.");
 		this.clients.add(sc);
 		bienvenue(sc);
 		connecte(sc);
@@ -93,13 +103,20 @@ public class Server implements Communication {
 	
 	@Override
 	public void bienvenue(ServiceClient sc){
-		try {
-			sc.sendMessage(ProtocoleCreator.create(Protocole.BIENVENUE, this.session.toString()));
-			System.out.println("Bienvenue à " + sc.getPseudo());
-			if(clients.size() == 1)
-				new Thread(this.session).start();
-		} catch (IOException e) {
-			e.printStackTrace();
+		sc.sendMessage(ProtocoleCreator.create(Protocole.BIENVENUE, this.session.toString()));
+		System.out.println("Bienvenue à " + sc.getPseudo());
+		if(clients.size() == 1)
+			new Thread(this.session).start();
+	}
+	
+	public void sendStateActuel(ServiceClient sc){
+		int state_actuel = session.getStep_actuel();
+		if(state_actuel == Session.PHASE_DE_RECHERCHE){
+			sc.sendMessage(ProtocoleCreator.create(Protocole.TOUR, this.session.getPlateau().toString(), this.session.getTirageCourant()));
+		}else if(state_actuel == Session.PHASE_DE_SOUMISSION){
+			sc.sendMessage(ProtocoleCreator.create(Protocole.TOUR, this.session.getPlateau().toString(), this.session.getTirageCourant()));
+		}else{
+			
 		}
 	}
 	@Override
@@ -110,6 +127,7 @@ public class Server implements Communication {
 	
 	@Override
 	public void debutSession() {
+		logger.info("Start of new session !");
 		this.sendToAll(ProtocoleCreator.create(Protocole.SESSION));
 	}
 
@@ -121,7 +139,7 @@ public class Server implements Communication {
 
 	@Override
 	public void tour() {
-		// TODO Auto-generated method stub
+		logger.info("New turn");
 		this.sendToAll(ProtocoleCreator.create(Protocole.TOUR, this.session.getPlateau().toString(), this.session.getTirageCourant()));
 	}
 
@@ -146,6 +164,7 @@ public class Server implements Communication {
 	@Override
 	public void rFin() {
 		// TODO Auto-generated method stub
+		logger.info("End of reflexion phase");
 		this.sendToAll(ProtocoleCreator.create(Protocole.RFIN));
 	}
 
@@ -156,6 +175,7 @@ public class Server implements Communication {
 
 	@Override
 	public void sFin() {
+		logger.info("End of soumission phase");
 		this.sendToAll(ProtocoleCreator.create(Protocole.SFIN));
 	}
 
@@ -173,12 +193,7 @@ public class Server implements Communication {
 
 	@Override
 	public void refus(ServiceClient sc) {
-		try {
-			sc.sendMessage(ProtocoleCreator.create(Protocole.REFUS));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		sc.sendMessage(ProtocoleCreator.create(Protocole.REFUS));
 	}
 
 	@Override

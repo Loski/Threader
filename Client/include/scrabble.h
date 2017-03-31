@@ -14,10 +14,12 @@
 #ifndef SCRABBLE_H
 #define SCRABBLE_H
 
-#include "joueur.h"
 
 #define TAILLE_PLATEAU 15
 #define TAILLE_TIRAGE 7
+#include "joueur.h"
+#include "transmission.h"
+
 
 typedef struct Session Session;
 struct Session{
@@ -28,16 +30,15 @@ struct Session{
     int nombre_joueur;
     JoueurClient * p_client;
 };
- 
-
-
 
 int chercher_joueur(char * nom_joueur, Session * session);
 void bind_joueur_to_session(JoueurClient * joueur, Session * session);
 int init_session(Session * session, char * placement, char * tirage, char * liste_joueur);
 void initThread(Session * session);
-
-
+void *thread_input(void* arg);
+int handle_event(char * message_recu, Session * session);
+int change_tirage(Session * session, char * tirage);
+int change_plateau(Session * session, char * placement);
+int refresh_game(Session * session, char * placement, char * tirage);
 
 #endif /* SCRABBLE_H */
-

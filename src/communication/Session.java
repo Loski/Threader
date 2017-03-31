@@ -44,11 +44,13 @@ public class Session implements Runnable {
 				break;
 				case STEP_RECHERCHE:
 					this.server.tour();
-					try {
-						wait(PHASE_DE_RECHERCHE);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					synchronized(Server.obj){
+						try {
+							Server.obj.wait(PHASE_DE_RECHERCHE);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 					this.server.rFin();
 					this.step_actuel = STEP_SOUMISSION;
@@ -79,7 +81,6 @@ public class Session implements Runnable {
 			}
 		}
 	}
-
 	public Alphabet getTirage() {
 		return tirage;
 	}
@@ -112,12 +113,23 @@ public class Session implements Runnable {
 		}
 		return s;
 	}
+	public int getStep_actuel() {
+		return step_actuel;
+	}
+
+	public void setStep_actuel(int step_actuel) {
+		this.step_actuel = step_actuel;
+	}
+
 	public String toString(){
 		return this.plateau.toString()+"/"+this.getTirageCourant()+"/"+this.getScore();
 	}
 	public String getTirageCourant() {
-		// TODO Auto-generated method stub
-		return "AAAAAAA";
+		String str = "";
+		for(Character c : this.tirage.tirage()){
+			str += c;
+		}
+		return str;
 	}
 
 }

@@ -14,17 +14,19 @@
 #ifndef JOUEUR_H
 #define JOUEUR_H
 
-#include <pthread.h>
 #include "socket.h"
+#include <stdbool.h>
 
+
+typedef struct JoueurClient JoueurClient;
 typedef struct Joueur Joueur;
+typedef struct Session Session;
+
 struct Joueur
 {
     char * username;
     int score;
 };
-
-typedef struct JoueurClient JoueurClient;
 struct JoueurClient{
     pthread_t input;
     pthread_t  output;
@@ -32,7 +34,11 @@ struct JoueurClient{
     Joueur * p_joueur;
 };
 
+#include "scrabble.h"
+
 void initClient(JoueurClient * joueur, char * name);
 void initJoueur(Joueur * joueur, char * name);
+int supprimerJoueur(char * nom_joueur, Session * session);
+int connexion_nouveau_joueur(Session *session, char * nom_joueur);
 #endif /* JOUEUR_H */
 

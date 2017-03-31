@@ -21,7 +21,6 @@ int connexion_socket(const char * ip);
 int connexion_joueur(JoueurClient * client);
 int deconnexion_joueur(JoueurClient * client);
 socket_t connexion_socket(const char* ip);
-int handle_event(char * message_recu, Session * session);
 
 #endif /* CONNEXION_H */
 

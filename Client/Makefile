@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/maxime/NetBeansProjects/Client
+CMAKE_SOURCE_DIR = /home/maxime/Documents/workspace/Threader/Client
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/maxime/NetBeansProjects/Client
+CMAKE_BINARY_DIR = /home/maxime/Documents/workspace/Threader/Client
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/maxime/NetBeansProjects/Client/CMakeFiles /home/maxime/NetBeansProjects/Client/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/maxime/Documents/workspace/Threader/Client/CMakeFiles /home/maxime/Documents/workspace/Threader/Client/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/maxime/NetBeansProjects/Client/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/maxime/Documents/workspace/Threader/Client/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -123,65 +123,167 @@ client/fast:
 	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/build
 .PHONY : client/fast
 
-# target to build an object file
-src/connexion.o:
-	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/connexion.o
+src/connexion.o: src/connexion.c.o
+
 .PHONY : src/connexion.o
 
-# target to preprocess a source file
-src/connexion.i:
-	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/connexion.i
+# target to build an object file
+src/connexion.c.o:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/connexion.c.o
+.PHONY : src/connexion.c.o
+
+src/connexion.i: src/connexion.c.i
+
 .PHONY : src/connexion.i
 
-# target to generate assembly for a file
-src/connexion.s:
-	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/connexion.s
+# target to preprocess a source file
+src/connexion.c.i:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/connexion.c.i
+.PHONY : src/connexion.c.i
+
+src/connexion.s: src/connexion.c.s
+
 .PHONY : src/connexion.s
 
+# target to generate assembly for a file
+src/connexion.c.s:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/connexion.c.s
+.PHONY : src/connexion.c.s
+
+src/joueur.o: src/joueur.c.o
+
+.PHONY : src/joueur.o
+
 # target to build an object file
-src/main.o:
-	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/main.o
+src/joueur.c.o:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/joueur.c.o
+.PHONY : src/joueur.c.o
+
+src/joueur.i: src/joueur.c.i
+
+.PHONY : src/joueur.i
+
+# target to preprocess a source file
+src/joueur.c.i:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/joueur.c.i
+.PHONY : src/joueur.c.i
+
+src/joueur.s: src/joueur.c.s
+
+.PHONY : src/joueur.s
+
+# target to generate assembly for a file
+src/joueur.c.s:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/joueur.c.s
+.PHONY : src/joueur.c.s
+
+src/main.o: src/main.c.o
+
 .PHONY : src/main.o
 
-# target to preprocess a source file
-src/main.i:
-	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/main.i
+# target to build an object file
+src/main.c.o:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/main.c.o
+.PHONY : src/main.c.o
+
+src/main.i: src/main.c.i
+
 .PHONY : src/main.i
 
-# target to generate assembly for a file
-src/main.s:
-	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/main.s
+# target to preprocess a source file
+src/main.c.i:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/main.c.i
+.PHONY : src/main.c.i
+
+src/main.s: src/main.c.s
+
 .PHONY : src/main.s
 
-# target to build an object file
-src/scabble.o:
-	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/scabble.o
+# target to generate assembly for a file
+src/main.c.s:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/main.c.s
+.PHONY : src/main.c.s
+
+src/scabble.o: src/scabble.c.o
+
 .PHONY : src/scabble.o
 
-# target to preprocess a source file
-src/scabble.i:
-	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/scabble.i
+# target to build an object file
+src/scabble.c.o:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/scabble.c.o
+.PHONY : src/scabble.c.o
+
+src/scabble.i: src/scabble.c.i
+
 .PHONY : src/scabble.i
 
-# target to generate assembly for a file
-src/scabble.s:
-	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/scabble.s
+# target to preprocess a source file
+src/scabble.c.i:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/scabble.c.i
+.PHONY : src/scabble.c.i
+
+src/scabble.s: src/scabble.c.s
+
 .PHONY : src/scabble.s
 
-# target to build an object file
-src/transmission.o:
-	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/transmission.o
+# target to generate assembly for a file
+src/scabble.c.s:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/scabble.c.s
+.PHONY : src/scabble.c.s
+
+src/transmission.o: src/transmission.c.o
+
 .PHONY : src/transmission.o
 
-# target to preprocess a source file
-src/transmission.i:
-	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/transmission.i
+# target to build an object file
+src/transmission.c.o:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/transmission.c.o
+.PHONY : src/transmission.c.o
+
+src/transmission.i: src/transmission.c.i
+
 .PHONY : src/transmission.i
 
-# target to generate assembly for a file
-src/transmission.s:
-	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/transmission.s
+# target to preprocess a source file
+src/transmission.c.i:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/transmission.c.i
+.PHONY : src/transmission.c.i
+
+src/transmission.s: src/transmission.c.s
+
 .PHONY : src/transmission.s
+
+# target to generate assembly for a file
+src/transmission.c.s:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/transmission.c.s
+.PHONY : src/transmission.c.s
+
+src/window.o: src/window.c.o
+
+.PHONY : src/window.o
+
+# target to build an object file
+src/window.c.o:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/window.c.o
+.PHONY : src/window.c.o
+
+src/window.i: src/window.c.i
+
+.PHONY : src/window.i
+
+# target to preprocess a source file
+src/window.c.i:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/window.c.i
+.PHONY : src/window.c.i
+
+src/window.s: src/window.c.s
+
+.PHONY : src/window.s
+
+# target to generate assembly for a file
+src/window.c.s:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/src/window.c.s
+.PHONY : src/window.c.s
 
 # Help Target
 help:
@@ -195,6 +297,9 @@ help:
 	@echo "... src/connexion.o"
 	@echo "... src/connexion.i"
 	@echo "... src/connexion.s"
+	@echo "... src/joueur.o"
+	@echo "... src/joueur.i"
+	@echo "... src/joueur.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
@@ -204,6 +309,9 @@ help:
 	@echo "... src/transmission.o"
 	@echo "... src/transmission.i"
 	@echo "... src/transmission.s"
+	@echo "... src/window.o"
+	@echo "... src/window.i"
+	@echo "... src/window.s"
 .PHONY : help
 
 

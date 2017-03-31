@@ -16,31 +16,28 @@
 #include <string.h>
 #include <pthread.h>
 #include <netinet/tcp.h>
+#include <gtk/gtk.h>
 #include "../include/socket.h"
 #include "../include/transmission.h"
 #include "../include/connexion.h"
 #include "../include/joueur.h"
 #include "../include/scrabble.h"
+#include "../include/gui.h"
 
 
-/*
-void setName(JoueurClient * client, char * name){
-    client->joueur->username = name;
-}*/
 
 int main(int argc, char** argv) {
-    JoueurClient client;
-    Joueur michel;
-    Session session;
-    initClient(&client, "Loski");
-    client.socket = connexion_socket("0.0.0.0");
-    if(client.socket < 0)
-        exit(EXIT_FAILURE);
-    bind_joueur_to_session(&client, &session);
-    connexion_joueur(&client);
-    initThread(&session);
-    pthread_join(client.input, NULL);
+      /* Initialisation de GTK+ */
+  gtk_init (&argc, &argv);
+  GtkWidget *p_window = init_window(), *p_label;
+
+  GtkWidget * p_main_grid = init_main_container(p_window);
+   connexion_windows(p_main_grid);
+
+  /* Affichage de la fenetre principale */
+    gtk_widget_show_all (p_window);  /* Lancement de la boucle principale */
+      /* enter the GTK main loop */
+    gtk_main();
     return (EXIT_SUCCESS);
 }
-
 

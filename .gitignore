@@ -49,3 +49,15 @@ Temporary Items
 .settings/org.eclipse.jdt.core.prefs
 *.class
 bin/protocole/Protocole.class
+
+*.o
+
+Client/cmake_install\.cmake
+
+Client/CMakeFiles/client\.dir/
+
+Client/CMakeFiles/
+
+Client/CMakeCache\.txt
+
+Client/\.dep\.inc

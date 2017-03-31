@@ -20,9 +20,12 @@
 void analyse(char * message);
 bool sendMessage(socket_t socket, char * message);
 int split (const char *str, char c, char ***arr);
+
+
 //reception
 #define TOUR "TOUR"
 #define BIENVENUE "BIENVENUE"
+#define CONNECTE "CONNECTE"
 #define DECONNEXION "DECONNEXION"
 #define SESSION "SESSION"
 #define VAINQUEUR "VAINQUEUR"
