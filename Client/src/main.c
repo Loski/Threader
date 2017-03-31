@@ -14,7 +14,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <pthread.h>
 #include <netinet/tcp.h>
 #include <gtk/gtk.h>
 #include "../include/socket.h"
