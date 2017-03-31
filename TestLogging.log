@@ -2,8 +2,8 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2017-03-31T01:19:09</date>
-  <millis>1490915949221</millis>
+  <date>2017-03-31T19:26:35</date>
+  <millis>1490981195948</millis>
   <sequence>0</sequence>
   <logger>communication.Server</logger>
   <level>INFO</level>
@@ -13,135 +13,36 @@
   <message>Waiting for clients to connect...</message>
 </record>
 <record>
-  <date>2017-03-31T01:19:57</date>
-  <millis>1490915997154</millis>
+  <date>2017-03-31T19:26:47</date>
+  <millis>1490981207307</millis>
   <sequence>1</sequence>
   <logger>communication.Server</logger>
   <level>INFO</level>
   <class>communication.Server</class>
   <method>addClient</method>
   <thread>13</thread>
-  <message>vorm entering the server.</message>
+  <message>michel entering the server.</message>
 </record>
 <record>
-  <date>2017-03-31T01:19:57</date>
-  <millis>1490915997159</millis>
+  <date>2017-03-31T19:26:47</date>
+  <millis>1490981207310</millis>
   <sequence>2</sequence>
   <logger>communication.Server</logger>
   <level>INFO</level>
   <class>communication.Server</class>
-  <method>debutSession</method>
+  <method>tour</method>
   <thread>14</thread>
-  <message>Start of new session !</message>
+  <message>New turn</message>
 </record>
 <record>
-  <date>2017-03-31T01:19:57</date>
-  <millis>1490915997161</millis>
+  <date>2017-03-31T19:26:47</date>
+  <millis>1490981207312</millis>
   <sequence>3</sequence>
   <logger>communication.Server</logger>
   <level>INFO</level>
   <class>communication.Server</class>
-  <method>tour</method>
-  <thread>14</thread>
-  <message>New turn</message>
-</record>
-<record>
-  <date>2017-03-31T01:20:27</date>
-  <millis>1490916027164</millis>
-  <sequence>4</sequence>
-  <logger>communication.Server</logger>
-  <level>INFO</level>
-  <class>communication.Server</class>
-  <method>rFin</method>
-  <thread>14</thread>
-  <message>End of reflexion phase</message>
-</record>
-<record>
-  <date>2017-03-31T01:20:57</date>
-  <millis>1490916057167</millis>
-  <sequence>5</sequence>
-  <logger>communication.Server</logger>
-  <level>INFO</level>
-  <class>communication.Server</class>
-  <method>sFin</method>
-  <thread>14</thread>
-  <message>End of soumission phase</message>
-</record>
-<record>
-  <date>2017-03-31T01:21:07</date>
-  <millis>1490916067170</millis>
-  <sequence>6</sequence>
-  <logger>communication.Server</logger>
-  <level>INFO</level>
-  <class>communication.Server</class>
-  <method>debutSession</method>
-  <thread>14</thread>
-  <message>Start of new session !</message>
-</record>
-<record>
-  <date>2017-03-31T01:21:07</date>
-  <millis>1490916067171</millis>
-  <sequence>7</sequence>
-  <logger>communication.Server</logger>
-  <level>INFO</level>
-  <class>communication.Server</class>
-  <method>tour</method>
-  <thread>14</thread>
-  <message>New turn</message>
-</record>
-<record>
-  <date>2017-03-31T01:21:37</date>
-  <millis>1490916097172</millis>
-  <sequence>8</sequence>
-  <logger>communication.Server</logger>
-  <level>INFO</level>
-  <class>communication.Server</class>
-  <method>rFin</method>
-  <thread>14</thread>
-  <message>End of reflexion phase</message>
-</record>
-<record>
-  <date>2017-03-31T01:22:07</date>
-  <millis>1490916127175</millis>
-  <sequence>9</sequence>
-  <logger>communication.Server</logger>
-  <level>INFO</level>
-  <class>communication.Server</class>
-  <method>sFin</method>
-  <thread>14</thread>
-  <message>End of soumission phase</message>
-</record>
-<record>
-  <date>2017-03-31T01:22:12</date>
-  <millis>1490916132083</millis>
-  <sequence>10</sequence>
-  <logger>communication.Server</logger>
-  <level>INFO</level>
-  <class>communication.Server</class>
-  <method>addClient</method>
-  <thread>15</thread>
-  <message>vormjjj entering the server.</message>
-</record>
-<record>
-  <date>2017-03-31T01:22:17</date>
-  <millis>1490916137176</millis>
-  <sequence>11</sequence>
-  <logger>communication.Server</logger>
-  <level>INFO</level>
-  <class>communication.Server</class>
-  <method>debutSession</method>
-  <thread>14</thread>
-  <message>Start of new session !</message>
-</record>
-<record>
-  <date>2017-03-31T01:22:17</date>
-  <millis>1490916137178</millis>
-  <sequence>12</sequence>
-  <logger>communication.Server</logger>
-  <level>INFO</level>
-  <class>communication.Server</class>
-  <method>tour</method>
-  <thread>14</thread>
-  <message>New turn</message>
+  <method>bienvenue</method>
+  <thread>13</thread>
+  <message>Bienvenue à michel</message>
 </record>
 </log>

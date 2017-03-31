@@ -103,17 +103,18 @@ public class Server implements Communication {
 	
 	@Override
 	public void bienvenue(ServiceClient sc){
-		sc.sendMessage(ProtocoleCreator.create(Protocole.BIENVENUE, this.session.toString()));
-		System.out.println("Bienvenue à " + sc.getPseudo());
 		if(clients.size() == 1)
 			new Thread(this.session).start();
+		sc.sendMessage(ProtocoleCreator.create(Protocole.BIENVENUE, this.session.getPlateau().toString(), this.session.getTirageCourant(),
+				this.session.getScore(), this.session.getPhaseActuelleString(), String.valueOf(this.session.getTempsRestant())));
+		logger.info("Bienvenue à " + sc.getPseudo());
 	}
 	
 	public void sendStateActuel(ServiceClient sc){
 		int state_actuel = session.getStep_actuel();
-		if(state_actuel == Session.PHASE_DE_RECHERCHE){
+		if(state_actuel == Session.TEMPS_PHASE_DE_RECHERCHE){
 			sc.sendMessage(ProtocoleCreator.create(Protocole.TOUR, this.session.getPlateau().toString(), this.session.getTirageCourant()));
-		}else if(state_actuel == Session.PHASE_DE_SOUMISSION){
+		}else if(state_actuel == Session.TEMPS_PHASE_DE_SOUMISSION){
 			sc.sendMessage(ProtocoleCreator.create(Protocole.TOUR, this.session.getPlateau().toString(), this.session.getTirageCourant()));
 		}else{
 			

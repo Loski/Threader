@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"pthread",
+				"pthread.h\t(main.c)"
+			],
+			[
 				"bu",
 				"button_connexion"
 			],
@@ -115,33 +119,6 @@
 	},
 	"buffers":
 	[
-		{
-			"file": "src/main.c",
-			"settings":
-			{
-				"buffer_size": 1421,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/window.c",
-			"settings":
-			{
-				"buffer_size": 1679,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "include/gui.h",
-			"settings":
-			{
-				"buffer_size": 410,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
 		{
 			"file": "src/connexion.c",
 			"settings":
@@ -261,6 +238,13 @@
 	],
 	"file_history":
 	[
+		"/home/maxime/Documents/workspace/Threader/Client/src/window.c",
+		"/home/maxime/Documents/workspace/Threader/Client/include/joueur.h",
+		"/home/maxime/Documents/workspace/Threader/Client/src/main.c",
+		"/home/maxime/Documents/workspace/Threader/Client/src/joueur.c",
+		"/home/maxime/Documents/workspace/Threader/Client/src/scabble.c",
+		"/home/maxime/Documents/workspace/Threader/Client/include/gui.h",
+		"/home/maxime/Documents/workspace/Threader/Client/.dep.inc",
 		"/home/maxime/.config/sublime-text-3/Packages/ClangAutoComplete/ClangAutoComplete.sublime-settings",
 		"/home/maxime/.config/sublime-text-3/Packages/User/ClangAutoComplete.sublime-settings",
 		"/home/maxime/Documents/workspace/Threader/Client/src/client.c",
@@ -271,11 +255,7 @@
 		"/var/www/html/Clickeur/css/style.css",
 		"/var/www/html/Clickeur/js/app.js",
 		"/var/www/html/Clickeur/js/modules/sessionModule/sessions.js",
-		"/home/maxime/Documents/workspace/Threader/Client/src/main.c",
 		"/home/maxime/Documents/workspace/Threader/Client/include/transmission.h",
-		"/home/maxime/Documents/workspace/Threader/Client/src/scabble.c",
-		"/home/maxime/Documents/workspace/Threader/Client/src/joueur.c",
-		"/home/maxime/Documents/workspace/Threader/Client/include/joueur.h",
 		"/home/maxime/Documents/workspace/Threader/Client/include/scrabble.h",
 		"/home/maxime/Documents/workspace/Threader/Client/include/connexion.h",
 		"/home/maxime/Documents/workspace/Threader/Client/src/connexion.c",
@@ -294,13 +274,16 @@
 	],
 	"find":
 	{
-		"height": 23.0
+		"height": 34.0
 	},
 	"find_in_files":
 	{
 		"height": 90.0,
 		"where_history":
 		[
+			"",
+			"Client",
+			""
 		]
 	},
 	"find_state":
@@ -308,6 +291,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"error",
 			"for(int i = 0; i < TAILLE_TIRAGE; i++){\n            session->tirage[i] = tirage[i];\n        }",
 			"string",
 			"con",
@@ -331,107 +315,14 @@
 	"folders":
 	[
 		{
-			"path": "/var/www/html/Clickeur/css"
-		},
-		{
-			"path": "/var/www/html/Clickeur"
-		},
-		{
 			"path": "/home/maxime/Documents/workspace/Threader/Client"
 		}
 	],
 	"groups":
 	[
 		{
-			"selected": 0,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "src/main.c",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1421,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1421,
-								1421
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C Improved/C Improved.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 392.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "src/window.c",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1679,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1677,
-								1677
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C Improved/C Improved.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 126.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "include/gui.h",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 410,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								336,
-								336
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				}
 			]
 		},
 		{
@@ -439,7 +330,7 @@
 			"sheets":
 			[
 				{
-					"buffer": 3,
+					"buffer": 0,
 					"file": "src/connexion.c",
 					"semi_transient": false,
 					"settings":
@@ -451,8 +342,8 @@
 						"selection":
 						[
 							[
-								1378,
-								1378
+								698,
+								698
 							]
 						],
 						"settings":
@@ -462,10 +353,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 126.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 0,
 					"type": "text"
 				}
 			]

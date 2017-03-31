@@ -54,10 +54,12 @@ bin/protocole/Protocole.class
 
 Client/cmake_install\.cmake
 
-Client/CMakeFiles/client\.dir/
 
 Client/CMakeFiles/
 
 Client/CMakeCache\.txt
 
 Client/\.dep\.inc
+
+*.log
+

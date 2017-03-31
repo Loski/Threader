@@ -9,9 +9,9 @@ public class Session implements Runnable {
 	public final static int TAILLE_TIRAGE = 7;
 
 	// temps en mlsecondes pour chaque phase
-	public final static int PHASE_DE_RECHERCHE = 30 * 1 *1000; //30sec => need 5mn
-	public final static int PHASE_DE_SOUMISSION = 30 * 1000; //30 seco >need 2mn
-	public final static int PHASE_DE_RESULTAT = 10 * 1000; //10sec
+	public final static int TEMPS_PHASE_DE_RECHERCHE = 30 * 1 *1000; //30sec => need 5mn
+	public final static int TEMPS_PHASE_DE_SOUMISSION = 30 * 1000; //30 seco >need 2mn
+	public final static int TEMPS_PHASE_DE_RESULTAT = 10 * 1000; //10sec
 	public final static int STEP_RECHERCHE = 1;
 	public final static int STEP_SOUMISSION = 2;
 	public final static int STEP_RESULTAT = 3;
@@ -24,6 +24,9 @@ public class Session implements Runnable {
 	private int tour;
 	private Server server;
 	private int step_actuel;
+	
+	private long debut_phase;
+
 
 	public Session(List<ServiceClient> clients, Server s) {
 		this.tirage = new Alphabet(TAILLE_TIRAGE);
@@ -39,14 +42,15 @@ public class Session implements Runnable {
 		while (this.joueurs.size() > 0) {
 			switch (step_actuel) {
 				case NO_STEP:
-					this.server.debutSession();
 					this.step_actuel = STEP_RECHERCHE;
+					this.debut_phase = System.currentTimeMillis();
 				break;
 				case STEP_RECHERCHE:
 					this.server.tour();
+					this.debut_phase = System.currentTimeMillis();
 					synchronized(Server.obj){
 						try {
-							Server.obj.wait(PHASE_DE_RECHERCHE);
+							Server.obj.wait(TEMPS_PHASE_DE_RECHERCHE);
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -56,8 +60,9 @@ public class Session implements Runnable {
 					this.step_actuel = STEP_SOUMISSION;
 					break;
 				case STEP_SOUMISSION:
+					this.debut_phase = System.currentTimeMillis();
 					try {
-						Thread.sleep(PHASE_DE_SOUMISSION);
+						Thread.sleep(TEMPS_PHASE_DE_SOUMISSION);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -66,9 +71,10 @@ public class Session implements Runnable {
 					this.step_actuel = STEP_RESULTAT;
 					break;
 				case STEP_RESULTAT:
+					this.debut_phase = System.currentTimeMillis();
 					this.server.bilan();
 					try {
-						Thread.sleep(PHASE_DE_RESULTAT);
+						Thread.sleep(TEMPS_PHASE_DE_RESULTAT);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -122,7 +128,7 @@ public class Session implements Runnable {
 	}
 
 	public String toString(){
-		return this.plateau.toString()+"/"+this.getTirageCourant()+"/"+this.getScore();
+		return this.plateau.toString()+"/"+this.getTirageCourant()+"/"+this.getScore()+"/"+getPhaseActuelleString()+"/"+getTempsRestant() ;
 	}
 	public String getTirageCourant() {
 		String str = "";
@@ -130,6 +136,34 @@ public class Session implements Runnable {
 			str += c;
 		}
 		return str;
+	}
+	
+	public String getPhaseActuelleString(){
+		if(this.step_actuel == STEP_RECHERCHE)
+			return "REC";
+		else if(this.step_actuel == STEP_RESULTAT)
+			return "RES";
+		else if(this.step_actuel == STEP_SOUMISSION)
+			return "SOU";
+		return "DEB";
+	}
+	
+	public long getTempsRestant(){
+		long time = 0;
+		switch (step_actuel) {
+		case STEP_RECHERCHE:
+			time = TEMPS_PHASE_DE_RECHERCHE;
+			break;
+		case STEP_SOUMISSION:
+			time = TEMPS_PHASE_DE_SOUMISSION;
+		case STEP_RESULTAT:
+			time = TEMPS_PHASE_DE_RESULTAT;
+		case NO_STEP:
+			time = 0;
+		default:
+			break;
+		}
+		return time - (this.debut_phase - System.currentTimeMillis());
 	}
 
 }
