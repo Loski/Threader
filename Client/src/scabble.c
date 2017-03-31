@@ -10,7 +10,9 @@
 #include <string.h>
 #include <pthread.h>
 #include <unistd.h>
-int init_session(Session * session, char * placement, char * tirage, char * liste_joueur){    
+
+
+int init_session(Session * session, char * placement, char * tirage, char * liste_joueur, char * phase, char * temps){    
     refresh_game(session, placement, tirage);
     char **score = NULL;
     int count = split(liste_joueur, '*', &score);
@@ -26,6 +28,26 @@ int init_session(Session * session, char * placement, char * tirage, char * list
         j++;
     }
     session->nombre_joueur = ++j;
+    
+    if(strcmp(phase,"DEB") == 0)
+    {
+		session->phase = DEB;
+	}
+    else if(strcmp(phase,"REC") == 0)
+    {
+		session->phase = REC;
+	}
+    else if(strcmp(phase,"SOU") == 0)
+    {
+		session->phase = SOU;
+	}
+    else if(strcmp(phase,"RES") == 0)
+    {
+		session->phase = RES;
+	}
+    
+    session->temps = atoi(temps);
+    
     return 1;
 }
 
@@ -86,9 +108,9 @@ int handle_event(char * message_recu, Session * session){
     if(strcmp(protocole, TOUR ) == 0){
         refresh_game(session, pp_message[1], pp_message[2]);
     }else if(strcmp(protocole, BIENVENUE) == 0){
-        if(count < 4)
+        if(count < 6)
             return -1;
-        init_session(session, pp_message[1], pp_message[2], pp_message[3]);
+        init_session(session, pp_message[1], pp_message[2], pp_message[3],pp_message[4],pp_message[5]);
     }
     else if(strcmp(protocole, DECONNEXION) == 0){
         supprimerJoueur(pp_message[1], session);

@@ -17,6 +17,14 @@
 
 #define TAILLE_PLATEAU 15
 #define TAILLE_TIRAGE 7
+
+#define DEB 0
+#define REC 1
+#define SOU 2
+#define RES 3
+
+
+
 #include "joueur.h"
 #include "transmission.h"
 
@@ -29,11 +37,14 @@ struct Session{
     char tirage[TAILLE_TIRAGE];
     int nombre_joueur;
     JoueurClient * p_client;
+    int phase;
+    int temps;
+    
 };
 
 int chercher_joueur(char * nom_joueur, Session * session);
 void bind_joueur_to_session(JoueurClient * joueur, Session * session);
-int init_session(Session * session, char * placement, char * tirage, char * liste_joueur);
+int init_session(Session * session, char * placement, char * tirage, char * liste_joueur,char * phase, char * temps);
 void initThread(Session * session);
 void *thread_input(void* arg);
 int handle_event(char * message_recu, Session * session);

@@ -1,7 +1,9 @@
 project(Scrabble)
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.2)
 #set(EXECUTABLE_OUTPUT_PATH dist/${CMAKE_BUILD_TYPE})
-set(CMAKE_CXX_FLAGS "-Wall -Wextra -std=c++11")
+#set(CMAKE_CXX_FLAGS "-Wall -Wextra -std=c++11")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 -Wall")
+
 set(CMAKE_BUILD_TYPE debug)
 
 #Génération de la liste des fichiers sources
@@ -35,7 +37,7 @@ add_executable(
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
-
 target_link_libraries(client Threads::Threads)
+
 target_link_libraries(client ${GTK3_LIBRARIES})
 

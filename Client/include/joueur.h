@@ -16,6 +16,7 @@
 
 #include "socket.h"
 #include <stdbool.h>
+#include <pthread.h>
 
 
 typedef struct JoueurClient JoueurClient;
