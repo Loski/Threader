@@ -1,0 +1,15 @@
+"folders":
+ [
+ {
+ "path": "/home/Documents/workspace/Client"
+ }
+ ],
+ "settings":
+ {
+	"sublimegdb_commandline": "gdb -nx -readnow -fullname --interpreter=mi -args ./client",
+	"sublimegdb_workingdir": "${folder:${project_path:./client}}"
+ },
+{
+    "cmd": ["client"],
+}
+}

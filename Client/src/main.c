@@ -28,7 +28,7 @@
 int main(int argc, char** argv) {
       /* Initialisation de GTK+ */
   gtk_init (&argc, &argv);
-  GtkWidget *p_window = init_window(), *p_label;
+  GtkWidget *p_window = init_window();
 
   GtkWidget * p_main_grid = init_main_container(p_window);
    connexion_windows(p_main_grid);

@@ -15,7 +15,6 @@
 #define JOUEUR_H
 
 #include "socket.h"
-#include <stdbool.h>
 #include <pthread.h>
 
 
@@ -41,5 +40,6 @@ void initClient(JoueurClient * joueur, char * name);
 void initJoueur(Joueur * joueur, char * name);
 int supprimerJoueur(char * nom_joueur, Session * session);
 int connexion_nouveau_joueur(Session *session, char * nom_joueur);
+int verification_connexion(Session * session);
 #endif /* JOUEUR_H */
 

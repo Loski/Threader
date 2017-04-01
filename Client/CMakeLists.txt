@@ -2,7 +2,7 @@ project(Scrabble)
 cmake_minimum_required(VERSION 3.2)
 #set(EXECUTABLE_OUTPUT_PATH dist/${CMAKE_BUILD_TYPE})
 #set(CMAKE_CXX_FLAGS "-Wall -Wextra -std=c++11")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 -Wall")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 -Wall -Wextra -g")
 
 set(CMAKE_BUILD_TYPE debug)
 

@@ -35,6 +35,7 @@ public class Session implements Runnable {
 		this.tour = 1;
 		this.server = s;
 		this.step_actuel = NO_STEP;
+		this.debut_phase = -1;
 	}
 
 	@Override
@@ -163,7 +164,9 @@ public class Session implements Runnable {
 		default:
 			break;
 		}
-		return time - (this.debut_phase - System.currentTimeMillis());
+		System.out.println(time);
+		System.out.println(debut_phase);
+		return (time - (this.debut_phase - System.currentTimeMillis()))/1000;
 	}
 
 }

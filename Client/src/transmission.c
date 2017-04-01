@@ -5,21 +5,20 @@
  */
 
 #include "../include/socket.h"
-#include <stdbool.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 
 
-bool sendMessage(socket_t socket, char * message){
+int sendMessage(socket_t socket, char * message){
     puts(message);
     if( send(socket , message , strlen(message) , 0) < 0)
     {
         puts("Send failed");
-        return false;
+        return -1;
     }
-    return true;
+    return 1;
 }
 
 int split (char const *str, char c, char ***arr)

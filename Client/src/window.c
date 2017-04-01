@@ -2,6 +2,7 @@
 #include <string.h>
 #include "../include/gui.h"
 #include "../include/joueur.h"
+#include "../include/connexion.h"
 #include "../include/scrabble.h"
 #include "../include/transmission.h"
 
@@ -62,7 +63,13 @@ void askConnexion(GtkButton *button, GtkWidget * input){
 	    initClient(&client, nom);
 	    bind_joueur_to_session(&client, &session);
 	    connexion_joueur(&client);
-	    initThread(&session);
+	    if(verification_connexion(&session) < 0){
+	    	//bad connexion
+	    	puts("bad connexion");
+	    }else{
+	    	puts("ça marche.");
+	    	initThread(&session);
+	    }
 	    //pthread_join(client.input, NULL);
 	}
 		

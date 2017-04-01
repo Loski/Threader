@@ -5,6 +5,7 @@
 
 #include "../include/joueur.h"
 #include "../include/scrabble.h"
+#include "../include/connexion.h"
 #include "../include/transmission.h"
 
 void initClient(JoueurClient * client,  char * name){
@@ -63,10 +64,29 @@ int connexion_nouveau_joueur(Session *session, char * nom_joueur){
 void print_joueur(Joueur * joueur){
     puts(joueur->username);
     printf("%d", joueur->score);
+    puts("SISI LA FAMILLE");
 }
 
 void print_all_joueur(Session * session){
     for(int i =0; i < session->nombre_joueur; i++){
         print_joueur(&session->p_liste_joueur[i]);
     }
+}
+
+int verification_connexion(Session * session){
+    puts("je rentre");
+    if(session->p_client->socket!=0){
+        char buffer[2048];
+        int n = 0;
+        if((n = recv(session->p_client->socket, buffer, 2048, 0)) < 0)
+        {
+            puts("error. Socket dead?");
+            return -1;
+        }
+        buffer[n] = '\0';
+        return handle_connexion(buffer, session);
+    }else{
+        puts("error. Socket null/dead?");
+    }
+    return -1;
 }

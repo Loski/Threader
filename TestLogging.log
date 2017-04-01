@@ -2,8 +2,8 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2017-03-31T19:26:35</date>
-  <millis>1490981195948</millis>
+  <date>2017-04-01T03:30:16</date>
+  <millis>1491010216386</millis>
   <sequence>0</sequence>
   <logger>communication.Server</logger>
   <level>INFO</level>
@@ -13,19 +13,19 @@
   <message>Waiting for clients to connect...</message>
 </record>
 <record>
-  <date>2017-03-31T19:26:47</date>
-  <millis>1490981207307</millis>
+  <date>2017-04-01T03:31:19</date>
+  <millis>1491010279952</millis>
   <sequence>1</sequence>
   <logger>communication.Server</logger>
   <level>INFO</level>
   <class>communication.Server</class>
   <method>addClient</method>
   <thread>13</thread>
-  <message>michel entering the server.</message>
+  <message>FRANCK entering the server.</message>
 </record>
 <record>
-  <date>2017-03-31T19:26:47</date>
-  <millis>1490981207310</millis>
+  <date>2017-04-01T03:31:19</date>
+  <millis>1491010279954</millis>
   <sequence>2</sequence>
   <logger>communication.Server</logger>
   <level>INFO</level>
@@ -35,14 +35,14 @@
   <message>New turn</message>
 </record>
 <record>
-  <date>2017-03-31T19:26:47</date>
-  <millis>1490981207312</millis>
+  <date>2017-04-01T03:31:19</date>
+  <millis>1491010279957</millis>
   <sequence>3</sequence>
   <logger>communication.Server</logger>
   <level>INFO</level>
   <class>communication.Server</class>
   <method>bienvenue</method>
   <thread>13</thread>
-  <message>Bienvenue à michel</message>
+  <message>Bienvenue à FRANCK</message>
 </record>
 </log>

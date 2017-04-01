@@ -48,8 +48,8 @@ int init_session(Session * session, char * placement, char * tirage, char * list
 void initThread(Session * session);
 void *thread_input(void* arg);
 int handle_event(char * message_recu, Session * session);
-int change_tirage(Session * session, char * tirage);
-int change_plateau(Session * session, char * placement);
-int refresh_game(Session * session, char * placement, char * tirage);
-
+void change_tirage(Session * session, char * tirage);
+void change_plateau(Session * session, char * placement);
+void refresh_game(Session * session, char * placement, char * tirage);
+int handle_connexion(char * message_recu, Session * session);
 #endif /* SCRABBLE_H */

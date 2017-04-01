@@ -15,10 +15,9 @@
 #define TRANSMISSION_H
 
 #include "socket.h"
-#include <stdbool.h>
 
 void analyse(char * message);
-bool sendMessage(socket_t socket, char * message);
+int sendMessage(socket_t socket, char * message);
 int split (const char *str, char c, char ***arr);
 
 
@@ -38,6 +37,7 @@ int split (const char *str, char c, char ***arr);
 #define SINVALIDE "SINVALIDE"
 #define SFIN "SFIN"
 #define BILAN "BILAN"
+#define REFUS "REFUS"
 
 
 //envoie
