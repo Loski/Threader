@@ -117,6 +117,25 @@ int handle_connexion(char * message_recu, Session * session){
         return -1;
     return -1;
 }
+
+void switch_phase(Session* session,int phase)
+{
+	
+	/* Tester enchainement ?*/
+	session->phase=phase;
+}
+
+int annoncer_placement(char * proposition,JoueurClient * client)
+{
+	puts("Annonce d'un placement :\n");
+
+	char message[255] = TROUVE;
+    strcat(message, proposition);
+    strcat(message, "/\n");
+    printf("%s\n", message);
+    return sendMessage(client->socket, message);
+}
+
 int handle_event(char * message_recu, Session * session){
     
     char **pp_message = NULL, *protocole = NULL;
@@ -125,6 +144,7 @@ int handle_event(char * message_recu, Session * session){
         return -1;
     protocole = pp_message[0];
     if(strcmp(protocole, TOUR ) == 0){
+		switch_phase(session,REC);
         refresh_game(session, pp_message[1], pp_message[2]);
     }else if(strcmp(protocole, DECONNEXION) == 0){
         supprimerJoueur(pp_message[1], session);
@@ -135,21 +155,22 @@ int handle_event(char * message_recu, Session * session){
     }else if(strcmp(protocole, RINVALIDE) == 0){
         
     }else if(strcmp(protocole, RATROUVE) == 0){
-        
+        switch_phase(session,SOU);
     }else if(strcmp(protocole, RFIN) == 0){
-        
+		switch_phase(session,RES);
     }else if(strcmp(protocole, SVALIDE) == 0){
         
     }else if(strcmp(protocole, SINVALIDE) == 0){
         
     }else if(strcmp(protocole, SFIN) == 0){
-        
+        switch_phase(session,RES);
+        switch_phase(session,RES);
     }else if(strcmp(protocole, BILAN) == 0){
         
     }else if(strcmp(protocole, VAINQUEUR) == 0){
         
     }else if(strcmp(protocole, SESSION) == 0){
-        
+        switch_phase(session,DEB);
     }else{
         puts("bad param for handler");
     }

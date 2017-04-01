@@ -34,6 +34,40 @@ GtkWidget * createGrid(){
 	GtkWidget *  widget= NULL;
 }
 
+GtkWidget * createGrille (GtkWidget * p_container){
+	GtkWidget *  table = gtk_table_new (TAILLE_PLATEAU, TAILLE_PLATEAU, TRUE);
+	
+	/*GtkWidget * text = gtk_text_view_new();
+	
+	GtkTextBuffer * buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text));
+	
+	GtkTextIter iter ;
+	
+	gtk_text_buffer_get_iter_at_offset(buffer, &iter, 0);
+	
+	gtk_text_buffer_insert(buffer, &iter, "A", -1);
+	
+	gtk_table_attach_defaults (GTK_TABLE (table), text, 0, 1, 0, 1);
+	
+	gtk_text_view_set_editable(GTK_TEXT_VIEW(text), FALSE);*/
+	
+	
+	for(int i=0;i<TAILLE_PLATEAU;i++)
+		for(int j=0;j<TAILLE_PLATEAU;j++)
+		{
+			GtkWidget * text =  gtk_button_new_with_label ("KEK");
+	
+			gtk_button_set_relief(GTK_BUTTON(text), GTK_RELIEF_NONE); 
+	
+			gtk_table_attach_defaults (GTK_TABLE (table), text, i, i+1, j, j+1);
+	
+			
+		}
+	
+	gtk_grid_attach (GTK_GRID (p_container), table, 0,500,1000,500);
+
+}
+
 GtkWidget * createInputText(GtkWidget * p_container){
 	GtkWidget* inputText = gtk_entry_new();
 	gtk_grid_attach (GTK_GRID (p_container), inputText, 70,0,56,561);
@@ -53,6 +87,8 @@ void connexion_windows(GtkWidget * p_grid){
   GtkWidget * button_connexion =  gtk_button_new_with_label ("Se connecter");
   gtk_grid_attach(GTK_GRID(p_grid),button_connexion, 60,10,10,10);
   g_signal_connect(G_OBJECT(button_connexion), "clicked", G_CALLBACK(askConnexion), inputText);
+  
+  createGrille (p_grid);
 }
 
 void askConnexion(GtkButton *button, GtkWidget * input){
@@ -71,6 +107,13 @@ void askConnexion(GtkButton *button, GtkWidget * input){
 	    	initThread(&session);
 	    }
 	    //pthread_join(client.input, NULL);
+	}	
+}
+
+void proposerMot(GtkButton *button, GtkWidget * input){
+	char *proposition = (char*)gtk_entry_get_text(GTK_ENTRY(input));
+	if(strlen(proposition) > 1)
+	{
+		//annoncer_placement(proposition,session.p_client);
 	}
-		
 }
