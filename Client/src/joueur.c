@@ -15,8 +15,8 @@ void initClient(JoueurClient * client,  char * name){
     client->p_joueur = malloc(sizeof(Joueur));
     initJoueur(client->p_joueur, name);
     client->socket = connexion_socket("0.0.0.0");
-    if(client->socket < 0)
-        exit(EXIT_FAILURE);
+    /*if(client->socket < 0)
+        exit(EXIT_FAILURE);*/
 }
 
 void initJoueur(Joueur * joueur,  char *name){
