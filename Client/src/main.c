@@ -28,13 +28,8 @@
 int main(int argc, char** argv) {
       /* Initialisation de GTK+ */
   gtk_init (&argc, &argv);
-  GtkWidget *p_window = init_window();
-
-  GtkWidget * p_main_grid = init_main_container(p_window);
-   connexion_windows(p_main_grid);
-
-  /* Affichage de la fenetre principale */
-    gtk_widget_show_all (p_window);  /* Lancement de la boucle principale */
+  lancementGUI();
+   
       /* enter the GTK main loop */
     gtk_main();
     return (EXIT_SUCCESS);

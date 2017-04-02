@@ -64,7 +64,6 @@ int connexion_nouveau_joueur(Session *session, char * nom_joueur){
 void print_joueur(Joueur * joueur){
     puts(joueur->username);
     printf("%d", joueur->score);
-    puts("SISI LA FAMILLE");
 }
 
 void print_all_joueur(Session * session){
@@ -74,7 +73,6 @@ void print_all_joueur(Session * session){
 }
 
 int verification_connexion(Session * session){
-    puts("je rentre");
     if(session->p_client->socket!=0){
         char buffer[2048];
         int n = 0;

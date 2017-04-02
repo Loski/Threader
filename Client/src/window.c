@@ -9,7 +9,7 @@
 JoueurClient client;
 Session session;
 
-GtkWidget * p_main_box;
+GtkWidget * p_main_grid;
 
 /* Fenêtre de connexion*/
 
@@ -17,15 +17,22 @@ GtkWidget * label_connexion;
 GtkWidget * button_connexion;
 GtkWidget * inputTextConnexion;
 GtkWidget * errorField;
+GtkWidget *p_window;
 
 
 /* Fenêtre de jeu */
 
 GtkWidget * grille;
 
+void lancementGUI(){
+	init_window();
+	init_main_container();
+	connexion_windows();
+	gtk_widget_show_all (p_window);  /* Lancement de la boucle principale */
+}
 
 GtkWidget *init_window(){
-	GtkWidget * p_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	p_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title(GTK_WINDOW(p_window), "Scrabble");
 	gtk_window_set_default_size(GTK_WINDOW(p_window), 1000, 1000);
 	gtk_window_set_position(GTK_WINDOW(p_window), GTK_WIN_POS_CENTER);
@@ -34,11 +41,10 @@ GtkWidget *init_window(){
 }
 
 
-GtkWidget * init_main_container(GtkWidget * p_window){
-	p_main_box = gtk_grid_new ();
-  	gtk_container_add (GTK_CONTAINER (p_window), p_main_box);
-  	
-  	return p_main_box;
+GtkWidget * init_main_container(){
+	p_main_grid = gtk_grid_new ();
+  	gtk_container_add (GTK_CONTAINER (p_window), p_main_grid);
+  	return p_main_grid;
 }
 void cb_quit (GtkWidget *p_widget)
 {
@@ -46,12 +52,8 @@ void cb_quit (GtkWidget *p_widget)
 }
 
 
-GtkWidget * createGrid(){
-	GtkWidget *  widget= NULL;
-}
-
 GtkWidget * createGrille (){
-	grille = gtk_table_new (TAILLE_PLATEAU, TAILLE_PLATEAU, TRUE);
+	grille = gtk_grid_new ();
 	
 	/*GtkWidget * text = gtk_text_view_new();
 	
@@ -75,13 +77,11 @@ GtkWidget * createGrille (){
 	
 			gtk_button_set_relief(GTK_BUTTON(text), GTK_RELIEF_NONE); 
 	
-			gtk_table_attach_defaults (GTK_TABLE (grille), text, i, i+1, j, j+1);
+			gtk_grid_attach(GTK_GRID(grille), text, i, j, 1, 1);
 	
-			
 		}
-	
-	gtk_grid_attach (GTK_GRID (p_main_box), grille, 0,500,1000,500);
-
+		gtk_grid_attach (GTK_GRID (p_main_grid), grille, 0,500,1000,500);
+		gtk_widget_show_all (p_window);  /* Lancement de la boucle principale */
 }
 
 GtkWidget * createInputText(GtkWidget * p_container){
@@ -96,13 +96,13 @@ void createTexte(GtkWidget * p_grid, GtkWidget * p_label, char const * texte){
 }
 
 
-void connexion_windows(GtkWidget * p_grid){
+void connexion_windows(){
 	
   label_connexion=gtk_label_new(NULL);
-  GtkWidget * inputText = createInputText(p_grid);
-  createTexte(p_main_box, label_connexion, "<span>CONNEXION</span>");
+  GtkWidget * inputText = createInputText(p_main_grid);
+  createTexte(p_main_grid, label_connexion, "<span>CONNEXION</span>");
   button_connexion =  gtk_button_new_with_label ("Se connecter");
-  gtk_grid_attach(GTK_GRID(p_main_box),button_connexion, 60,10,10,10);
+  gtk_grid_attach(GTK_GRID(p_main_grid),button_connexion, 60,10,10,10);
   g_signal_connect(G_OBJECT(button_connexion), "clicked", G_CALLBACK(askConnexion), inputText);
   
 }
@@ -119,6 +119,7 @@ void askConnexion(GtkButton *button, GtkWidget * input){
 	    	//bad connexion
 	    	puts("bad connexion");
 	    }else{
+
 	    	puts("ça marche.");
 	    	initThread(&session);
 	    	gtk_widget_destroy (input);
