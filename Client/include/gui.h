@@ -8,6 +8,10 @@
 	void createTexte(GtkWidget * p_window, GtkWidget * p_label, char const * texte);
 	void askConnexion(GtkButton *button, GtkWidget * p_input);
 	void connexion_windows();
-	void proposerMot(GtkButton *button, GtkWidget * input);
+	void proposerMot(GtkButton *button);
 	 void lancementGUI();
+	void editPlateau(GtkButton *button);
+	void createGrille ();
+	void selectLetter(GtkButton * button);
+	
 #endif

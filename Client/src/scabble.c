@@ -183,5 +183,5 @@ void print_session(Session * session)
     printf("TOUR : %d\n",session->tour);
     printf("PHASE : %d\n",session->phase);
     printf("PLATEAU : %s\n",session->plateau);
-    printf("PLATEAU : %c\n",session->plateau[0]);
+    printf("TIRAGE : %s\n",session->tirage);
 }

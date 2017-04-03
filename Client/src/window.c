@@ -23,6 +23,10 @@ GtkWidget *p_window;
 /* Fenêtre de jeu */
 
 GtkWidget * grille;
+GtkWidget* plateau[TAILLE_PLATEAU*TAILLE_PLATEAU];
+GtkWidget * tirage;
+
+char selectedLetter;
 
 void lancementGUI(){
 	init_window();
@@ -51,23 +55,8 @@ void cb_quit (GtkWidget *p_widget)
   gtk_main_quit();
 }
 
-
-GtkWidget * createGrille (){
+void createGrille (){
 	grille = gtk_grid_new ();
-	
-	/*GtkWidget * text = gtk_text_view_new();
-	
-	GtkTextBuffer * buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text));
-	
-	GtkTextIter iter ;
-	
-	gtk_text_buffer_get_iter_at_offset(buffer, &iter, 0);
-	
-	gtk_text_buffer_insert(buffer, &iter, "A", -1);
-	
-	gtk_table_attach_defaults (GTK_TABLE (table), text, 0, 1, 0, 1);
-	
-	gtk_text_view_set_editable(GTK_TEXT_VIEW(text), FALSE);*/
 	
 	int k = 0;
 	
@@ -79,16 +68,111 @@ GtkWidget * createGrille (){
 			ptr[0] = c;
 			ptr[1] = '\0';
 			
-			GtkWidget * text =  gtk_button_new_with_label (ptr);
+			/*GtkWidget * text = gtk_text_view_new();
+	
+			GtkTextBuffer * buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text));
+				
+			GtkTextIter iter ;
+				
+			gtk_text_buffer_get_iter_at_offset(buffer, &iter, -1);
+				
+			gtk_text_buffer_insert(buffer, &iter, "", -1);
+				
+			g_signal_connect(G_OBJECT(buffer), "insert-text", G_CALLBACK(textLimiter), text)	
+				
+			gtk_grid_attach(GTK_GRID(grille), text, i, j, 1, 1);*/
+			
+			GtkWidget * text; 
+	
+			if (c == '0')
+			{
+				text =  gtk_button_new_with_label ("_");
+				g_signal_connect(G_OBJECT(text), "clicked", G_CALLBACK(editPlateau),NULL);
+			}
+			else
+			{
+				text =  gtk_button_new_with_label (ptr);
+			}
 	
 			gtk_button_set_relief(GTK_BUTTON(text), GTK_RELIEF_NONE); 
 	
-			gtk_grid_attach(GTK_GRID(grille), text, i, j, 1, 1);	
+			gtk_grid_attach(GTK_GRID(grille), text, j, i, 1, 1);
+			
+			plateau[k] = text;
+			
+
 			
 			k++;
 		}
-		gtk_grid_attach (GTK_GRID (p_main_grid), grille, 0,500,1000,500);
+		
+		gtk_grid_attach (GTK_GRID (p_main_grid), grille, 0,0,1000,500);
+		
+		GtkWidget * text =  gtk_button_new_with_label ("Valider le mot");
+		
+		g_signal_connect(G_OBJECT(text), "clicked", G_CALLBACK(proposerMot),NULL);
+		
+		gtk_grid_attach (GTK_GRID (p_main_grid), text, 400,800,200,100);
+		
+		
 		gtk_widget_show_all (p_window);  /* Lancement de la boucle principale */
+}
+
+void createTirageDisplay()
+{
+	tirage = gtk_grid_new (); // A changer en ligne
+	
+	for(int i=0;i<TAILLE_TIRAGE;i++)
+	{
+		char c = session.tirage[i];
+		char *ptr = malloc(2*sizeof(char));
+		ptr[0] = c;
+		ptr[1] = '\0';
+		
+		GtkWidget * text =  gtk_button_new_with_label (ptr);
+		
+		g_signal_connect(G_OBJECT(text), "clicked", G_CALLBACK(selectLetter),NULL);
+	
+		gtk_button_set_relief(GTK_BUTTON(text), GTK_RELIEF_NONE); 
+	
+		gtk_grid_attach(GTK_GRID(tirage), text, i, 0, 1, 1);
+		
+	}
+		
+	gtk_grid_attach (GTK_GRID (p_main_grid), tirage, 0,600,1000,100);
+	gtk_widget_show_all (p_window);
+}
+
+void selectLetter(GtkButton * button)
+{
+	char * label = gtk_button_get_label (button);
+	
+	printf("switch letter to : %c",*label);
+	
+	selectedLetter = *label;
+}
+
+void editPlateau(GtkButton *button)
+{
+	if(selectedLetter!=NULL && selectedLetter!='_')
+	{
+		char *ptr = malloc(2*sizeof(char));
+		ptr[0] = selectedLetter;
+		ptr[1] = '\0';
+		
+		gtk_button_set_label(GTK_BUTTON(button),ptr);
+		
+		int i;
+		
+		for(i=0;i<TAILLE_PLATEAU;i++)
+		{
+			if(plateau[i]==button)
+				break;
+		}
+		
+		session.plateau[i]=selectedLetter;
+		selectedLetter='_';
+		
+	}
 }
 
 GtkWidget * createInputText(GtkWidget * p_container){
@@ -113,6 +197,27 @@ void connexion_windows(){
   g_signal_connect(G_OBJECT(button_connexion), "clicked", G_CALLBACK(askConnexion), inputText);
   
 }
+
+/*void textLimiter(GtkTextBuffer * buffer,GtkWidget * text_view)
+{
+	GtkTextIter start, end;
+	GtkTextBuffer *buffer = gtk_text_view_get_buffer (text_view);
+	gchar *text;
+
+	gtk_text_buffer_get_bounds (buffer, &start, &end);
+	text = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
+
+	if(strlen(text>1))
+	{
+		GtkTextIter range_start, range_end;
+		gtk_text_buffer_get_start_iter(buffer, &range_start);
+		range_end = range_start;
+		gtk_text_iter_forward_chars(&range_end,1);
+		gtk_text_buffer_delete(buffer, &range_start, &range_end);
+	}
+
+	g_free (text)
+}*/
 
 void askConnexion(GtkButton *button, GtkWidget * input){
 	char *nom = (char*)gtk_entry_get_text(GTK_ENTRY(input));
@@ -141,16 +246,15 @@ void askConnexion(GtkButton *button, GtkWidget * input){
 	    	
 	    	
 	    	print_session(&session);
+	    	createTirageDisplay();
 	    	createGrille();
 	    }
 	    //pthread_join(client.input, NULL);
 	}	
 }
 
-void proposerMot(GtkButton *button, GtkWidget * input){
-	char *proposition = (char*)gtk_entry_get_text(GTK_ENTRY(input));
-	if(strlen(proposition) > 1)
-	{
-		//annoncer_placement(proposition,session.p_client);
-	}
+void proposerMot(GtkButton *button){
+	
+	annoncer_placement(session.plateau,session.p_client);
+
 }

@@ -28,7 +28,7 @@ int split (const char *str, char c, char ***arr);
 #define DECONNEXION "DECONNEXION"
 #define SESSION "SESSION"
 #define VAINQUEUR "VAINQUEUR"
-#define TROUVE "TROUVE"
+
 #define RVALIDE "RVALIDE"
 #define RINVALIDE "RINVALIDE"
 #define RATROUVE "RATROUVE"
@@ -43,6 +43,7 @@ int split (const char *str, char c, char ***arr);
 //envoie
 #define CONNEXION "CONNEXION/"
 #define SORT "SORT/"
+#define TROUVE "TROUVE/"
 
 
 
