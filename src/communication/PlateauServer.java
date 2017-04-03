@@ -41,7 +41,7 @@ public class PlateauServer extends Plateau {
 	 */
 	public boolean verificationAlignement(List<Point> point){
 		// on suposse alignement en X
-		if(point.isEmpty())
+		if(point.size() <= 1)
 			return true;
 		if(point.get(0).getX() == point.get(1).getX()){
 			double x = point.get(0).getX();
