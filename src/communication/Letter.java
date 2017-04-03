@@ -1,23 +1,23 @@
 package communication;
 
 public class Letter {
-	private Character letter;
+	private char letter;
 	private int nombre_total;;
-	private int puisssance;
+	private int puissance;
 	
 	
 	public Letter(Character letter, int nombre_total, int puisssance) {
 		super();
 		this.letter = letter;
 		this.nombre_total = nombre_total;
-		this.puisssance = puisssance;
+		this.puissance = puisssance;
 	}
 	
 	public Letter(String ligne[]) {
 		this(ligne[0].toCharArray()[0], new Integer(ligne[1]), new Integer(ligne[1]));	
 	}
 
-	public Character getLetter() {
+	public char getLetter() {
 		return letter;
 	}
 	public void setLetter(Character letter) {
@@ -30,14 +30,26 @@ public class Letter {
 		this.nombre_total = nombre_total;
 	}
 	public int getPuisssance() {
-		return puisssance;
+		return puissance;
 	}
 	public void setPuisssance(int puisssance) {
-		this.puisssance = puisssance;
+		this.puissance = puisssance;
 	}
 	
 	public void decrementeLetter(){
 		this.nombre_total--;
+	}
+
+	public boolean isVoyelle() {
+		if(letter == 'A' || letter=='E' || letter =='I' || letter == 'Y' || letter == 'O' ||letter == 'U')
+			return true;
+		return false;
+	}
+
+	public static boolean isVoyelle(char letter) {
+		if(letter == 'A' || letter=='E' || letter =='I' || letter == 'Y' || letter == 'O' ||letter == 'U')
+			return true;
+		return false;
 	}
 
 }

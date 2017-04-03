@@ -1,4 +1,5 @@
 #include <gtk/gtk.h>
+#include <stdlib.h>
 #include <string.h>
 #include "../include/gui.h"
 #include "../include/joueur.h"
@@ -26,7 +27,7 @@ GtkWidget * grille;
 GtkWidget* plateau[TAILLE_PLATEAU*TAILLE_PLATEAU];
 GtkWidget * tirage;
 
-char selectedLetter;
+char selectedLetter = '1';
 
 void lancementGUI(){
 	init_window();
@@ -64,7 +65,11 @@ void createGrille (){
 		for(int j=0;j<TAILLE_PLATEAU;j++)
 		{	
 			char c = session.plateau[k];
-			char *ptr = malloc(2*sizeof(char));
+			char *ptr = NULL;
+			ptr = malloc(2*sizeof(char));
+			if(ptr == NULL){
+				puts("Erreur pointeur GtkWidget");
+			}
 			ptr[0] = c;
 			ptr[1] = '\0';
 			
@@ -124,7 +129,11 @@ void createTirageDisplay()
 	for(int i=0;i<TAILLE_TIRAGE;i++)
 	{
 		char c = session.tirage[i];
-		char *ptr = malloc(2*sizeof(char));
+		char *ptr = NULL;
+		ptr = malloc(2*sizeof(char));
+		if(ptr == NULL){
+			puts("Erreur pointeur tirage letter");
+		}
 		ptr[0] = c;
 		ptr[1] = '\0';
 		
@@ -144,7 +153,7 @@ void createTirageDisplay()
 
 void selectLetter(GtkButton * button)
 {
-	char * label = gtk_button_get_label (button);
+	char * label = (char *)gtk_button_get_label (button);
 	
 	printf("switch letter to : %c",*label);
 	
@@ -153,9 +162,13 @@ void selectLetter(GtkButton * button)
 
 void editPlateau(GtkButton *button)
 {
-	if(selectedLetter!=NULL && selectedLetter!='_')
+	if(selectedLetter!='1' && selectedLetter!='_')
 	{
-		char *ptr = malloc(2*sizeof(char));
+		char *ptr = NULL;
+		ptr = malloc(2*sizeof(char));
+		if(ptr == NULL){
+			puts("Erreur pointeur tirage edit plateau");
+		}
 		ptr[0] = selectedLetter;
 		ptr[1] = '\0';
 		
@@ -187,8 +200,7 @@ void createTexte(GtkWidget * p_grid, GtkWidget * p_label, char const * texte){
 }
 
 
-void connexion_windows(){
-	
+void connexion_windows(){	
   label_connexion=gtk_label_new(NULL);
   GtkWidget * inputText = createInputText(p_main_grid);
   createTexte(p_main_grid, label_connexion, "<span>CONNEXION</span>");

@@ -47,9 +47,7 @@ Temporary Items
 .apdisk
 *.class
 .settings/org.eclipse.jdt.core.prefs
-*.class
-bin/protocole/Protocole.class
-
+*.log*
 *.o
 
 Client/cmake_install\.cmake
