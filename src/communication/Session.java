@@ -164,8 +164,6 @@ public class Session implements Runnable {
 		default:
 			break;
 		}
-		System.out.println(time);
-		System.out.println(debut_phase);
 		return (time - (this.debut_phase - System.currentTimeMillis()))/1000;
 	}
 

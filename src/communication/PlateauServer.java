@@ -10,7 +10,7 @@ public class PlateauServer extends Plateau {
 		super(taillePlateau);
 	}
 	
-	public boolean placementValide(Plateau plateau_joueur) throws ExceptionPlateau{
+	public void placementValide(Plateau plateau_joueur) throws ExceptionPlateau{
 		boolean somethingChange = false;
 		List<Point> point = new ArrayList<Point>();
 		for(int i = 0; i < taille_plateau; i++){
@@ -32,9 +32,12 @@ public class PlateauServer extends Plateau {
 		 if(!verificationAlignement(point)){
 			 throw new ExceptionPlateau("Alignement des lettres non respecté.", "POS");
 		 }
-		 return true;
 	}
-	
+	/**
+	 * Vérifie que les nouvelles lettres sont bien alignées
+	 * @param point Coordonnés des lettres dans le tableau
+	 * @return
+	 */
 	public boolean verificationAlignement(List<Point> point){
 		// on suposse alignement en X
 		if(point.get(0).getX() == point.get(1).getY()){

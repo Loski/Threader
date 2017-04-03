@@ -52,6 +52,17 @@ public class Server implements Communication {
 		}
 	}
 	
+	public void sendToHim(Protocole p, String message, String name){
+		for(ServiceClient sc: this.clients){
+			if(sc.getPseudo().equals(name)){
+				sc.sendMessage(p ,message);
+			}
+		}
+	}
+	
+	public void sendToAll(Protocole p, String message){
+		this.sendToAll(ProtocoleCreator.create(p, message));
+	}
 	
 	public void startServer(){	
 		Runnable serverTask = new Runnable() {
@@ -202,6 +213,31 @@ public class Server implements Communication {
 		// TODO Auto-generated method stub
 		this.sendToAll(ProtocoleCreator.create(Protocole.CONNECTE, sc.getPseudo()));
 		
+	}
+	
+
+	public ServerSocket getServerSocket() {
+		return serverSocket;
+	}
+
+	public void setServerSocket(ServerSocket serverSocket) {
+		this.serverSocket = serverSocket;
+	}
+
+	public ArrayList<ServiceClient> getClients() {
+		return clients;
+	}
+
+	public void setClients(ArrayList<ServiceClient> clients) {
+		this.clients = clients;
+	}
+
+	public Session getSession() {
+		return session;
+	}
+
+	public void setSession(Session session) {
+		this.session = session;
 	}
 
 }

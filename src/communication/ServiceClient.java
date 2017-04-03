@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 import protocole.Protocole;
+import protocole.ProtocoleCreator;
 
 public class ServiceClient implements Runnable{
 
@@ -46,6 +47,10 @@ public class ServiceClient implements Runnable{
 			if(this.output.checkError()){
 				isConnected = false;
 			}
+		}
+	 	
+		public void sendMessage(Protocole p, String message) {
+			this.sendMessage(ProtocoleCreator.create(p, message));
 		}
 
 		@Override
@@ -95,7 +100,22 @@ public class ServiceClient implements Runnable{
 				this.server.removeJoueur(this);
 			}
 			else if (Protocole.TROUVE.name().equals(cmd) && isAuthentified){
-				
+				if(msgs.length > 1){
+					try {
+						this.server.getSession().getPlateau().placementValide(new Plateau(msgs[1]));
+					} catch (ExceptionPlateau e) {
+						this.sendMessage(Protocole.RINVALIDE, e.getCode_erreur() + e.getMessage());
+						e.printStackTrace();
+					}
+				}
+			}else if(Protocole.PENVOIE.name().equals(cmd) && isAuthentified){
+				if(msgs.length > 2){
+					this.server.sendToHim(Protocole.PRECEPTION, msgs[1], msgs[2]);
+				}
+			}else if(Protocole.ENVOIE.name().equals(cmd) && isAuthentified){
+				if(msgs.length > 1){
+					this.server.sendToAll(Protocole.RECEPTION, msgs[1]);
+				}
 			}
 
 		}

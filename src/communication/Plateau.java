@@ -18,6 +18,19 @@ public class Plateau {
 		 }
 	}
 
+	public Plateau(String string) throws ExceptionPlateau {
+		if(string.length() == taille_plateau * taille_plateau){
+			this.plateau = new char[taille_plateau][taille_plateau];
+			for(int i = 0; i < taille_plateau; i++){
+				for(int j = 0; j < taille_plateau; j++){
+					plateau[i][j] = string.charAt(i * taille_plateau + j);
+				}
+			 }
+		}else{
+			throw new ExceptionPlateau("Nombre de lettres invalides", "POS");
+		}
+	}
+
 	@Override
 	public String toString() {
 		String s ="";

@@ -34,9 +34,7 @@ int init_session(Session * session, char * placement, char * tirage, char * list
         j++;
     }
     session->nombre_joueur = j;
-    printf("%d\n", session->nombre_joueur );
-    
-    
+    printf("%s\n", phase);
     if(strcmp(phase,"DEB") == 0)
     {
 		session->phase = DEB;
@@ -78,16 +76,6 @@ void change_tirage(Session * session, char * tirage){
 void bind_joueur_to_session( JoueurClient * joueur, Session * session){
     session->p_client = joueur;
 }
-
-void print_session(Session * session)
-{
-	printf("NB Joueurs : %d\n",session->nombre_joueur);
-	printf("TOUR : %d\n",session->tour);
-	printf("PHASE : %d\n",session->phase);
-	printf("PLATEAU : %s\n",session->plateau);
-	printf("PLATEAU : %c\n",session->plateau[0]);
-}
-
 
 void initThread(Session * session){
     puts("je suis là?");
