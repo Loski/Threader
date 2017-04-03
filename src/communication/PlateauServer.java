@@ -25,7 +25,7 @@ public class PlateauServer extends Plateau {
 				 }
 			 }
 		 }
-		
+		System.out.println(somethingChange);
 		 if(!somethingChange){
 			 throw new ExceptionPlateau("Le changement, c'est pas maintenant !", "POS");
 		 }
@@ -41,6 +41,8 @@ public class PlateauServer extends Plateau {
 	 */
 	public boolean verificationAlignement(List<Point> point){
 		// on suposse alignement en X
+		if(point.isEmpty())
+			return true;
 		if(point.get(0).getX() == point.get(1).getX()){
 			double x = point.get(0).getX();
 			for(Point pt : point){

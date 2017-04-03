@@ -21,7 +21,9 @@ void initClient(JoueurClient * client,  char * name){
 
 void initJoueur(Joueur * joueur,  char *name){
     joueur->score = 0;
-    joueur->username = name;
+    int taille = strlen(name);
+    joueur->username = malloc(sizeof(char) * (taille + 1));
+    strcpy(joueur->username, name);
 }
 
 int chercherJoueur(char * nom_joueur, Session * session){

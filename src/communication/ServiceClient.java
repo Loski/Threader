@@ -60,7 +60,7 @@ public class ServiceClient implements Runnable{
 					readFromJoueur();
 				}
 			} catch (Exception e) {
-				System.err.println("(Joueur run) Exception : "+e.toString());
+				e.printStackTrace();
 			}
 }
 
