@@ -54,4 +54,5 @@ void refresh_game(Session * session, char * placement, char * tirage);
 int handle_connexion(char * message_recu, Session * session);
 int annoncer_placement(char * proposition,JoueurClient * client);
 void switch_phase(Session* session,int phase);
+void print_session(Session * session);
 #endif /* SCRABBLE_H */

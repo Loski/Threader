@@ -69,16 +69,23 @@ GtkWidget * createGrille (){
 	
 	gtk_text_view_set_editable(GTK_TEXT_VIEW(text), FALSE);*/
 	
+	int k = 0;
 	
 	for(int i=0;i<TAILLE_PLATEAU;i++)
 		for(int j=0;j<TAILLE_PLATEAU;j++)
-		{
-			GtkWidget * text =  gtk_button_new_with_label ("KEK");
+		{	
+			char c = session.plateau[k];
+			char *ptr = malloc(2*sizeof(char));
+			ptr[0] = c;
+			ptr[1] = '\0';
+			
+			GtkWidget * text =  gtk_button_new_with_label (ptr);
 	
 			gtk_button_set_relief(GTK_BUTTON(text), GTK_RELIEF_NONE); 
 	
-			gtk_grid_attach(GTK_GRID(grille), text, i, j, 1, 1);
-	
+			gtk_grid_attach(GTK_GRID(grille), text, i, j, 1, 1);	
+			
+			k++;
 		}
 		gtk_grid_attach (GTK_GRID (p_main_grid), grille, 0,500,1000,500);
 		gtk_widget_show_all (p_window);  /* Lancement de la boucle principale */
@@ -118,14 +125,22 @@ void askConnexion(GtkButton *button, GtkWidget * input){
 	    if(verification_connexion(&session) < 0){
 	    	//bad connexion
 	    	puts("bad connexion");
+	    	errorField=gtk_label_new(NULL);
+			gtk_label_set_markup(GTK_LABEL(errorField), "ERREUR DE CONNEXION");
+			gtk_grid_attach(GTK_GRID(p_main_grid),errorField,0,150,1000,500);
+			gtk_widget_show_all (p_window); 
+	    	
 	    }else{
 
 	    	puts("ça marche.");
 	    	initThread(&session);
 	    	gtk_widget_destroy (input);
 	    	gtk_widget_destroy (button_connexion);
-	    	gtk_widget_destroy (label_connexion); 	
+	    	gtk_widget_destroy (label_connexion);
+	    	//gtk_widget_destroy (errorField); 	
 	    	
+	    	
+	    	print_session(&session);
 	    	createGrille();
 	    }
 	    //pthread_join(client.input, NULL);

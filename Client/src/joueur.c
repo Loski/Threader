@@ -20,7 +20,7 @@ void initClient(JoueurClient * client,  char * name){
 }
 
 void initJoueur(Joueur * joueur,  char *name){
-    joueur->score = 50;
+    joueur->score = 0;
     joueur->username = name;
 }
 
