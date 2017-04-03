@@ -175,3 +175,13 @@ int handle_event(char * message_recu, Session * session){
     }
     return 1;   
 }
+
+
+void print_session(Session * session)
+{
+    printf("NB Joueurs : %d\n",session->nombre_joueur);
+    printf("TOUR : %d\n",session->tour);
+    printf("PHASE : %d\n",session->phase);
+    printf("PLATEAU : %s\n",session->plateau);
+    printf("PLATEAU : %c\n",session->plateau[0]);
+}
