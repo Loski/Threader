@@ -80,9 +80,8 @@ void bind_joueur_to_session( JoueurClient * joueur, Session * session){
 }
 
 void initThread(Session * session){
-    puts("je suis là?");
    if(pthread_create(&(session->p_client->input), NULL, thread_input, session)){
-       puts("bah alors ça sent pas bon");
+       puts("Erreur création thread_input");
    }
    //pthread_create(session->p_joueur->p_output, NULL, thread_output, (void *)(session));
 }
@@ -112,7 +111,6 @@ int handle_connexion(char * message_recu, Session * session){
     if(strcmp(protocole, BIENVENUE) == 0){
         if(count < 6)
             return -1;
-        puts("handle_connexion");
         return init_session(session, pp_message[1], pp_message[2], pp_message[3],pp_message[4],pp_message[5]);
     }else if(strcmp(protocole, REFUS) == 0)
         return -1;
@@ -182,11 +180,12 @@ int handle_event(char * message_recu, Session * session){
 
 void print_session(Session * session)
 {
-    printf("NB Joueurs : %d\n",session->nombre_joueur);
+  /*  printf("NB Joueurs : %d\n",session->nombre_joueur);
     printf("JOUEUR : %s\n",((session->p_client)->p_joueur)->username);
     printf("TOUR : %d\n",session->tour);
     printf("PHASE : %d\n",session->phase);
     printf("PLATEAU : %s\n",session->plateau);
     printf("TIRAGE : %s\n",session->tirage);
+*/
     
 }

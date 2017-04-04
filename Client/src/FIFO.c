@@ -49,12 +49,17 @@ char * get_message(FIFO ** list)
 	{
 		pthread_mutex_lock (& mutex_stock);
 		FIFO * next = (*list)->next;
-		
-		char * message = malloc(sizeof(*list)->message);
+		char * message = NULL;
+		message = malloc(sizeof(char) * (1+strlen((*list)->message)));
+		if(message == NULL){
+			puts("Pointeur non initialisé");
+			exit(1);
+		}
 		strcpy(message, (*list)->message);
 		
 		
-		free(*list), *list = NULL;
+		free(*list);
+		 *list = NULL;
 		
 		*list = next;
 		pthread_mutex_unlock (& mutex_stock);

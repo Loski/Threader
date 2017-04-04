@@ -42,7 +42,6 @@ int connexion_joueur(JoueurClient * joueur){
     char message[255] = CONNEXION;
     strcat(message, joueur->p_joueur->username);
     strcat(message, "/\n");
-    printf("Je me connecte : %s\n", message);
     return sendMessage(joueur->socket, message);
 }
 

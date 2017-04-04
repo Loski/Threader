@@ -1,6 +1,7 @@
 #include <gtk/gtk.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include "../include/gui.h"
 #include "../include/joueur.h"
 #include "../include/connexion.h"
@@ -293,7 +294,7 @@ void logger(char * message)
 	gtk_text_buffer_insert(buffer, &iter, "\n", -1);
 }
 
-void refresh_GUI()
+gboolean refresh_GUI(gpointer user_data)
 {	
 	char * message = get_message(session.messages);
 	
@@ -301,6 +302,7 @@ void refresh_GUI()
 	{
 		logger(message);
 	}
+	return true;
 }
 
 void askConnexion(GtkButton *button, GtkWidget * input){
