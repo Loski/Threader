@@ -13,5 +13,6 @@
 	void editPlateau(GtkButton *button);
 	void createGrille ();
 	void selectLetter(GtkButton * button);
+	void logger(char * message);
 	
 #endif

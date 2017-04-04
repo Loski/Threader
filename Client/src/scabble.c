@@ -11,7 +11,6 @@
 #include <pthread.h>
 #include <unistd.h>
 
-
 int init_session(Session * session, char * placement, char * tirage, char * liste_joueur, char * phase, char * temps){    
     refresh_game(session, placement, tirage);
     char **score = NULL;
@@ -180,8 +179,10 @@ int handle_event(char * message_recu, Session * session){
 void print_session(Session * session)
 {
     printf("NB Joueurs : %d\n",session->nombre_joueur);
+    printf("JOUEUR : %s\n",((session->p_client)->p_joueur)->username);
     printf("TOUR : %d\n",session->tour);
     printf("PHASE : %d\n",session->phase);
     printf("PLATEAU : %s\n",session->plateau);
     printf("TIRAGE : %s\n",session->tirage);
+    
 }

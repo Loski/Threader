@@ -18,7 +18,7 @@ GtkWidget * label_connexion;
 GtkWidget * button_connexion;
 GtkWidget * inputTextConnexion;
 GtkWidget * errorField;
-GtkWidget *p_window;
+GtkWidget * p_window;
 
 
 /* Fenêtre de jeu */
@@ -26,6 +26,8 @@ GtkWidget *p_window;
 GtkWidget * grille;
 GtkWidget* plateau[TAILLE_PLATEAU*TAILLE_PLATEAU];
 GtkWidget * tirage;
+
+GtkWidget * consoleArea;
 
 char selectedLetter = '1';
 
@@ -151,6 +153,28 @@ void createTirageDisplay()
 	gtk_widget_show_all (p_window);
 }
 
+void createConsoleLog()
+{
+    consoleArea = gtk_text_view_new();
+    GtkWidget* scrollbar= gtk_vscrollbar_new(gtk_text_view_get_vadjustment(GTK_TEXT_VIEW(consoleArea)));
+    GtkWidget* textEntry = gtk_entry_new();
+
+    GtkWidget* console = gtk_table_new(3, 2, FALSE);
+
+	gtk_text_view_set_editable (GTK_TEXT_VIEW(consoleArea),FALSE);
+
+    gtk_table_attach_defaults(GTK_TABLE(console), consoleArea, 0, 1, 0, 1);
+    gtk_table_attach_defaults(GTK_TABLE(console), scrollbar, 1, 2, 0, 1);
+    //gtk_table_attach_defaults(GTK_TABLE(console), textEntry, 0, 2, 1, 2);
+    //This code sets the preferred size for the widget, so it does not ask for extra space
+    gtk_widget_set_size_request(consoleArea, 1000, 240);
+    
+    gtk_grid_attach (GTK_GRID (p_main_grid), console, 0,900,1000,1000);
+    
+    gtk_widget_show_all (p_window);
+
+}
+
 void selectLetter(GtkButton * button)
 {
 	char * label = (char *)gtk_button_get_label (button);
@@ -178,7 +202,7 @@ void editPlateau(GtkButton *button)
 		
 		for(i=0;i<TAILLE_PLATEAU;i++)
 		{
-			if(plateau[i]==button)
+			if((GtkButton *)plateau[i]==button)
 				break;
 		}
 		
@@ -231,14 +255,36 @@ void connexion_windows(){
 	g_free (text)
 }*/
 
+void logger(char * message)
+{
+	GtkTextBuffer * buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(consoleArea));
+			
+	GtkTextIter iter ;
+				
+	gtk_text_buffer_get_end_iter (buffer,&iter);
+				
+	gtk_text_buffer_insert(buffer, &iter, message, -1);
+	
+	gtk_text_buffer_get_end_iter (buffer,&iter);
+	
+	gtk_text_buffer_insert(buffer, &iter, "\n", -1);
+}
+
+void refresh_GUI()
+{
+	
+}
+
 void askConnexion(GtkButton *button, GtkWidget * input){
 	char *nom = (char*)gtk_entry_get_text(GTK_ENTRY(input));
+	
 	if(strlen(nom) < 1)
 		return;
 	else{
 	    initClient(&client, nom);
 	    bind_joueur_to_session(&client, &session);
 	    connexion_joueur(&client);
+	    
 	    if(verification_connexion(&session) < 0){
 	    	//bad connexion
 	    	puts("bad connexion");
@@ -254,12 +300,21 @@ void askConnexion(GtkButton *button, GtkWidget * input){
 	    	gtk_widget_destroy (input);
 	    	gtk_widget_destroy (button_connexion);
 	    	gtk_widget_destroy (label_connexion);
-	    	//gtk_widget_destroy (errorField); 	
-	    	
-	    	
+	    	//gtk_widget_destroy (errorField);	    	
 	    	print_session(&session);
 	    	createTirageDisplay();
 	    	createGrille();
+	    	createConsoleLog();
+	    	
+	    	char str[80];
+	    	
+	    	strcpy(str, "BIENVENUE, ");
+			strcat(str, (client.p_joueur)->username);
+	    	
+	    	logger(str);
+	    	
+	    	g_timeout_add (1000,refresh_GUI,NULL);
+	    	
 	    }
 	    //pthread_join(client.input, NULL);
 	}	
