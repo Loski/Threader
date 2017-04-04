@@ -24,8 +24,10 @@ GtkWidget * p_window;
 /* Fenêtre de jeu */
 
 GtkWidget * grille;
-GtkWidget* plateau[TAILLE_PLATEAU*TAILLE_PLATEAU];
+GtkWidget * plateau[TAILLE_PLATEAU*TAILLE_PLATEAU];
 GtkWidget * tirage;
+GtkWidget * scoreDisplay;
+//GtkWidget * players[][2];
 
 GtkWidget * consoleArea;
 
@@ -112,16 +114,37 @@ void createGrille (){
 			k++;
 		}
 		
-		gtk_grid_attach (GTK_GRID (p_main_grid), grille, 0,0,1000,500);
+		gtk_widget_set_size_request(grille, 500, 500);
+		
+		gtk_grid_attach (GTK_GRID (p_main_grid), grille, 0,0,1,1);
+		
 		
 		GtkWidget * text =  gtk_button_new_with_label ("Valider le mot");
 		
 		g_signal_connect(G_OBJECT(text), "clicked", G_CALLBACK(proposerMot),NULL);
 		
+		
 		gtk_grid_attach (GTK_GRID (p_main_grid), text, 400,800,200,100);
 		
 		
 		gtk_widget_show_all (p_window);  /* Lancement de la boucle principale */
+}
+
+void createScoreDisplay()
+{
+	scoreDisplay = tirage = gtk_grid_new ();
+	
+	for(int i=0;i<session.nombre_joueur;i++)
+	{
+		GtkWidget * name = gtk_label_new(NULL);
+		
+		printf("USERNAME :%s",(session.p_liste_joueur)->username);
+		
+		gtk_label_set_markup(GTK_LABEL(name),(session.p_liste_joueur)->username);
+		gtk_grid_attach (GTK_GRID (p_main_grid), name, 600,0,400,200);
+	}
+	
+	gtk_widget_show_all (p_window);
 }
 
 void createTirageDisplay()
@@ -271,8 +294,13 @@ void logger(char * message)
 }
 
 void refresh_GUI()
-{
+{	
+	char * message = get_message(session.messages);
 	
+	if(message!=NULL)
+	{
+		logger(message);
+	}
 }
 
 void askConnexion(GtkButton *button, GtkWidget * input){
@@ -301,10 +329,12 @@ void askConnexion(GtkButton *button, GtkWidget * input){
 	    	gtk_widget_destroy (button_connexion);
 	    	gtk_widget_destroy (label_connexion);
 	    	//gtk_widget_destroy (errorField);	    	
-	    	print_session(&session);
 	    	createTirageDisplay();
 	    	createGrille();
 	    	createConsoleLog();
+	    	createScoreDisplay();
+	    	
+	    	print_session(&session);
 	    	
 	    	char str[80];
 	    	

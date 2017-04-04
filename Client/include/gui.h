@@ -14,5 +14,5 @@
 	void createGrille ();
 	void selectLetter(GtkButton * button);
 	void logger(char * message);
-	
+	void createScoreDisplay();
 #endif

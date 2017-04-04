@@ -27,12 +27,7 @@
 
 #include "joueur.h"
 #include "transmission.h"
-
-typedef struct FIFO FIFO;
-struct FIFO{
-	char * message;
-	FIFO * next;
-};
+#include "FIFO.h"
 
 typedef struct Session Session;
 struct Session{
@@ -44,7 +39,7 @@ struct Session{
     JoueurClient * p_client;
     int phase;
     int temps;
-    FIFO messages; 
+    FIFO ** messages; 
 };
 
 int chercher_joueur(char * nom_joueur, Session * session);
