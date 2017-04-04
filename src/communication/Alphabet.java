@@ -1,14 +1,24 @@
 package communication;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+
+import javax.swing.text.Document;
+import javax.xml.*;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 public class Alphabet {
 	/**
@@ -96,6 +106,37 @@ public class Alphabet {
 		if(l.getNombre_total() <= 0)
 			liste_lettre_voyelle.remove(l);
 		return c;
+	}
+	
+	public static boolean isRealWord(String s){
+		   URL url;
+		   HttpURLConnection urlConnection = null;
+		   BufferedReader input;
+		   String ligne;
+		   String xml ="";
+		try {
+			url = new URL("http://www.wordgamedictionary.com/api/v1/references/scrabble/"+s+"?key=9.320519842586974e29");
+		    urlConnection = (HttpURLConnection) url.openConnection();
+		     input = new BufferedReader(new InputStreamReader(new BufferedInputStream(urlConnection.getInputStream())));
+		     while ((ligne=input.readLine())!=null){
+				xml+=ligne;
+			}
+		     System.out.println(xml);
+		     
+		}catch(MalformedURLException e){} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+		     urlConnection.disconnect();
+		   }
+
+		return parse(xml);	
+	}
+	public static boolean parse(String xml){
+		return xml.contains("<scrabble>1</scrabble>");
+	}
+	   public static void main (String[] args){
+		  System.out.println(isRealWord("Milou"));
 	}
 	
 }
