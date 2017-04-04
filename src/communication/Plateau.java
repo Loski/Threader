@@ -30,7 +30,7 @@ public class Plateau {
 			throw new ExceptionPlateau("Nombre de lettres invalides", "POS");
 		}
 	}
-
+	
 	@Override
 	public String toString() {
 		String s ="";

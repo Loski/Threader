@@ -102,7 +102,7 @@ public class ServiceClient implements Runnable{
 			else if (Protocole.TROUVE.name().equals(cmd) && isAuthentified){
 				if(msgs.length > 1){
 					try {
-						this.server.getSession().getPlateau().placementValide(new Plateau(msgs[1]));
+						String mot = this.server.getSession().getPlateau().placementValide(new Plateau(msgs[1]));
 					} catch (ExceptionPlateau e) {
 						this.sendMessage(Protocole.RINVALIDE, e.getCode_erreur() + e.getMessage());
 						e.printStackTrace();
