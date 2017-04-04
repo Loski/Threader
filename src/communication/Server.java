@@ -52,6 +52,14 @@ public class Server implements Communication {
 		}
 	}
 	
+	public void sendToAllWhithoutHim(String message, ServiceClient notHim){
+		for(ServiceClient sc:this.clients){
+			if(sc == notHim)
+				continue;
+			sc.sendMessage(message);
+		}
+	}
+	
 	public void sendToHim(Protocole p, String message, String name){
 		for(ServiceClient sc: this.clients){
 			if(sc.getPseudo().equals(name)){
@@ -210,9 +218,7 @@ public class Server implements Communication {
 
 	@Override
 	public void connecte(ServiceClient sc) {
-		// TODO Auto-generated method stub
-		this.sendToAll(ProtocoleCreator.create(Protocole.CONNECTE, sc.getPseudo()));
-		
+		this.sendToAllWhithoutHim(ProtocoleCreator.create(Protocole.CONNECTE, sc.getPseudo()), sc);		
 	}
 	
 
