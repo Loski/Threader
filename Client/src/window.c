@@ -263,7 +263,7 @@ void selectLetter(GtkWidget* event_box,GdkEventButton *event,gpointer data)
 {
 	int i;
 	
-	for(i=0;i<TAILLE_PLATEAU*TAILLE_PLATEAU;i++)
+	for(i=0;i<TAILLE_TIRAGE;i++)
 	{
 		if(event_box_tirage[i]==event_box)
 			break;
@@ -275,12 +275,8 @@ void selectLetter(GtkWidget* event_box,GdkEventButton *event,gpointer data)
 void editPlateau(GtkWidget* event_box,GdkEventButton *event,gpointer data)
 {
 	if(selectedLetter!='1' && selectedLetter!='_')
-	{
-		char lettre[1] = "";
-		lettre[0] = (char)toupper(selectedLetter);
-		char src[6] = "";
-		strcat(src,lettre);
-		strcat(src, ".png\0");	
+	{		
+		int index = (char)toupper(selectedLetter) - 'A';
 		
 		//gtk_button_set_label(GTK_BUTTON(button),ptr);
 		
@@ -292,11 +288,12 @@ void editPlateau(GtkWidget* event_box,GdkEventButton *event,gpointer data)
 				break;
 		}
 		
-		gtk_image_set_from_pixbuf (GTK_IMAGE(plateau[i]),gtk_image_get_pixbuf(GTK_IMAGE(plateau[i])));
+		gtk_image_set_from_pixbuf (GTK_IMAGE(plateau[i]),images[index]);
 		
 		session.plateau[i]=selectedLetter;
 		selectedLetter='_';
-		
+			
+		gtk_widget_show_all (p_window);
 	}
 }
 
