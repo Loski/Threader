@@ -17,6 +17,12 @@ public class Letter {
 		this(ligne[0].toCharArray()[0], new Integer(ligne[1]), new Integer(ligne[1]));	
 	}
 
+	public Letter(Letter l) {
+		this.letter = new Character(l.letter);
+		this.puissance =  l.puissance;
+		this.nombre_total = l.nombre_total;
+	}
+
 	public char getLetter() {
 		return letter;
 	}

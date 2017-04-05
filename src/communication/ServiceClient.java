@@ -20,6 +20,7 @@ public class ServiceClient implements Runnable{
 	private boolean isConnected; // To stop listening and stop the thread
 	private boolean isWaiting;
 	private boolean isAuthentified;
+	private Plateau plateau_courant;
 	
 	public ServiceClient(Socket s, Server server) {
 		
@@ -38,6 +39,7 @@ public class ServiceClient implements Runnable{
 		} catch (IOException e) {
 			System.out.println("(Joueur) : Obtiention inputStream de "+pseudo+" impossible.");
 		}
+		this.plateau_courant = new Plateau(server.getSession().getPlateau()); 
 	}
 	
 	
@@ -104,7 +106,7 @@ public class ServiceClient implements Runnable{
 					try {
 						this.server.getSession().getPlateau().gestionPlacement(new Plateau(msgs[1]));
 					} catch (ExceptionPlateau e) {
-						this.sendMessage(Protocole.RINVALIDE, e.getCode_erreur() + e.getMessage());
+						server.rInValide(this, e.getCode_erreur() + e.getMessage());
 						e.printStackTrace();
 					}
 				}

@@ -61,3 +61,7 @@ Client/\.dep\.inc
 
 *.log
 
+
+Client/client
+
+Client/Makefile

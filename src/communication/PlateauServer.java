@@ -6,9 +6,7 @@ import java.util.List;
 
 public class PlateauServer extends Plateau {
 
-	public static final int HORIZONTAL = 0;
-	public static final int VERTICAL = 1;
-	public static final int NO_DIRECTION = 2;
+
 	public boolean empty;
 	
 	public PlateauServer(int taillePlateau) {
@@ -16,15 +14,16 @@ public class PlateauServer extends Plateau {
 		empty = true;
 	}
 	
-	public void gestionPlacement(Plateau plateau_joueur) throws ExceptionPlateau{
+	public String gestionPlacement(Plateau plateau_joueur) throws ExceptionPlateau{
 		List<Point> points = placementValide(plateau_joueur);
 		 int alignement = verificationAlignement(points);
 		 if(alignement == NO_DIRECTION){
 			 throw new ExceptionPlateau("Alignement des lettres non respecté.", "POS");
 		 }
-		System.out.println(findMainWord(points, alignement));
-		System.out.println(findMainWord(points, alignement).length());
+		return plateau_joueur.findMainWord(points, alignement);
 	}
+
+
 	public List<Point> placementValide(Plateau plateau_joueur) throws ExceptionPlateau{
 		boolean somethingChange = false;
 		List<Point> points = new ArrayList<Point>();
@@ -45,6 +44,7 @@ public class PlateauServer extends Plateau {
 		 }
 		 return points;
 	}
+	
 	/**
 	 * Vérifie que les nouvelles lettres sont bien alignées
 	 * @param point Coordonnés des lettres dans le tableau
@@ -71,90 +71,6 @@ public class PlateauServer extends Plateau {
 		return HORIZONTAL;
 	}
 	
-	public String findMainWord(List<Point> points, int alignement) throws ExceptionPlateau{
-		if(points.isEmpty())
-			 throw new ExceptionPlateau("Aucune lettre !", "POS");
-		switch (alignement) {
-			case VERTICAL:
-				return searchUpDown(points.get(0));
-			case HORIZONTAL:
-				return searchLeftRight(points.get(0));
-			default:
-				break;
-			}
-		return null;
-	}
-	
-	public List<String> searchVertical(List<Point> points){
-		if(empty){
-			
-		}
-		return null;
-	}
-	
-	
-	public List<String> chercherAutreMots(List<Point> points, int alignement){
-		switch (alignement) {
-		case VERTICAL:
-				return searchLeftRight(points);
-		case HORIZONTAL:
-				return searchUpDown(points);
-		default:
-			break;
-		}
-		return null;
-	}
-
-	private ArrayList<String> searchLeftRight(List<Point> points) {
-		ArrayList<String> mots = new ArrayList<String>();
-		for(Point pt: points){
-			mots.add(searchLeftRight(pt));
-		}
-		return mots;
-	}
-	private String searchLeftRight(Point pt){
-		String str ="";
-		int x = (int) pt.getX() -1;
-		while(x >= 0 && plateau[(int) pt.getY()][x] != char_empty){
-			str+= plateau[(int) pt.getY()][x];
-			x--;
-		}
-		if(str.length() > 0){
-			str = new StringBuilder(str).reverse().toString();
-		}
-		x = (int) pt.getX();
-		while(x < taille_plateau && plateau[(int) pt.getY()][x] != char_empty){
-			str+= plateau[(int) pt.getY()][x];
-			x++;
-		}
-		return str;
-	}
-	private ArrayList<String> searchUpDown(List<Point> points) {
-		ArrayList<String> mots = new ArrayList<String>();
-		for(Point pt: points){
-			mots.add(searchUpDown(pt));
-		}
-		return mots;
-	}
-	
-	
-	private String searchUpDown(Point pt) {
-			String str ="";
-			int y = (int) pt.getY() -1;
-			while(y >= 0 && plateau[y][(int) pt.getX()] != char_empty){
-				str+=plateau[y][(int) pt.getX()];
-				y--;
-			}
-			if(str.length() > 0){
-				str = new StringBuilder(str).reverse().toString();
-			}
-			y = (int) pt.getY();
-			while(y < taille_plateau && plateau[y][(int) pt.getX()] != char_empty){
-				str+=  plateau[y][(int) pt.getX()];
-				y++;
-			}
-			return str;
-	}
 
 }
 
