@@ -100,7 +100,7 @@ void loadImage()
 		
 		strcat(src, ".png");
 		
-		widget = gtk_image_new_from_file ("img/K.png"); 
+		widget = gtk_image_new_from_file (src); 
 		
 		resize_image(widget);
 		
