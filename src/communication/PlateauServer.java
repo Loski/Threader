@@ -23,6 +23,7 @@ public class PlateauServer extends Plateau {
 			 throw new ExceptionPlateau("Alignement des lettres non respecté.", "POS");
 		 }
 		System.out.println(findMainWord(points, alignement));
+		System.out.println(findMainWord(points, alignement).length());
 	}
 	public List<Point> placementValide(Plateau plateau_joueur) throws ExceptionPlateau{
 		boolean somethingChange = false;
@@ -34,7 +35,7 @@ public class PlateauServer extends Plateau {
 						throw new ExceptionPlateau("un joueur tente de tricher Michel", "POS");
 					}else{
 						somethingChange = true;
-						points.add(new Point(i, j));
+						points.add(new Point(j, i));
 					 }
 				 }
 			 }
@@ -114,16 +115,16 @@ public class PlateauServer extends Plateau {
 	private String searchLeftRight(Point pt){
 		String str ="";
 		int x = (int) pt.getX() -1;
-		while(x >= 0 && plateau[x][(int) pt.getY()] != char_empty){
-			str+= plateau[x][(int) pt.getY()];
+		while(x >= 0 && plateau[(int) pt.getY()][x] != char_empty){
+			str+= plateau[(int) pt.getY()][x];
 			x--;
 		}
 		if(str.length() > 0){
 			str = new StringBuilder(str).reverse().toString();
 		}
 		x = (int) pt.getX();
-		while(x < taille_plateau && plateau[x][(int) pt.getY()] != char_empty){
-			str+= plateau[x][(int) pt.getY()];
+		while(x < taille_plateau && plateau[(int) pt.getY()][x] != char_empty){
+			str+= plateau[(int) pt.getY()][x];
 			x++;
 		}
 		return str;
@@ -140,16 +141,16 @@ public class PlateauServer extends Plateau {
 	private String searchUpDown(Point pt) {
 			String str ="";
 			int y = (int) pt.getY() -1;
-			while(y >= 0 && plateau[(int) pt.getX()][y] != char_empty){
-				str+=plateau[(int) pt.getX()][y];
+			while(y >= 0 && plateau[y][(int) pt.getX()] != char_empty){
+				str+=plateau[y][(int) pt.getX()];
 				y--;
 			}
 			if(str.length() > 0){
 				str = new StringBuilder(str).reverse().toString();
 			}
 			y = (int) pt.getY();
-			while(y < taille_plateau && plateau[(int) pt.getX()][y] != char_empty){
-				str+=  plateau[(int) pt.getX()][y];
+			while(y < taille_plateau && plateau[y][(int) pt.getX()] != char_empty){
+				str+=  plateau[y][(int) pt.getX()];
 				y++;
 			}
 			return str;
