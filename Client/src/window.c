@@ -26,9 +26,12 @@ GtkWidget * p_window;
 
 GtkWidget * grille;
 GtkWidget * plateau[TAILLE_PLATEAU*TAILLE_PLATEAU];
+GtkWidget * event_box_list[TAILLE_PLATEAU*TAILLE_PLATEAU];
+GtkWidget * event_box_tirage[TAILLE_TIRAGE];
 GtkWidget * tirage;
 GtkWidget * scoreDisplay;
 //GtkWidget * players[][2];
+GdkPixbuf * images[27];
 
 GtkWidget * consoleArea;
 
@@ -37,6 +40,7 @@ char selectedLetter = '1';
 void lancementGUI(){
 	init_window();
 	init_main_container();
+	loadImage();
 	connexion_windows();
 	gtk_widget_show_all (p_window);  /* Lancement de la boucle principale */
 }
@@ -59,6 +63,51 @@ GtkWidget * init_main_container(){
 void cb_quit (GtkWidget *p_widget)
 {
   gtk_main_quit();
+}
+
+void resize_image(GtkWidget *widget)
+{
+	GdkPixbuf * pixbuf = gtk_image_get_pixbuf(GTK_IMAGE(widget));
+	if (pixbuf == NULL)
+	{
+		g_printerr("Failed to resize image\n");
+	}
+	
+	pixbuf = gdk_pixbuf_scale_simple(pixbuf,40, 40, GDK_INTERP_BILINEAR);
+	
+	gtk_image_set_from_pixbuf(GTK_IMAGE(widget), pixbuf);
+}
+
+void loadImage()
+{
+	char c = 'A';
+	
+	for(int i=0;i<27;i++)
+	{
+		GtkWidget *widget = NULL;
+		
+		char lettre[2] = "";
+		lettre[0] = c;
+		lettre[1] = '\0';
+		char src[10] = "img/";
+		
+		if(i==26)
+			strcat(src,"_");
+		else
+		{
+			strcat(src,lettre);
+		}
+		
+		strcat(src, ".png");
+		
+		widget = gtk_image_new_from_file ("img/K.png"); 
+		
+		resize_image(widget);
+		
+		images[i] = gtk_image_get_pixbuf(GTK_IMAGE(widget));
+		
+		c = (char) (c+1);
+	}
 }
 
 void createGrille (){
@@ -92,25 +141,37 @@ void createGrille (){
 				
 			gtk_grid_attach(GTK_GRID(grille), text, i, j, 1, 1);*/
 			
-			GtkWidget * text; 
+			GtkWidget * event_box;
+			GtkWidget * image;
 	
 			if (c == '0')
 			{
-				text =  gtk_button_new_with_label ("_");
+				/*text =  gtk_button_new_with_label ("_");
 				g_signal_connect(G_OBJECT(text), "clicked", G_CALLBACK(editPlateau),NULL);
+				gtk_button_set_relief(GTK_BUTTON(text), GTK_RELIEF_NONE); */
+
+				image = gtk_image_new_from_pixbuf (images[26]);
+
+				event_box = gtk_event_box_new ();
+				
+				event_box_list[k] = event_box;
+
+				gtk_container_add (GTK_CONTAINER (event_box), image);
+
+				g_signal_connect (G_OBJECT (event_box),"button_press_event",G_CALLBACK (editPlateau),image);
 			}
 			else
 			{
-				text =  gtk_button_new_with_label (ptr);
+				//text =  gtk_button_new_with_label (ptr);
+				
+				int index = (char)toupper(c) - 'A';
+				
+				image = gtk_image_new_from_pixbuf (images[26]);
 			}
 	
-			gtk_button_set_relief(GTK_BUTTON(text), GTK_RELIEF_NONE); 
-	
-			gtk_grid_attach(GTK_GRID(grille), text, j, i, 1, 1);
+			gtk_grid_attach(GTK_GRID(grille), event_box, j, i, 1, 1);
 			
-			plateau[k] = text;
-			
-
+			plateau[k] = image;
 			
 			k++;
 		}
@@ -155,21 +216,20 @@ void createTirageDisplay()
 	for(int i=0;i<TAILLE_TIRAGE;i++)
 	{
 		char c = session.tirage[i];
-		char *ptr = NULL;
-		ptr = malloc(2*sizeof(char));
-		if(ptr == NULL){
-			puts("Erreur pointeur tirage letter");
-		}
-		ptr[0] = c;
-		ptr[1] = '\0';
 		
-		GtkWidget * text =  gtk_button_new_with_label (ptr);
+		int index = (char)toupper(c) - 'A';
 		
-		g_signal_connect(G_OBJECT(text), "clicked", G_CALLBACK(selectLetter),NULL);
+		GtkWidget * image = gtk_image_new_from_pixbuf (images[index]);
+
+		GtkWidget * event_box = gtk_event_box_new ();
+				
+		event_box_tirage[i] = event_box;
+
+		gtk_container_add (GTK_CONTAINER (event_box), image);
+		
+		g_signal_connect (G_OBJECT (event_box),"button_press_event",G_CALLBACK (selectLetter),image);
 	
-		gtk_button_set_relief(GTK_BUTTON(text), GTK_RELIEF_NONE); 
-	
-		gtk_grid_attach(GTK_GRID(tirage), text, i, 0, 1, 1);
+		gtk_grid_attach(GTK_GRID(tirage), event_box, i, 0, 1, 1);
 		
 	}
 		
@@ -199,36 +259,40 @@ void createConsoleLog()
 
 }
 
-void selectLetter(GtkButton * button)
+void selectLetter(GtkWidget* event_box,GdkEventButton *event,gpointer data)
 {
-	char * label = (char *)gtk_button_get_label (button);
+	int i;
 	
-	printf("switch letter to : %c",*label);
+	for(i=0;i<TAILLE_PLATEAU*TAILLE_PLATEAU;i++)
+	{
+		if(event_box_tirage[i]==event_box)
+			break;
+	}
 	
-	selectedLetter = *label;
+	selectedLetter = session.tirage[i];
 }
 
-void editPlateau(GtkButton *button)
+void editPlateau(GtkWidget* event_box,GdkEventButton *event,gpointer data)
 {
 	if(selectedLetter!='1' && selectedLetter!='_')
 	{
-		char *ptr = NULL;
-		ptr = malloc(2*sizeof(char));
-		if(ptr == NULL){
-			puts("Erreur pointeur tirage edit plateau");
-		}
-		ptr[0] = selectedLetter;
-		ptr[1] = '\0';
+		char lettre[1] = "";
+		lettre[0] = (char)toupper(selectedLetter);
+		char src[6] = "";
+		strcat(src,lettre);
+		strcat(src, ".png\0");	
 		
-		gtk_button_set_label(GTK_BUTTON(button),ptr);
+		//gtk_button_set_label(GTK_BUTTON(button),ptr);
 		
 		int i;
 		
-		for(i=0;i<TAILLE_PLATEAU;i++)
+		for(i=0;i<TAILLE_PLATEAU*TAILLE_PLATEAU;i++)
 		{
-			if((GtkButton *)plateau[i]==button)
+			if(event_box_list[i]==event_box)
 				break;
 		}
+		
+		gtk_image_set_from_pixbuf (GTK_IMAGE(plateau[i]),gtk_image_get_pixbuf(GTK_IMAGE(plateau[i])));
 		
 		session.plateau[i]=selectedLetter;
 		selectedLetter='_';
@@ -301,6 +365,23 @@ gboolean refresh_GUI(gpointer user_data)
 	if(message!=NULL)
 	{
 		logger(message);
+		for(int i=0;i<TAILLE_PLATEAU*TAILLE_PLATEAU;i++)
+		{	
+			char c = session.plateau[i];
+			if (c == '0')
+			{
+				//gtk_button_set_label(GTK_BUTTON(plateau[i]),"_");
+			}
+			else
+			{
+				char * ptr = malloc(2*sizeof(char));
+				
+				ptr[0] = c;
+				ptr[1] = '\0';
+				
+				//gtk_button_set_label(GTK_BUTTON(plateau[i]),ptr);
+			}
+		}
 	}
 	return true;
 }

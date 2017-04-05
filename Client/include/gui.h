@@ -10,9 +10,11 @@
 	void connexion_windows();
 	void proposerMot(GtkButton *button);
 	 void lancementGUI();
-	void editPlateau(GtkButton *button);
+	void editPlateau(GtkWidget* event_box,GdkEventButton *event,gpointer data);
 	void createGrille ();
-	void selectLetter(GtkButton * button);
+	void selectLetter(GtkWidget* event_box,GdkEventButton *event,gpointer data);
 	void logger(char * message);
 	void createScoreDisplay();
+	void loadImage();
+	void resize_image(GtkWidget *widget);
 #endif
