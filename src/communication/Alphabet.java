@@ -114,7 +114,7 @@ public class Alphabet {
 			liste_lettre_voyelle.remove(l);
 		return new Letter(l);
 	}
-	public static int findScoreForLetter(char charAt) {
+	public static int findScoreForLetter(char charAt, Alphabet tirage) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

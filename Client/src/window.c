@@ -63,6 +63,9 @@ GtkWidget * init_main_container(){
 void cb_quit (GtkWidget *p_widget)
 {
   gtk_main_quit();
+  if(session.p_client != NULL){
+  	deconnexion_joueur(session.p_client);
+  }
 }
 
 void resize_image(GtkWidget *widget)

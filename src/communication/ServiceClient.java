@@ -192,4 +192,10 @@ public class ServiceClient implements Runnable{
 			this.isWaiting = isWaiting;
 		}
 
+
+		public void reset() {
+			this.plateau_courant = new Plateau(15);
+			this.score = 0;
+		}
+
 }

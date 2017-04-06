@@ -185,12 +185,8 @@ public class Plateau {
 	public static int calculScore(String mot, Alphabet tirage) {
 		int score = 0;
 		for(int i = 0; i < mot.length(); i++){
-			score += findScoreForLetter(mot.charAt(i));
+			score += findScoreForLetter(mot.charAt(i), tirage);
 		}
-	}
-
-	private static int findScoreForLetter(char charAt) {
-		// TODO Auto-generated method stub
-		return 0;
+		return score;
 	}
 }

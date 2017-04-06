@@ -50,6 +50,7 @@ public class Session implements Runnable {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					this.server.debutSession();
 					this.debut_phase = System.currentTimeMillis();
 				break;
 				case STEP_RECHERCHE:

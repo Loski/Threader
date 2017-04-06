@@ -92,9 +92,12 @@ void *thread_input(void* arg){
         while(session->p_client->socket!=0){
             char buffer[1024];
             int n = 0;
-            if((n = recv(session->p_client->socket, buffer, 1024, 0)) < 0)
+            n = recv(session->p_client->socket, buffer, 1024, 0);
+            if(n == SOCKET_ERROR)
             {
                 puts("error. Socket dead?");
+                closesocket(session->p_client->socket);
+                break;
                 //exit(0);
             }
             buffer[n] = '\0';

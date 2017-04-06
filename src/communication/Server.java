@@ -129,16 +129,6 @@ public class Server implements Communication {
 		logger.info("Bienvenue à " + sc.getPseudo());
 	}
 	
-	public void sendStateActuel(ServiceClient sc){
-		int state_actuel = session.getStep_actuel();
-		if(state_actuel == Session.TEMPS_PHASE_DE_RECHERCHE){
-			sc.sendMessage(ProtocoleCreator.create(Protocole.TOUR, this.session.getPlateau().toString(), this.session.getTirageCourant()));
-		}else if(state_actuel == Session.TEMPS_PHASE_DE_SOUMISSION){
-			sc.sendMessage(ProtocoleCreator.create(Protocole.TOUR, this.session.getPlateau().toString(), this.session.getTirageCourant()));
-		}else{
-			
-		}
-	}
 	@Override
 	public void deconnexion(ServiceClient sc) {
 		// TODO Auto-generated method stub
@@ -149,6 +139,9 @@ public class Server implements Communication {
 	public void debutSession() {
 		logger.info("Start of new session !");
 		this.sendToAll(ProtocoleCreator.create(Protocole.SESSION));
+		for(ServiceClient sc : this.clients){
+			sc.reset();
+		}
 	}
 
 	@Override
