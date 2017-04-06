@@ -17,4 +17,6 @@
 	void createScoreDisplay();
 	void loadImage();
 	void resize_image(GtkWidget *widget);
+	void saveToLocal();
+	void reset_placement();
 #endif

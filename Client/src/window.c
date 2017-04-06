@@ -39,7 +39,10 @@ GtkWidget * tourDisplay;
 GtkWidget * phaseDisplay;
 GtkWidget * timer;
 
-char selectedLetter = '1';
+char plateau_local[TAILLE_PLATEAU*TAILLE_PLATEAU];
+char tirage_local[TAILLE_TIRAGE];
+
+int selectedLetter = -1;
 
 void lancementGUI(){
 	init_window();
@@ -173,7 +176,7 @@ void createGrille (){
 				
 				int index = (char)toupper(c) - 'A';
 				
-				image = gtk_image_new_from_pixbuf (images[26]);
+				image = gtk_image_new_from_pixbuf (images[index]);
 			}
 	
 			gtk_grid_attach(GTK_GRID(grille), event_box, j, i, 1, 1);
@@ -194,6 +197,13 @@ void createGrille (){
 		
 		
 		gtk_grid_attach (GTK_GRID (p_main_grid), text, 400,800,200,100);
+		
+		GtkWidget * reset =  gtk_button_new_with_label ("Reset");
+		
+		g_signal_connect(G_OBJECT(text), "clicked", G_CALLBACK(reset_placement),NULL);
+		
+		
+		gtk_grid_attach (GTK_GRID (p_main_grid), reset, 200,800,200,100);
 		
 		
 		gtk_widget_show_all (p_window);  /* Lancement de la boucle principale */
@@ -224,8 +234,11 @@ void createTirageDisplay()
 	{
 		char c = session.tirage[i];
 		
-		int index = (char)toupper(c) - 'A';
+		int index = 26;
 		
+		if(session.phase==REC || session.phase==SOU)
+			index = (char)toupper(c) - 'A';
+			
 		tirage[i] = gtk_image_new_from_pixbuf (images[index]);
 
 		GtkWidget * event_box = gtk_event_box_new ();
@@ -289,22 +302,55 @@ void createConsoleLog()
 
 void selectLetter(GtkWidget* event_box,GdkEventButton *event,gpointer data)
 {
+	if(session.phase!=REC && session.phase!=SOU)
+	{
+		printf("PHASE : %d\n",session.phase);
+		return;
+	}
+	
 	int i;
 	
 	for(i=0;i<TAILLE_TIRAGE;i++)
 	{
 		if(event_box_tirage[i]==event_box)
 			break;
+		else
+		{
+			if(tirage_local[i]=='0')
+			{
+				int index = (char)toupper(session.tirage[i]) - 'A';
+				gtk_image_set_from_pixbuf (GTK_IMAGE(tirage[i]),images[index]);
+			}
+			
+			tirage_local[i]=session.tirage[i];
+		}
 	}
 	
-	selectedLetter = session.tirage[i];
+	if(tirage_local[i]!='0' && tirage_local[i]!='_')
+	{
+		gtk_image_set_from_pixbuf (GTK_IMAGE(tirage[i]),images[26]);
+		selectedLetter = i;
+		tirage_local[i]='0';
+	}
+	else if(tirage_local[i]=='0')
+	{
+		selectedLetter = -1;
+		int index = (char)toupper(session.tirage[i]) - 'A';
+		tirage_local[i]=session.tirage[i];
+		gtk_image_set_from_pixbuf (GTK_IMAGE(tirage[i]),images[index]);
+	}
+	
+	gtk_widget_show_all (p_window);
 }
 
 void editPlateau(GtkWidget* event_box,GdkEventButton *event,gpointer data)
 {
-	if(selectedLetter!='1' && selectedLetter!='_')
+	if(session.phase!=REC && session.phase!=SOU)
+		return;
+	
+	if(selectedLetter!=-1)
 	{		
-		int index = (char)toupper(selectedLetter) - 'A';
+		int index = (char)toupper(session.tirage[selectedLetter]) - 'A';
 		
 		//gtk_button_set_label(GTK_BUTTON(button),ptr);
 		
@@ -318,8 +364,9 @@ void editPlateau(GtkWidget* event_box,GdkEventButton *event,gpointer data)
 		
 		gtk_image_set_from_pixbuf (GTK_IMAGE(plateau[i]),images[index]);
 		
-		session.plateau[i]=selectedLetter;
-		selectedLetter='_';
+		tirage_local[selectedLetter]='_';
+		session.plateau[i]=session.tirage[selectedLetter];
+		selectedLetter=-1;
 			
 		gtk_widget_show_all (p_window);
 	}
@@ -414,14 +461,34 @@ void refresh_tirage()
 		
 	for(i=0;i<TAILLE_TIRAGE;i++)
 	{			
-		int index = -1;
+		int index = 26;
 		
-		index = (char)toupper(session.plateau[i]) - 'A';
+		index = (char)session.tirage[i] - 'A';
 				
 		gtk_image_set_from_pixbuf (GTK_IMAGE(tirage[i]),images[index]);
 	}
 			
 	gtk_widget_show_all (p_window);
+}
+
+void refresh_tour()
+{
+	char tour[5] = "";
+	sprintf(tour, "%d", session.tour);
+	char tourTexte[11] = "TOUR ";
+	
+	strcat(tourTexte,tour);
+	
+	strcat(tourTexte," :");
+	
+	gtk_label_set_markup(GTK_LABEL(tourDisplay), tourTexte);
+}
+
+void reset_placement()
+{
+	saveToLocal();
+	refresh_tirage();
+	refresh_grille();
 }
 
 void refreshIAmTheBest(bool imthebest){
@@ -446,6 +513,7 @@ gboolean refresh_GUI(gpointer user_data)
 			logger("-----------Début d'un nouveau tour---------",1);
 			refresh_tirage();
 			refresh_grille();
+			refresh_tour();
 		}else if(strcmp(protocole, MEILLEUR) == 0){ 
           if(strcmp(pp_message[1], "0") == 0){ 
             refreshIAmTheBest(true); 
@@ -464,14 +532,74 @@ gboolean refresh_GUI(gpointer user_data)
 			logger(pp_message[1],1);
 			/* MAJ tab score*/
 		}
+		else if(strcmp(protocole, SESSION) == 0){
+			logger("--------- Début d'une nouvelle session -------------",1);
+		}
+		else if(strcmp(protocole, RVALIDE) == 0 || strcmp(protocole, SVALIDE) == 0){
+			logger("Proposition valide",1);
+		}
+		else if(strcmp(protocole, RINVALIDE) == 0 || strcmp(protocole, SINVALIDE) == 0){
+			logger("Proposition invalide : ",0);
+			if(count>1)
+				logger(pp_message[1],1);
+		}
+		else if(strcmp(protocole, RATROUVE) == 0){
+			logger("Le joueur [",0);
+			if(count>1)
+				logger(pp_message[1],0);
+			else
+				logger("???",0);
+			
+			logger("] a trouvé un mot",1);
+		}
+		else if(strcmp(protocole, RFIN) == 0)
+		{
+			logger("La phase de recherche est terminée",1);
+		}
+		else if(strcmp(protocole, SFIN) == 0)
+		{
+			logger("La phase de soumission est terminée",1);
+		}
+		else if(strcmp(protocole, RECEPTION) == 0)
+		{
+			if(count>1)
+			{
+				logger(">",0);
+				logger(pp_message[1],1);
+			}
+		}
+		else if(strcmp(protocole, PRECEPTION) == 0)
+		{
+			if(count>1)
+			{
+				if(count>2)
+				{
+					logger(pp_message[2],0);
+					logger(" : ",0);
+				}
+				else
+					logger("??? :",0);
+					
+				logger(pp_message[1],1);
+			}
+		}
 		else
 		{
-			logger("Le serveur utilise un protcole non reconnu par le client : ",0);
+			logger("Le serveur utilise un protocole non reconnu par le client : ",0);
 			logger(protocole,1);
 		}
 	}
 	
 	return true;
+}
+
+void saveToLocal()
+{
+	for(int i=0;i<TAILLE_PLATEAU*TAILLE_PLATEAU;i++)
+		plateau_local[i]=session.plateau[i];
+		
+	for(int i=0;i<TAILLE_TIRAGE;i++)
+		tirage_local[i]=session.tirage[i];
 }
 
 void askConnexion(GtkButton *button, GtkWidget * input){
@@ -495,6 +623,9 @@ void askConnexion(GtkButton *button, GtkWidget * input){
 	    }else{
 
 	    	puts("ça marche.");
+	    	
+	    	saveToLocal();
+	    	
 	    	initThread(&session);
 	    	gtk_widget_destroy (input);
 	    	gtk_widget_destroy (button_connexion);
@@ -524,6 +655,7 @@ void askConnexion(GtkButton *button, GtkWidget * input){
 
 void proposerMot(GtkButton *button){
 	
-	annoncer_placement(session.plateau,session.p_client);
+	if(session.phase==REC || session.phase==SOU)
+		annoncer_placement(session.plateau,session.p_client);
 
 }
