@@ -25,7 +25,7 @@ public class Session implements Runnable {
 	private int tour;
 	private Server server;
 	private int step_actuel;
-	
+	private boolean session_over;
 	private long debut_phase;
 
 
@@ -37,6 +37,7 @@ public class Session implements Runnable {
 		this.server = s;
 		this.step_actuel = STEP_SESSION;
 		this.debut_phase = -1;
+		this.session_over = true;
 	}
 
 	@Override
@@ -50,7 +51,10 @@ public class Session implements Runnable {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					this.server.debutSession();
+					if(session_over){
+						this.server.debutSession();
+						session_over = false;
+					}
 					this.step_actuel = STEP_RECHERCHE;
 					this.debut_phase = System.currentTimeMillis();
 				break;
@@ -73,7 +77,6 @@ public class Session implements Runnable {
 					try {
 						Thread.sleep(TEMPS_PHASE_DE_SOUMISSION);
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					this.server.sFin();
@@ -82,12 +85,6 @@ public class Session implements Runnable {
 				case STEP_RESULTAT:
 					this.debut_phase = System.currentTimeMillis();
 					this.server.bilan();
-					try {
-						Thread.sleep(TEMPS_PHASE_DE_RESULTAT);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
 					tour++;
 					this.step_actuel = STEP_SESSION;
 					break;
