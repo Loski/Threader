@@ -200,7 +200,7 @@ void createGrille (){
 		
 		GtkWidget * reset =  gtk_button_new_with_label ("Reset");
 		
-		g_signal_connect(G_OBJECT(text), "clicked", G_CALLBACK(reset_placement),NULL);
+		g_signal_connect(G_OBJECT(reset), "clicked", G_CALLBACK(reset_placement),NULL);
 		
 		
 		gtk_grid_attach (GTK_GRID (p_main_grid), reset, 200,800,200,100);
@@ -365,7 +365,7 @@ void editPlateau(GtkWidget* event_box,GdkEventButton *event,gpointer data)
 		gtk_image_set_from_pixbuf (GTK_IMAGE(plateau[i]),images[index]);
 		
 		tirage_local[selectedLetter]='_';
-		session.plateau[i]=session.tirage[selectedLetter];
+		plateau_local[i]=session.tirage[selectedLetter];
 		selectedLetter=-1;
 			
 		gtk_widget_show_all (p_window);
@@ -505,7 +505,7 @@ gboolean refresh_GUI(gpointer user_data)
 		int count = split(message, '/', &pp_message);
 		 
 		if(count < 0)
-			return;
+			return false;
 			
 		protocole = pp_message[0];
 		
@@ -539,6 +539,9 @@ gboolean refresh_GUI(gpointer user_data)
 			logger("Proposition valide",1);
 		}
 		else if(strcmp(protocole, RINVALIDE) == 0 || strcmp(protocole, SINVALIDE) == 0){
+			
+			reset_placement();
+			
 			logger("Proposition invalide : ",0);
 			if(count>1)
 				logger(pp_message[1],1);
@@ -656,6 +659,6 @@ void askConnexion(GtkButton *button, GtkWidget * input){
 void proposerMot(GtkButton *button){
 	
 	if(session.phase==REC || session.phase==SOU)
-		annoncer_placement(session.plateau,session.p_client);
+		annoncer_placement(plateau_local,session.p_client);
 
 }
