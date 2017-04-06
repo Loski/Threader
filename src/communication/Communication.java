@@ -23,7 +23,6 @@ public interface Communication {
 	public void tour();
 	public void rATrouve(ServiceClient sc);
 	public void rFin();
-	public void sValide();
 	public void sFin();
 	public void sInvalide();
 	public void meilleurMot(ServiceClient meilleur);
@@ -43,5 +42,6 @@ public interface Communication {
 	public void bienvenue(ServiceClient sc);
 	void rInValide(ServiceClient sc, String message);
 	void rValide(ServiceClient sc);
+	void sValide(ServiceClient sc);
 
 }

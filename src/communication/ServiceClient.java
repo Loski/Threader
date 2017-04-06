@@ -104,10 +104,12 @@ public class ServiceClient implements Runnable{
 			else if (Protocole.TROUVE.name().equals(cmd) && isAuthentified){
 				if(msgs.length > 1){
 					try {
-						server.getSession().verificationSessionForTrouve();
+						System.out.println("jessaie");
+						if(!server.getSession().verificationSessionForTrouve())
+							throw new ExceptionPlateau("Not in the good phase","INV");
 						Plateau plateau_tmp = new Plateau(msgs[1]);
 						String str = this.server.getSession().getPlateau().gestionPlacement(plateau_tmp);
-
+						gestionPlateauValide(str, plateau_tmp);
 					} catch (ExceptionPlateau e) {
 						server.rInValide(this, e.getCode_erreur() + e.getMessage());
 						e.printStackTrace();
@@ -127,8 +129,9 @@ public class ServiceClient implements Runnable{
 		
 		public void gestionPlateauValide(String str, Plateau plateau_tmp){
 			int score = plateau_tmp.calculScore(str, server.getSession().getListe_letters());
+			System.out.println("try my best desu");
 			if(score > plateau.getScore()){
-				server.rValide(this);
+				server.validation(this);
 				plateau_tmp.setScore(score);
 				plateau = plateau_tmp;
 				ServiceClient old = server.getSession().getPlateau().getMeilleur_joueur();

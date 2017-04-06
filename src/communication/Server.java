@@ -167,7 +167,9 @@ public class Server implements Communication {
 		sc.sendMessage(ProtocoleCreator.create(Protocole.RVALIDE));
 		rATrouve(sc);
 		logger.info(sc.getPseudo() + " est le premier a avoir trouvé un mot valide !");
-		this.session.notify();
+		synchronized (obj) {
+			obj.notifyAll();
+		}
 	}
 
 	@Override
@@ -179,17 +181,22 @@ public class Server implements Communication {
 	public void rATrouve(ServiceClient sc) {
 		this.sendToAll(Protocole.RATROUVE, sc.getPseudo());	
 	}
-
+	public synchronized void validation(ServiceClient sc){
+		if(session.getStep_actuel() == Session.STEP_RECHERCHE){
+			rValide(sc);
+		}else{
+			sValide(sc);
+		}
+	}
 	@Override
 	public void rFin() {
-		// TODO Auto-generated method stub
 		logger.info("End of reflexion phase");
 		this.sendToAll(ProtocoleCreator.create(Protocole.RFIN));
 	}
 
 	@Override
-	public void sValide() {
-		this.sendToAll(ProtocoleCreator.create(Protocole.SVALIDE));
+	public void sValide(ServiceClient sc) {
+		sc.sendMessage(ProtocoleCreator.create(Protocole.SVALIDE));
 	}
 
 	@Override
