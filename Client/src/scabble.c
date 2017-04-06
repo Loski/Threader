@@ -62,7 +62,6 @@ int init_session(Session * session, char * placement, char * tirage, char * list
 }
 
 int refresh_score(Session * session, char * liste_score){
-    char *ptr;
     char **score = NULL;
     int count = split(liste_score, '*', &score);
     if(count < 0 || score == NULL){
@@ -71,7 +70,7 @@ int refresh_score(Session * session, char * liste_score){
     }
     for(int i = 1; i < session->nombre_joueur; i+=2){
         int index = chercherJoueur(score[i], session);
-        session->p_liste_joueur[index].score = strtol(score[i+1], &ptr, 10);
+        session->p_liste_joueur[index].score = atoi(score[i+1]);
     }
 }
 void refresh_game(Session * session, char * placement, char * tirage){
@@ -174,7 +173,7 @@ int handle_event(char * message_recu, Session * session){
     }else if(strcmp(protocole, RATROUVE) == 0){
         switch_phase(session,SOU);
     }else if(strcmp(protocole, RFIN) == 0){
-		switch_phase(session,RES);
+		switch_phase(session,SOU);
     }else if(strcmp(protocole, SVALIDE) == 0){
         //do nothing
     }else if(strcmp(protocole, SINVALIDE) == 0){

@@ -217,10 +217,17 @@ void createScoreDisplay()
 	{
 		GtkWidget * name = gtk_label_new(NULL);
 		
-		printf("USERNAME :%s",(session.p_liste_joueur)->username);
-		
 		gtk_label_set_markup(GTK_LABEL(name),(session.p_liste_joueur)->username);
 		gtk_grid_attach (GTK_GRID (p_main_grid), name, 600,0,400,200);
+		
+		GtkWidget * score = gtk_label_new(NULL);
+		
+		char value[5] = "";
+		sprintf(value, "%d", (session.p_liste_joueur)->score);
+		
+		gtk_label_set_markup(GTK_LABEL(score),value);
+		gtk_grid_attach (GTK_GRID (p_main_grid), score, 700,0,300,200);
+			
 	}
 	
 	gtk_widget_show_all (p_window);
@@ -659,6 +666,9 @@ void askConnexion(GtkButton *button, GtkWidget * input){
 void proposerMot(GtkButton *button){
 	
 	if(session.phase==REC || session.phase==SOU)
+	{
 		annoncer_placement(plateau_local,session.p_client);
+		reset_placement();
+	}
 
 }
