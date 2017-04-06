@@ -38,7 +38,7 @@ int split (const char *str, char c, char ***arr);
 #define SFIN "SFIN"
 #define BILAN "BILAN"
 #define REFUS "REFUS"
-
+#define MEILLEUR "MEILLEUR"
 
 //envoie
 #define CONNEXION "CONNEXION/"
@@ -46,6 +46,12 @@ int split (const char *str, char c, char ***arr);
 #define TROUVE "TROUVE/"
 
 
+//Chat
+
+#define PENVOIE "PENVOIE/"
+#define ENVOIE "ENVOIE/"
+#define RECEPTION "PRECEPTION"
+#define RECEPTION "RECEPTION"
 
 #define DELIMITOR "/"
 

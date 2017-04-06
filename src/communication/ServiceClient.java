@@ -92,10 +92,14 @@ public class ServiceClient implements Runnable{
 						System.out.println("Connexion de " + this.pseudo);
 						this.server.addClient(this);
 					}else{
-						System.out.println("Tentative de reconnexion" + this.pseudo);
+						Server.logger.warning("Tentative de reconnexion" + this.pseudo);
+						server.refus(this);
+						this.isConnected = false;
 					}
 				}catch (Exception e) {
-					System.err.println("Aucun pseudonyme fournis.");
+					Server.logger.warning("Aucun pseudonyme fournis" + this.pseudo);
+					this.isConnected = false;
+					server.refus(this);
 				}
 			}else if(Protocole.SORT.name().equals(cmd) && isAuthentified){
 				isConnected = false;
@@ -104,7 +108,6 @@ public class ServiceClient implements Runnable{
 			else if (Protocole.TROUVE.name().equals(cmd) && isAuthentified){
 				if(msgs.length > 1){
 					try {
-						System.out.println("jessaie");
 						if(!server.getSession().verificationSessionForTrouve())
 							throw new ExceptionPlateau("Not in the good phase","INV");
 						Plateau plateau_tmp = new Plateau(msgs[1]);
@@ -207,18 +210,7 @@ public class ServiceClient implements Runnable{
 		public void setServer(Server server) {
 			this.server = server;
 		}
-
-
-		public boolean isWaiting() {
-			return isWaiting;
-		}
-
-
-		public void setWaiting(boolean isWaiting) {
-			this.isWaiting = isWaiting;
-		}
-
-
+		
 		public void reset() {
 			this.setPlateau(new Plateau(15));
 			this.score = 0;

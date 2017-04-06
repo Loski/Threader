@@ -130,14 +130,13 @@ int handle_connexion(char * message_recu, Session * session){
             return -1;
         return init_session(session, pp_message[1], pp_message[2], pp_message[3],pp_message[4],pp_message[5]);
     }else if(strcmp(protocole, REFUS) == 0)
-        return -1;
+        return -2;
     return -1;
 }
 
 void switch_phase(Session* session,int phase)
 {
 	
-	/* Tester enchainement ?*/
 	session->phase=phase;
 }
 
@@ -168,19 +167,20 @@ int handle_event(char * message_recu, Session * session){
     }else if(strcmp(protocole, CONNECTE) == 0){
         connexion_nouveau_joueur(session, pp_message[1]);
     }else if(strcmp(protocole, RVALIDE) == 0){
-        
+        switch_phase(session,SOU);
     }else if(strcmp(protocole, RINVALIDE) == 0){
-        
+        //do nothing
+    }else if(strcmp(protocole, MEILLEUR) == 0){
+        //do nothing
     }else if(strcmp(protocole, RATROUVE) == 0){
         switch_phase(session,SOU);
     }else if(strcmp(protocole, RFIN) == 0){
 		switch_phase(session,RES);
     }else if(strcmp(protocole, SVALIDE) == 0){
-        
+        //do nothing
     }else if(strcmp(protocole, SINVALIDE) == 0){
-        
+        //do nothing
     }else if(strcmp(protocole, SFIN) == 0){
-        switch_phase(session,RES);
         switch_phase(session,RES);
     }else if(strcmp(protocole, BILAN) == 0){
         if(count > 3){
