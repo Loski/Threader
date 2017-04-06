@@ -35,6 +35,9 @@ GtkWidget * scoreDisplay;
 GdkPixbuf * images[27];
 
 GtkWidget * consoleArea;
+GtkWidget * tourDisplay;
+GtkWidget * phaseDisplay;
+GtkWidget * timer;
 
 char selectedLetter = '1';
 
@@ -182,7 +185,7 @@ void createGrille (){
 		
 		gtk_widget_set_size_request(grille, 500, 500);
 		
-		gtk_grid_attach (GTK_GRID (p_main_grid), grille, 0,0,1,1);
+		gtk_grid_attach (GTK_GRID (p_main_grid), grille, 0,100,500,500);
 		
 		
 		GtkWidget * text =  gtk_button_new_with_label ("Valider le mot");
@@ -238,6 +241,27 @@ void createTirageDisplay()
 	}
 		
 	gtk_grid_attach (GTK_GRID (p_main_grid), tirageDisplay, 0,600,1000,100);
+	gtk_widget_show_all (p_window);
+}
+
+void createPhaseDisplay()
+{
+	tourDisplay = gtk_label_new(NULL);
+	phaseDisplay = gtk_label_new(NULL);
+	timer = gtk_label_new(NULL);
+	
+	char tour[5] = "";
+	sprintf(tour, "%d", session.tour);
+	char tourTexte[11] = "TOUR ";
+	
+	strcat(tourTexte,tour);
+	
+	strcat(tourTexte," :");
+	
+	gtk_label_set_markup(GTK_LABEL(tourDisplay), tourTexte);
+	
+	gtk_grid_attach(GTK_GRID(p_main_grid),tourDisplay,600,10,500,100);
+	
 	gtk_widget_show_all (p_window);
 }
 
@@ -392,10 +416,7 @@ void refresh_tirage()
 	{			
 		int index = -1;
 		
-		if(session.plateau[i]=='0')
-			index = 26;
-		else
-			index = (char)toupper(session.plateau[i]) - 'A';
+		index = (char)toupper(session.plateau[i]) - 'A';
 				
 		gtk_image_set_from_pixbuf (GTK_IMAGE(tirage[i]),images[index]);
 	}
@@ -473,6 +494,7 @@ void askConnexion(GtkButton *button, GtkWidget * input){
 	    	createGrille();
 	    	createConsoleLog();
 	    	createScoreDisplay();
+	    	createPhaseDisplay();
 	    	
 	    	print_session(&session);
 	    	
