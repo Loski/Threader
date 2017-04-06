@@ -104,6 +104,7 @@ public class ServiceClient implements Runnable{
 			else if (Protocole.TROUVE.name().equals(cmd) && isAuthentified){
 				if(msgs.length > 1){
 					try {
+						server.getSession().verificationSessionForTrouve();
 						Plateau plateau_tmp = new Plateau(msgs[1]);
 						String str = this.server.getSession().getPlateau().gestionPlacement(plateau_tmp);
 

@@ -149,8 +149,7 @@ public class Server implements Communication {
 
 	@Override
 	public void vainqueur() {
-		// TODO Auto-generated method stub
-		
+		sendToAll(Protocole.VAINQUEUR, session.getScore());
 	}
 
 	@Override
@@ -167,6 +166,7 @@ public class Server implements Communication {
 	public void rValide(ServiceClient sc) {
 		sc.sendMessage(ProtocoleCreator.create(Protocole.RVALIDE));
 		rATrouve(sc);
+		logger.info(sc.getPseudo() + " est le premier a avoir trouvé un mot valide !");
 		this.session.notify();
 	}
 
@@ -206,8 +206,8 @@ public class Server implements Communication {
 
 	@Override
 	public void bilan() {
-		// TODO Auto-generated method stub
-		
+		String message =  this.session.getPlateau().getVainqueur();
+		this.sendToAll(Protocole.BILAN, message+this.getSession().getScore());
 	}
 
 	@Override

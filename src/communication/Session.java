@@ -176,4 +176,11 @@ public class Session implements Runnable {
 		return (time - (this.debut_phase - System.currentTimeMillis()))/1000;
 	}
 
+	public boolean verificationSessionForTrouve() {
+		if(step_actuel == STEP_RECHERCHE ||  step_actuel == STEP_SOUMISSION)
+			return true;
+		return false;
+		
+	}
+
 }

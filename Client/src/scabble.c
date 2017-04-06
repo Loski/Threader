@@ -61,6 +61,19 @@ int init_session(Session * session, char * placement, char * tirage, char * list
     return 1;
 }
 
+int refresh_score(Session * session, char * liste_score){
+    char *ptr;
+    char **score = NULL;
+    int count = split(liste_score, '*', &score);
+    if(count < 0 || score == NULL){
+        puts("count négatif");
+        return -1;
+    }
+    for(int i = 1; i < session->nombre_joueur; i+=2){
+        int index = chercherJoueur(score[i], session);
+        session->p_liste_joueur[index].score = strtol(score[i+1], &ptr, 10);
+    }
+}
 void refresh_game(Session * session, char * placement, char * tirage){
     change_plateau(session, placement);
     change_tirage(session, tirage);
@@ -170,7 +183,9 @@ int handle_event(char * message_recu, Session * session){
         switch_phase(session,RES);
         switch_phase(session,RES);
     }else if(strcmp(protocole, BILAN) == 0){
-        
+        if(count > 3){
+            refresh_score(pp_message[3], session);
+        }
     }else if(strcmp(protocole, VAINQUEUR) == 0){
         
     }else if(strcmp(protocole, SESSION) == 0){

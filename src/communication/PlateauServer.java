@@ -103,6 +103,15 @@ public class PlateauServer extends Plateau {
 		score = 0;
 		meilleur_joueur = null;
 	}
+
+
+
+	public String getVainqueur() {
+		if(meilleur_joueur == null){
+			return "//";
+		}else
+			return meilleur_joueur.getPseudo() + "/" + score+ "/";
+	}
 	
 
 }
