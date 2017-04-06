@@ -416,7 +416,7 @@ void refresh_tirage()
 	{			
 		int index = -1;
 		
-		index = (char)toupper(session.plateau[i]) - 'A';
+		index = (char)toupper(session.tirage[i]) - 'A';
 				
 		gtk_image_set_from_pixbuf (GTK_IMAGE(tirage[i]),images[index]);
 	}
