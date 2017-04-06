@@ -53,8 +53,8 @@ int init_session(Session * session, char * placement, char * tirage, char * list
         return -1;
     }
     
-    session->messages = (FIFO**)malloc(sizeof(FIFO*));
-    *(session->messages) = NULL;
+    session->messages = malloc(sizeof(session->messages));
+    session->messages->premier = NULL;
     
     if (pthread_mutex_init(& (session->lock), NULL) != 0)
     {
@@ -99,17 +99,16 @@ void bind_joueur_to_session( JoueurClient * joueur, Session * session){
 }
 
 void initThread(Session * session){
-   if(pthread_create(&(session->p_client->input), NULL, thread_input, session)){
-       puts("Erreur création thread_input");
-   }
-   //pthread_create(session->p_joueur->p_output, NULL, thread_output, (void *)(session));
+    g_mutex_init (&session->mutex);
+    session->p_client->input = g_thread_new("reader",&thread_input, session);
 }
 
-void *thread_input(void* arg){
+gpointer thread_input(gpointer arg){
     if(arg != NULL){
         Session * session = (Session *) arg;
         int n = 5;
-        while(session->p_client->socket!=0 && n > 0){
+        printf("%s", session->tirage);
+        while(n > 0){
             char buffer[1024];
             n = recv(session->p_client->socket, buffer, 1024, 0);
             if(n <= 0)
@@ -163,11 +162,8 @@ int handle_event(char * message_recu, Session * session){
     int count = split(message_recu, '/', &pp_message);
     if(count < 0)
         return -1;
-    protocole = pp_message[0];
-    pthread_mutex_lock(& (session->lock));
-    printf("J'ajoute :%s\n,",message_recu);
-		ajouter_message(session->messages,message_recu);
-    pthread_mutex_unlock(& (session->lock));
+    protocole = pp_message[0];    
+    ajouter_message(session->messages,message_recu, session);
     if(strcmp(protocole, TOUR ) == 0){
 		switch_phase(session,REC);
         refresh_game(session, pp_message[1], pp_message[2]);

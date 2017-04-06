@@ -16,6 +16,7 @@
 
 #include "socket.h"
 #include <pthread.h>
+#include <glib.h>
 
 
 typedef struct JoueurClient JoueurClient;
@@ -28,8 +29,7 @@ struct Joueur
     int score;
 };
 struct JoueurClient{
-    pthread_t input;
-    pthread_t  output;
+    GThread * input;
     socket_t socket;
     Joueur * p_joueur;
 };

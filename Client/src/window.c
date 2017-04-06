@@ -429,10 +429,8 @@ void refreshIAmTheBest(bool imthebest){
 }
 gboolean refresh_GUI(gpointer user_data)
 {	
-	pthread_mutex_lock(& (session.lock));
-	char * message = get_message(session.messages);
+	char * message = get_message(session.messages, &session);
 	printf("Je retire :%s\n,",message);
-	pthread_mutex_unlock(& (session.lock));
 	
 	if(message!=NULL)
 	{

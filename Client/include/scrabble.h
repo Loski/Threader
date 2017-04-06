@@ -23,11 +23,12 @@
 #define SOU 2
 #define RES 3
 
-
+typedef struct FIFO FIFO;
 
 #include "joueur.h"
 #include "transmission.h"
 #include "FIFO.h"
+#include <gtk/gtk.h>
 
 typedef struct Session Session;
 struct Session{
@@ -39,16 +40,15 @@ struct Session{
     JoueurClient * p_client;
     int phase;
     int temps;
-    FIFO ** messages; 
-    pthread_mutex_t lock;
-    int val;
+    File * messages;
+    GMutex mutex;
 };
 
 int chercher_joueur(char * nom_joueur, Session * session);
 void bind_joueur_to_session(JoueurClient * joueur, Session * session);
 int init_session(Session * session, char * placement, char * tirage, char * liste_joueur,char * phase, char * temps);
 void initThread(Session * session);
-void *thread_input(void* arg);
+gpointer thread_input(gpointer arg);
 int handle_event(char * message_recu, Session * session);
 void change_tirage(Session * session, char * tirage);
 void change_plateau(Session * session, char * placement);

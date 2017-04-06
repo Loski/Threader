@@ -5,79 +5,63 @@
 #include <string.h>
 #include <pthread.h>
 
-void ajouter_message(FIFO ** list, char * message)
-{	
-	FIFO * nouveau = malloc(sizeof(FIFO));
-	if(nouveau != NULL)
-	{
-		nouveau->next = NULL;
-		nouveau->message = message;
-		
-		if(*list == NULL)
-		{
-			*list = nouveau;
-		}
-		else
-		{
-			FIFO * last = * list;
-				
-			while (last->next != NULL)
-			{
-				last = last->next;
-			}
-			
-			last->next=nouveau;
-		}
-	}
-	else
-	{
-		printf("ERREUR MALLOC message");
-	}
-	
+
+
+char * get_message(File *file, Session * session)
+{
+    if (file == NULL)
+    {
+        exit(EXIT_FAILURE);
+    }
+
+    char * message = NULL;
+    g_mutex_lock (&session->mutex);
+    /* On vérifie s'il y a quelque chose à défiler */
+    if (file->premier != NULL)
+    {
+        Element *elementDefile = file->premier;
+
+        message = elementDefile->message;
+        file->premier = elementDefile->suivant;
+        free(elementDefile);
+    }
+    g_mutex_unlock (&session->mutex);
+    return message;
 }
 
-char * get_message(FIFO ** list)
+
+
+void ajouter_message(File *file, char  * messageGiven, Session * session)
 {
-	if(*list == NULL)
-	{
-		printf("C'est Vide gros");
-		return NULL;
-	}
-	else
-	{
-		FIFO * next = (*list)->next;
-		char * message = NULL;
-		message = malloc(sizeof(char) * (1+strlen((*list)->message)));
+
+    Element *nouveau = malloc(sizeof(*nouveau));
+    if (file == NULL || nouveau == NULL)
+    {
+        exit(EXIT_FAILURE);
+    }
+    char * message = NULL;
+	message = malloc(sizeof(char) * (1+strlen(messageGiven)));
 		if(message == NULL){
 			puts("Pointeur non initialisé");
-			return NULL;
-		}
-		
-		strcpy(message, (*list)->message);
-		
-		
-		free(*list);
-		*list = NULL;
-		
-		*list = next;
-		
-		return message;
+			exit(1);
 	}
-}
-
-void clear(FIFO ** list)
-{
-	while (*list != NULL)
+    strcpy(message ,messageGiven);
+    nouveau->message = message;
+    nouveau->suivant = NULL;
+    g_mutex_lock (&session->mutex);
+    if (file->premier != NULL) /* La file n'est pas vide */
     {
-		get_message(list);
+        Element *elementActuel = file->premier;
+        while (elementActuel->suivant != NULL)
+        {
+            elementActuel = elementActuel->suivant;
+        }
+        elementActuel->suivant = nouveau;
     }
-}
+    else /* La file est vide, notre élément est le premier */
+    {
+        file->premier = nouveau;
+    }
+    g_mutex_unlock (&session->mutex);
 
-/*int main()
-{
-	FIFO ** list = (FIFO**)malloc(sizeof(FIFO*));
-	ajouter_message(list,"SESSION/");
-	ajouter_message(list,"TOUR/");
-	printf("%s\n",get_message(list));
-	return 0;
-}*/
+}

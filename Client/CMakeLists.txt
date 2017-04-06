@@ -16,6 +16,18 @@ include_directories(${GTK3_INCLUDE_DIRS})
 link_directories(${GTK3_LIBRARY_DIRS})
 # Add other flags to the compiler
 add_definitions(${GTK3_CFLAGS_OTHER})
+
+
+
+pkg_check_modules(GLib REQUIRED glib-2.0)
+# Setup CMake to use GTK+, tell the compiler where to look for headers
+# and to the linker where to look for libraries
+include_directories(${GLib_INCLUDE_DIRS})
+link_directories(${GLib_LIBRARY_DIRS})
+# Add other flags to the compiler
+add_definitions(${GLib_CFLAGS_OTHER})
+
+
 include_directories(include)
 
 
@@ -40,4 +52,5 @@ find_package(Threads REQUIRED)
 target_link_libraries(client Threads::Threads)
 
 target_link_libraries(client ${GTK3_LIBRARIES})
+target_link_libraries(client ${GLib_LIBRARIES})
 
