@@ -18,7 +18,7 @@ GtkWidget * p_main_grid;
 GtkWidget * label_connexion;
 GtkWidget * button_connexion;
 GtkWidget * inputTextConnexion;
-GtkWidget * errorField;
+GtkWidget * errorField = NULL;
 GtkWidget * p_window;
 
 
@@ -288,23 +288,64 @@ void createPhaseDisplay()
 void createConsoleLog()
 {
     consoleArea = gtk_text_view_new();
-    GtkWidget* scrollbar= gtk_vscrollbar_new(gtk_text_view_get_vadjustment(GTK_TEXT_VIEW(consoleArea)));
-    GtkWidget* textEntry = gtk_entry_new();
-
-    GtkWidget* console = gtk_table_new(3, 2, FALSE);
+	GtkWidget *scwin = gtk_scrolled_window_new(NULL, NULL);
+	gtk_container_add(GTK_CONTAINER(scwin), consoleArea);
 
 	gtk_text_view_set_editable (GTK_TEXT_VIEW(consoleArea),FALSE);
-
-    gtk_table_attach_defaults(GTK_TABLE(console), consoleArea, 0, 1, 0, 1);
-    gtk_table_attach_defaults(GTK_TABLE(console), scrollbar, 1, 2, 0, 1);
-    //gtk_table_attach_defaults(GTK_TABLE(console), textEntry, 0, 2, 1, 2);
+    
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scwin), GTK_POLICY_AUTOMATIC,
+                               GTK_POLICY_ALWAYS);
     //This code sets the preferred size for the widget, so it does not ask for extra space
-    gtk_widget_set_size_request(consoleArea, 1000, 240);
+    gtk_widget_set_size_request(consoleArea, 1000, 100);
     
-    gtk_grid_attach (GTK_GRID (p_main_grid), console, 0,900,1000,1000);
+    gtk_grid_attach (GTK_GRID (p_main_grid), scwin, 0,900,1000,50);
     
-    gtk_widget_show_all (p_window);
+	GtkWidget * inputText = createInputText(p_main_grid);
+	inputText = gtk_entry_new();
+	gtk_grid_attach (GTK_GRID (p_main_grid), inputText, 150,950,500,50);
+	GtkWidget * button_send =  gtk_button_new_with_label ("Envoyer");
+	gtk_grid_attach(GTK_GRID(p_main_grid),button_send, 700,950,300,50);
+	g_signal_connect(G_OBJECT(button_send), "clicked", G_CALLBACK(sendMessageEvent), inputText);
+	
+	gtk_widget_show_all (p_window);
 
+}
+
+void sendMessageEvent(GtkButton *button, GtkWidget * input)
+{
+	char **pp_message = NULL;
+	char * mess = (char*)gtk_entry_get_text(GTK_ENTRY(input));
+	//gtk_entry_set_text(GTK_ENTRY(input),"");
+	
+	if(strlen(mess) < 1)
+		return;
+	else{
+		
+		int count = split(mess, ' ', &pp_message);
+		
+		if(count < 0 || (mess[0]=='/' && count<3) )
+		{
+			logger("Mauvais message",1);
+			return ;
+		}
+		
+		if(mess[0]=='/')
+		{
+			
+		}
+		else
+		{
+			char message[255] = ENVOIE;
+			strcat(message, mess);
+			strcat(message, "/\n");
+			/*logger("(MOI)>",0);
+			logger(mess,1);*/
+			
+			if(!sendMessage(client.socket, message))
+				logger("Message non envoyé",1);
+		}
+
+	}
 }
 
 void selectLetter(GtkWidget* event_box,GdkEventButton *event,gpointer data)
@@ -314,22 +355,22 @@ void selectLetter(GtkWidget* event_box,GdkEventButton *event,gpointer data)
 		printf("PHASE : %d\n",session.phase);
 		return;
 	}
-	
+		
 	int i;
 	
-	for(i=0;i<TAILLE_TIRAGE;i++)
+	for(int x=0;x<TAILLE_TIRAGE;x++)
 	{
-		if(event_box_tirage[i]==event_box)
-			break;
+		if(event_box_tirage[x]==event_box)
+			i=x;
 		else
 		{
-			if(tirage_local[i]=='0')
+			if(tirage_local[x]=='0')
 			{
-				int index = (char)toupper(session.tirage[i]) - 'A';
-				gtk_image_set_from_pixbuf (GTK_IMAGE(tirage[i]),images[index]);
+				int index = (char)toupper(session.tirage[x]) - 'A';
+				gtk_image_set_from_pixbuf (GTK_IMAGE(tirage[x]),images[index]);
 			}
 			
-			tirage_local[i]=session.tirage[i];
+			tirage_local[x]=session.tirage[x];
 		}
 	}
 	
@@ -439,6 +480,7 @@ void logger(char * message,int newline)
 		gtk_text_buffer_get_end_iter (buffer,&iter);
 	
 		gtk_text_buffer_insert(buffer, &iter, "\n", -1);
+		
 	}
 
 }
@@ -640,7 +682,8 @@ void askConnexion(GtkButton *button, GtkWidget * input){
 	    	gtk_widget_destroy (input);
 	    	gtk_widget_destroy (button_connexion);
 	    	gtk_widget_destroy (label_connexion);
-	    	//gtk_widget_destroy (errorField);	    	
+	    	if(errorField!=NULL)
+				gtk_widget_destroy (errorField);	    	
 	    	createTirageDisplay();
 	    	createGrille();
 	    	createConsoleLog();

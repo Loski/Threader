@@ -19,4 +19,5 @@
 	void resize_image(GtkWidget *widget);
 	void saveToLocal();
 	void reset_placement();
+	void sendMessageEvent(GtkButton *button, GtkWidget * input);
 #endif
