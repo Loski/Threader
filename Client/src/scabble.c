@@ -89,20 +89,21 @@ void initThread(Session * session){
 void *thread_input(void* arg){
     if(arg != NULL){
         Session * session = (Session *) arg;
-        while(session->p_client->socket!=0){
+        int n = 5;
+        while(session->p_client->socket!=0 && n > 0){
             char buffer[1024];
-            int n = 0;
             n = recv(session->p_client->socket, buffer, 1024, 0);
-            if(n == SOCKET_ERROR)
+            if(n <= 0)
             {
                 puts("error. Socket dead?");
                 closesocket(session->p_client->socket);
-                break;
                 //exit(0);
             }
             buffer[n] = '\0';
             handle_event(buffer, session);
-        }   
+        }
+        printf("%s %d", "my n is :", n);
+   
     }
 }
 int handle_connexion(char * message_recu, Session * session){
