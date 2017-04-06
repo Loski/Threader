@@ -68,7 +68,7 @@ int refresh_score(Session * session, char * liste_score){
         puts("count négatif");
         return -1;
     }
-    for(int i = 1; i < session->nombre_joueur; i+=2){
+    for(int i = 1; i < count-1; i+=2){
         int index = chercherJoueur(score[i], session);
         session->p_liste_joueur[index].score = atoi(score[i+1]);
     }
