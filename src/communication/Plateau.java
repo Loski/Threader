@@ -25,6 +25,7 @@ public class Plateau {
 	protected char plateau[][];
 	public final static char char_empty = '0';
 	protected int score;
+	protected String mot_courant;
 	
 	public Plateau(int taille){
 		Plateau.taille_plateau = taille;
@@ -58,6 +59,8 @@ public class Plateau {
 	
 	public Plateau(Plateau p){
 		this(p.toString());
+		this.score = p.getScore();
+		this.mot_courant = p.getMot_courant();
 	}
 	
 	@Override
@@ -148,6 +151,14 @@ public class Plateau {
 	}
 	   public static void main (String[] args){
 		   System.out.println(new Plateau(15));
+	}
+
+	public String getMot_courant() {
+		return mot_courant;
+	}
+
+	public void setMot_courant(String mot_courant) {
+		this.mot_courant = mot_courant;
 	}
 
 	public int getScore() {

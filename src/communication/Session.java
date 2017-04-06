@@ -44,7 +44,6 @@ public class Session implements Runnable {
 		while (this.joueurs.size() > 0) {
 			switch (step_actuel) {
 				case STEP_SESSION:
-					this.step_actuel = STEP_RECHERCHE;
 					try {
 						Thread.sleep(5*1000);
 					} catch (InterruptedException e) {
@@ -52,6 +51,7 @@ public class Session implements Runnable {
 						e.printStackTrace();
 					}
 					this.server.debutSession();
+					this.step_actuel = STEP_RECHERCHE;
 					this.debut_phase = System.currentTimeMillis();
 				break;
 				case STEP_RECHERCHE:

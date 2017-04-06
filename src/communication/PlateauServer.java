@@ -110,7 +110,7 @@ public class PlateauServer extends Plateau {
 		if(meilleur_joueur == null){
 			return "//";
 		}else
-			return meilleur_joueur.getPseudo() + "/" + score+ "/";
+			return meilleur_joueur.getPlateau().getMot_courant() + "/" +meilleur_joueur.getPseudo()+"/";
 	}
 	
 

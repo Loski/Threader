@@ -132,11 +132,11 @@ public class ServiceClient implements Runnable{
 		
 		public void gestionPlateauValide(String str, Plateau plateau_tmp){
 			int score = plateau_tmp.calculScore(str, server.getSession().getListe_letters());
-			System.out.println("try my best desu");
 			if(score > plateau.getScore()){
 				server.validation(this);
 				plateau_tmp.setScore(score);
-				plateau = plateau_tmp;
+				plateau_tmp.setMot_courant(str);
+				plateau = new Plateau(plateau_tmp);
 				ServiceClient old = server.getSession().getPlateau().getMeilleur_joueur();
 				switch (server.getSession().getPlateau().askSwitch(this)) {
 				case Plateau.NOTIFY_ALL:
