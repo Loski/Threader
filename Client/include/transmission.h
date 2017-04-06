@@ -51,7 +51,7 @@ int split (const char *str, char c, char ***arr);
 #define PENVOIE "PENVOIE/"
 #define ENVOIE "ENVOIE/"
 #define RECEPTION "PRECEPTION"
-#define RECEPTION "RECEPTION"
+#define PRECEPTION "RECEPTION"
 
 #define DELIMITOR "/"
 
