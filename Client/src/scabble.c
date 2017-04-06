@@ -56,14 +56,8 @@ int init_session(Session * session, char * placement, char * tirage, char * list
     session->messages = (FIFO**)malloc(sizeof(FIFO*));
     *(session->messages) = NULL;
     
-    if (pthread_mutex_init(& (session->lock), NULL) != 0)
-    {
-        printf("\n mutex init failed\n");
-    }
-    
     session->temps = atoi(temps);
     print_all_joueur(session);
-    
     return 1;
 }
 
@@ -163,11 +157,8 @@ int handle_event(char * message_recu, Session * session){
     int count = split(message_recu, '/', &pp_message);
     if(count < 0)
         return -1;
-    protocole = pp_message[0];
-    pthread_mutex_lock(& (session->lock));
-    printf("J'ajoute :%s\n,",message_recu);
-		ajouter_message(session->messages,message_recu);
-    pthread_mutex_unlock(& (session->lock));
+    protocole = pp_message[0];    
+    ajouter_message(session->messages,message_recu);
     if(strcmp(protocole, TOUR ) == 0){
 		switch_phase(session,REC);
         refresh_game(session, pp_message[1], pp_message[2]);

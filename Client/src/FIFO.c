@@ -5,14 +5,17 @@
 #include <string.h>
 #include <pthread.h>
 
+static pthread_mutex_t mutex_stock = PTHREAD_MUTEX_INITIALIZER;
+
 void ajouter_message(FIFO ** list, char * message)
-{	
+{
 	FIFO * nouveau = malloc(sizeof(FIFO));
 	if(nouveau != NULL)
 	{
 		nouveau->next = NULL;
 		nouveau->message = message;
 		
+		pthread_mutex_lock (& mutex_stock);
 		if(*list == NULL)
 		{
 			*list = nouveau;
@@ -28,38 +31,38 @@ void ajouter_message(FIFO ** list, char * message)
 			
 			last->next=nouveau;
 		}
+		pthread_mutex_unlock (& mutex_stock);
 	}
 	else
 	{
 		printf("ERREUR MALLOC message");
 	}
 	
+
 }
 
 char * get_message(FIFO ** list)
 {
 	if(*list == NULL)
-	{
-		printf("C'est Vide gros");
 		return NULL;
-	}
 	else
 	{
+		pthread_mutex_lock (& mutex_stock);
 		FIFO * next = (*list)->next;
 		char * message = NULL;
 		message = malloc(sizeof(char) * (1+strlen((*list)->message)));
 		if(message == NULL){
 			puts("Pointeur non initialisé");
-			return NULL;
+			exit(1);
 		}
-		
 		strcpy(message, (*list)->message);
 		
 		
 		free(*list);
-		*list = NULL;
+		 *list = NULL;
 		
 		*list = next;
+		pthread_mutex_unlock (& mutex_stock);
 		
 		return message;
 	}
@@ -72,12 +75,9 @@ void clear(FIFO ** list)
 		get_message(list);
     }
 }
-
-/*int main()
+/*
+int main()
 {
 	FIFO ** list = (FIFO**)malloc(sizeof(FIFO*));
-	ajouter_message(list,"SESSION/");
-	ajouter_message(list,"TOUR/");
-	printf("%s\n",get_message(list));
 	return 0;
 }*/
