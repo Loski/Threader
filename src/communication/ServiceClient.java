@@ -114,7 +114,7 @@ public class ServiceClient implements Runnable{
 						String str = this.server.getSession().getPlateau().gestionPlacement(plateau_tmp);
 						gestionPlateauValide(str, plateau_tmp);
 					} catch (ExceptionPlateau e) {
-						server.rInValide(this, e.getCode_erreur() + e.getMessage());
+						server.invalidation(this, e.getCode_erreur() + e.getMessage());
 						e.printStackTrace();
 					}
 				}

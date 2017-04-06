@@ -9,7 +9,7 @@ public class Session implements Runnable {
 	public final static int TAILLE_TIRAGE = 7;
 
 	// temps en mlsecondes pour chaque phase
-	public final static int TEMPS_PHASE_DE_RECHERCHE = 3000 * 1 *10000; //30sec => need 5mn
+	public final static int TEMPS_PHASE_DE_RECHERCHE = 30 * 1 *10000; //30sec => need 5mn
 	public final static int TEMPS_PHASE_DE_SOUMISSION = 30 * 1000; //30 seco >need 2mn
 	public final static int TEMPS_PHASE_DE_RESULTAT = 10 * 1000; //10sec
 	public final static int STEP_RECHERCHE = 1;

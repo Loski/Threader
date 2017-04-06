@@ -188,6 +188,14 @@ public class Server implements Communication {
 			sValide(sc);
 		}
 	}
+	
+	public void invalidation(ServiceClient sc, String message){
+		if(session.getStep_actuel() == Session.STEP_RECHERCHE){
+			rInValide(sc, message);
+		}else{
+			sInValide(sc, message);
+		}
+	}
 	@Override
 	public void rFin() {
 		logger.info("End of reflexion phase");
@@ -206,13 +214,13 @@ public class Server implements Communication {
 	}
 
 	@Override
-	public void sInvalide() {
-		// TODO Auto-generated method stub
-		
+	public void sInValide(ServiceClient sc, String message) {
+		sc.sendMessage(ProtocoleCreator.create(Protocole.SINVALIDE, message));
 	}
-
+	
 	@Override
 	public void bilan() {
+		logger.info("Bilan du tour" + this.getSession().getScore());
 		String message =  this.session.getPlateau().getVainqueur();
 		this.sendToAll(Protocole.BILAN, message+this.getSession().getScore());
 	}

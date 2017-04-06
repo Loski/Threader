@@ -24,7 +24,6 @@ public interface Communication {
 	public void rATrouve(ServiceClient sc);
 	public void rFin();
 	public void sFin();
-	public void sInvalide();
 	public void meilleurMot(ServiceClient meilleur);
 	public void ancienMeilleur(ServiceClient oldBest, ServiceClient newBest);
 	public void bilan();
@@ -43,5 +42,6 @@ public interface Communication {
 	void rInValide(ServiceClient sc, String message);
 	void rValide(ServiceClient sc);
 	void sValide(ServiceClient sc);
+	void sInValide(ServiceClient sc, String message);
 
 }
