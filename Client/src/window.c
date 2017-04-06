@@ -26,9 +26,10 @@ GtkWidget * p_window;
 
 GtkWidget * grille;
 GtkWidget * plateau[TAILLE_PLATEAU*TAILLE_PLATEAU];
+GtkWidget * tirage[TAILLE_TIRAGE];
 GtkWidget * event_box_list[TAILLE_PLATEAU*TAILLE_PLATEAU];
 GtkWidget * event_box_tirage[TAILLE_TIRAGE];
-GtkWidget * tirage;
+GtkWidget * tirageDisplay;
 GtkWidget * scoreDisplay;
 //GtkWidget * players[][2];
 GdkPixbuf * images[27];
@@ -194,7 +195,7 @@ void createGrille (){
 
 void createScoreDisplay()
 {
-	scoreDisplay = tirage = gtk_grid_new ();
+	scoreDisplay = gtk_grid_new ();
 	
 	for(int i=0;i<session.nombre_joueur;i++)
 	{
@@ -211,7 +212,7 @@ void createScoreDisplay()
 
 void createTirageDisplay()
 {
-	tirage = gtk_grid_new (); // A changer en ligne
+	tirageDisplay = gtk_grid_new (); // A changer en ligne
 	
 	for(int i=0;i<TAILLE_TIRAGE;i++)
 	{
@@ -219,21 +220,21 @@ void createTirageDisplay()
 		
 		int index = (char)toupper(c) - 'A';
 		
-		GtkWidget * image = gtk_image_new_from_pixbuf (images[index]);
+		tirage[i] = gtk_image_new_from_pixbuf (images[index]);
 
 		GtkWidget * event_box = gtk_event_box_new ();
 				
 		event_box_tirage[i] = event_box;
 
-		gtk_container_add (GTK_CONTAINER (event_box), image);
+		gtk_container_add (GTK_CONTAINER (event_box), tirage[i]);
 		
-		g_signal_connect (G_OBJECT (event_box),"button_press_event",G_CALLBACK (selectLetter),image);
+		g_signal_connect (G_OBJECT (event_box),"button_press_event",G_CALLBACK (selectLetter),tirage[i]);
 	
-		gtk_grid_attach(GTK_GRID(tirage), event_box, i, 0, 1, 1);
+		gtk_grid_attach(GTK_GRID(tirageDisplay), event_box, i, 0, 1, 1);
 		
 	}
 		
-	gtk_grid_attach (GTK_GRID (p_main_grid), tirage, 0,600,1000,100);
+	gtk_grid_attach (GTK_GRID (p_main_grid), tirageDisplay, 0,600,1000,100);
 	gtk_widget_show_all (p_window);
 }
 
@@ -340,7 +341,7 @@ void connexion_windows(){
 	g_free (text)
 }*/
 
-void logger(char * message)
+void logger(char * message,int newline)
 {
 	GtkTextBuffer * buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(consoleArea));
 			
@@ -350,9 +351,53 @@ void logger(char * message)
 				
 	gtk_text_buffer_insert(buffer, &iter, message, -1);
 	
-	gtk_text_buffer_get_end_iter (buffer,&iter);
+	if(newline>0)
+	{
+		/* int -> nombre de \n*/
+		
+		gtk_text_buffer_get_end_iter (buffer,&iter);
 	
-	gtk_text_buffer_insert(buffer, &iter, "\n", -1);
+		gtk_text_buffer_insert(buffer, &iter, "\n", -1);
+	}
+
+}
+
+void refresh_grille()
+{				
+	int i;
+		
+	for(i=0;i<TAILLE_PLATEAU*TAILLE_PLATEAU;i++)
+	{			
+		int index = -1;
+		
+		if(session.plateau[i]=='0')
+			index = 26;
+		else
+			index = (char)toupper(session.plateau[i]) - 'A';
+				
+		gtk_image_set_from_pixbuf (GTK_IMAGE(plateau[i]),images[index]);
+	}
+			
+	gtk_widget_show_all (p_window);
+}
+
+void refresh_tirage()
+{
+	int i;
+		
+	for(i=0;i<TAILLE_TIRAGE;i++)
+	{			
+		int index = -1;
+		
+		if(session.plateau[i]=='0')
+			index = 26;
+		else
+			index = (char)toupper(session.plateau[i]) - 'A';
+				
+		gtk_image_set_from_pixbuf (GTK_IMAGE(tirage[i]),images[index]);
+	}
+			
+	gtk_widget_show_all (p_window);
 }
 
 gboolean refresh_GUI(gpointer user_data)
@@ -361,25 +406,37 @@ gboolean refresh_GUI(gpointer user_data)
 	
 	if(message!=NULL)
 	{
-		logger(message);
-		for(int i=0;i<TAILLE_PLATEAU*TAILLE_PLATEAU;i++)
-		{	
-			char c = session.plateau[i];
-			if (c == '0')
-			{
-				//gtk_button_set_label(GTK_BUTTON(plateau[i]),"_");
-			}
-			else
-			{
-				char * ptr = malloc(2*sizeof(char));
-				
-				ptr[0] = c;
-				ptr[1] = '\0';
-				
-				//gtk_button_set_label(GTK_BUTTON(plateau[i]),ptr);
-			}
+		char **pp_message = NULL, *protocole = NULL;
+		int count = split(message, '/', &pp_message);
+		 
+		if(count < 0)
+			return;
+			
+		protocole = pp_message[0];
+		
+		if(strcmp(protocole, TOUR ) == 0){
+			logger("-----------Début d'un nouveau tour---------",1);
+			refresh_tirage();
+			refresh_grille();
+		}
+		else if(strcmp(protocole, DECONNEXION) == 0)
+		{
+			logger("Déconnexion de :",0);
+			logger(pp_message[1],1);
+			/* MAJ tab score*/
+		}
+		else if(strcmp(protocole, CONNECTE) == 0){
+			logger("Connexion de :",0);
+			logger(pp_message[1],1);
+			/* MAJ tab score*/
+		}
+		else
+		{
+			logger("Le serveur utilise un protcole non reconnu par le client : ",0);
+			logger(protocole,1);
 		}
 	}
+	
 	return true;
 }
 
@@ -421,7 +478,7 @@ void askConnexion(GtkButton *button, GtkWidget * input){
 	    	strcpy(str, "BIENVENUE, ");
 			strcat(str, (client.p_joueur)->username);
 	    	
-	    	logger(str);
+	    	logger(str,1);
 	    	
 	    	g_timeout_add (1000,refresh_GUI,NULL);
 	    	

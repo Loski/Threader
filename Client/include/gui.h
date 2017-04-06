@@ -13,7 +13,7 @@
 	void editPlateau(GtkWidget* event_box,GdkEventButton *event,gpointer data);
 	void createGrille ();
 	void selectLetter(GtkWidget* event_box,GdkEventButton *event,gpointer data);
-	void logger(char * message);
+	void logger(char * message, int newline);
 	void createScoreDisplay();
 	void loadImage();
 	void resize_image(GtkWidget *widget);
