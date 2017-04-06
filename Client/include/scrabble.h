@@ -40,6 +40,8 @@ struct Session{
     int phase;
     int temps;
     FIFO ** messages; 
+    pthread_mutex_t lock;
+    int val;
 };
 
 int chercher_joueur(char * nom_joueur, Session * session);

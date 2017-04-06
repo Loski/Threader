@@ -416,8 +416,8 @@ void refresh_tirage()
 	{			
 		int index = -1;
 		
-		index = (char)toupper(session.plateau[i]) - 'A';
-				
+		index = (char)toupper(session.tirage[i]) - 'A';
+		
 		gtk_image_set_from_pixbuf (GTK_IMAGE(tirage[i]),images[index]);
 	}
 			
@@ -426,7 +426,10 @@ void refresh_tirage()
 
 gboolean refresh_GUI(gpointer user_data)
 {	
+	pthread_mutex_lock(& (session.lock));
 	char * message = get_message(session.messages);
+	printf("Je retire :%s\n,",message);
+	pthread_mutex_unlock(& (session.lock));
 	
 	if(message!=NULL)
 	{
@@ -439,7 +442,7 @@ gboolean refresh_GUI(gpointer user_data)
 		protocole = pp_message[0];
 		
 		if(strcmp(protocole, TOUR ) == 0){
-			logger("-----------Début d'un nouveau tour---------",1);
+			logger("----------- Début d'un nouveau tour ---------",1);
 			refresh_tirage();
 			refresh_grille();
 		}
@@ -454,9 +457,37 @@ gboolean refresh_GUI(gpointer user_data)
 			logger(pp_message[1],1);
 			/* MAJ tab score*/
 		}
+		else if(strcmp(protocole, SESSION) == 0){
+			logger("--------- Début d'une nouvelle session -------------",1);
+		}
+		else if(strcmp(protocole, RVALIDE) == 0 || strcmp(protocole, SVALIDE) == 0){
+			logger("Proposition valide",1);
+		}
+		else if(strcmp(protocole, RINVALIDE) == 0 || strcmp(protocole, SINVALIDE) == 0){
+			logger("Proposition invalide : ",0);
+			if(count>1)
+				logger(pp_message[1],1);
+		}
+		else if(strcmp(protocole, RATROUVE) == 0){
+			logger("Le joueur [",0);
+			if(count>1)
+				logger(pp_message[1],0);
+			else
+				logger("???",0);
+			
+			logger("] a trouvé un mot",1);
+		}
+		else if(strcmp(protocole, RFIN) == 0)
+		{
+			logger("La phase de recherche est terminée",1);
+		}
+		else if(strcmp(protocole, SFIN) == 0)
+		{
+			logger("La phase de soumission est terminée",1);
+		}
 		else
 		{
-			logger("Le serveur utilise un protcole non reconnu par le client : ",0);
+			logger("Le serveur utilise un protocole non reconnu par le client : ",0);
 			logger(protocole,1);
 		}
 	}
