@@ -9,13 +9,13 @@ public class Session implements Runnable {
 	public final static int TAILLE_TIRAGE = 7;
 
 	// temps en mlsecondes pour chaque phase
-	public final static int TEMPS_PHASE_DE_RECHERCHE = 3000 * 1 *1000; //30sec => need 5mn
+	public final static int TEMPS_PHASE_DE_RECHERCHE = 3000 * 1 *10000; //30sec => need 5mn
 	public final static int TEMPS_PHASE_DE_SOUMISSION = 30 * 1000; //30 seco >need 2mn
 	public final static int TEMPS_PHASE_DE_RESULTAT = 10 * 1000; //10sec
 	public final static int STEP_RECHERCHE = 1;
 	public final static int STEP_SOUMISSION = 2;
 	public final static int STEP_RESULTAT = 3;
-	public final static int NO_STEP = 0;
+	public final static int STEP_SESSION = 0;
 
 	private Alphabet tirage;
 	private PlateauServer plateau;
@@ -34,7 +34,7 @@ public class Session implements Runnable {
 		this.joueurs = clients;
 		this.tour = 1;
 		this.server = s;
-		this.step_actuel = NO_STEP;
+		this.step_actuel = STEP_SESSION;
 		this.debut_phase = -1;
 	}
 
@@ -42,8 +42,15 @@ public class Session implements Runnable {
 	public void run() {
 		while (this.joueurs.size() > 0) {
 			switch (step_actuel) {
-				case NO_STEP:
+				case STEP_SESSION:
 					this.step_actuel = STEP_RECHERCHE;
+					try {
+						Thread.sleep(5*1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					this.server.debutSession();
 					this.debut_phase = System.currentTimeMillis();
 				break;
 				case STEP_RECHERCHE:
@@ -58,6 +65,7 @@ public class Session implements Runnable {
 						}
 					}
 					this.server.rFin();
+					System.out.println("Notify");
 					this.step_actuel = STEP_SOUMISSION;
 					break;
 				case STEP_SOUMISSION:
@@ -81,7 +89,7 @@ public class Session implements Runnable {
 						e.printStackTrace();
 					}
 					tour++;
-					this.step_actuel = NO_STEP;
+					this.step_actuel = STEP_SESSION;
 					break;
 			default:
 				break;
@@ -133,8 +141,8 @@ public class Session implements Runnable {
 	}
 	public String getTirageCourant() {
 		String str = "";
-		for(Character c : this.tirage.tirage()){
-			str += c;
+		for(Letter c : this.tirage.tirage()){
+			str += c.getLetter();
 		}
 		return str;
 	}
@@ -159,7 +167,7 @@ public class Session implements Runnable {
 			time = TEMPS_PHASE_DE_SOUMISSION;
 		case STEP_RESULTAT:
 			time = TEMPS_PHASE_DE_RESULTAT;
-		case NO_STEP:
+		case STEP_SESSION:
 			time = 0;
 		default:
 			break;

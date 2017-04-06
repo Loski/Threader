@@ -21,8 +21,6 @@ public interface Communication {
 	public void debutSession();
 	public void vainqueur();
 	public void tour();
-	public void rValide();
-	public void rInValide();
 	public void rATrouve(ServiceClient sc);
 	public void rFin();
 	public void sValide();
@@ -41,5 +39,7 @@ public interface Communication {
 	 * @param sc
 	 */
 	public void bienvenue(ServiceClient sc);
+	void rInValide(ServiceClient sc, String message);
+	void rValide(ServiceClient sc);
 
 }

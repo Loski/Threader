@@ -20,6 +20,7 @@ public class ServiceClient implements Runnable{
 	private boolean isConnected; // To stop listening and stop the thread
 	private boolean isWaiting;
 	private boolean isAuthentified;
+	private Plateau plateau_courant;
 	
 	public ServiceClient(Socket s, Server server) {
 		
@@ -38,6 +39,7 @@ public class ServiceClient implements Runnable{
 		} catch (IOException e) {
 			System.out.println("(Joueur) : Obtiention inputStream de "+pseudo+" impossible.");
 		}
+		this.plateau_courant = new Plateau(server.getSession().getPlateau()); 
 	}
 	
 	
@@ -77,7 +79,7 @@ public class ServiceClient implements Runnable{
 			
 			}
 			
-			System.out.println("(SERVER) ReadFromJoueur re�oit : "+ msg);
+			System.out.println("(SERVER) ReadFromJoueur reçoit : "+ msg);
 			
 			String[] msgs = msg.split("/");
 			String cmd = msgs[0];
@@ -102,9 +104,9 @@ public class ServiceClient implements Runnable{
 			else if (Protocole.TROUVE.name().equals(cmd) && isAuthentified){
 				if(msgs.length > 1){
 					try {
-						String mot = this.server.getSession().getPlateau().placementValide(new Plateau(msgs[1]));
+						this.server.getSession().getPlateau().gestionPlacement(new Plateau(msgs[1]));
 					} catch (ExceptionPlateau e) {
-						this.sendMessage(Protocole.RINVALIDE, e.getCode_erreur() + e.getMessage());
+						server.rInValide(this, e.getCode_erreur() + e.getMessage());
 						e.printStackTrace();
 					}
 				}
@@ -188,6 +190,12 @@ public class ServiceClient implements Runnable{
 
 		public void setWaiting(boolean isWaiting) {
 			this.isWaiting = isWaiting;
+		}
+
+
+		public void reset() {
+			this.plateau_courant = new Plateau(15);
+			this.score = 0;
 		}
 
 }

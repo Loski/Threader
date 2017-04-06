@@ -129,16 +129,6 @@ public class Server implements Communication {
 		logger.info("Bienvenue à " + sc.getPseudo());
 	}
 	
-	public void sendStateActuel(ServiceClient sc){
-		int state_actuel = session.getStep_actuel();
-		if(state_actuel == Session.TEMPS_PHASE_DE_RECHERCHE){
-			sc.sendMessage(ProtocoleCreator.create(Protocole.TOUR, this.session.getPlateau().toString(), this.session.getTirageCourant()));
-		}else if(state_actuel == Session.TEMPS_PHASE_DE_SOUMISSION){
-			sc.sendMessage(ProtocoleCreator.create(Protocole.TOUR, this.session.getPlateau().toString(), this.session.getTirageCourant()));
-		}else{
-			
-		}
-	}
 	@Override
 	public void deconnexion(ServiceClient sc) {
 		// TODO Auto-generated method stub
@@ -149,6 +139,9 @@ public class Server implements Communication {
 	public void debutSession() {
 		logger.info("Start of new session !");
 		this.sendToAll(ProtocoleCreator.create(Protocole.SESSION));
+		for(ServiceClient sc : this.clients){
+			sc.reset();
+		}
 	}
 
 	@Override
@@ -164,21 +157,20 @@ public class Server implements Communication {
 	}
 
 	@Override
-	public void rValide() {
-		// TODO Auto-generated method stub
-		
+	public void rValide(ServiceClient sc) {
+		sc.sendMessage(ProtocoleCreator.create(Protocole.RVALIDE));
+		rATrouve(sc);
+		this.session.notify();
 	}
 
 	@Override
-	public void rInValide() {
-		// TODO Auto-generated method stub
-		
+	public void rInValide(ServiceClient sc, String message) {
+		sc.sendMessage(ProtocoleCreator.create(Protocole.RINVALIDE, message));
 	}
 
 	@Override
 	public void rATrouve(ServiceClient sc) {
-		// TODO Auto-generated method stub
-		
+		this.sendToAll(Protocole.RATROUVE, sc.getPseudo());	
 	}
 
 	@Override
