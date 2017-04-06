@@ -72,7 +72,7 @@ public class PlateauServer extends Plateau {
 		return HORIZONTAL;
 	}
 
-	public int askSwitch(ServiceClient serviceClient) {
+	public synchronized int askSwitch(ServiceClient serviceClient) {
 		if(meilleur_joueur == null){
 			meilleur_joueur = serviceClient;
 			score = serviceClient.getPlateau().getScore();

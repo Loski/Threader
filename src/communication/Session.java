@@ -66,7 +66,6 @@ public class Session implements Runnable {
 						}
 					}
 					this.server.rFin();
-					System.out.println("Notify");
 					this.step_actuel = STEP_SOUMISSION;
 					break;
 				case STEP_SOUMISSION:

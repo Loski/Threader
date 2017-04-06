@@ -424,6 +424,9 @@ void refresh_tirage()
 	gtk_widget_show_all (p_window);
 }
 
+void refreshIAmTheBest(bool imthebest){
+
+}
 gboolean refresh_GUI(gpointer user_data)
 {	
 	pthread_mutex_lock(& (session.lock));
@@ -445,7 +448,13 @@ gboolean refresh_GUI(gpointer user_data)
 			logger("----------- Début d'un nouveau tour ---------",1);
 			refresh_tirage();
 			refresh_grille();
-		}
+		}else if(strcmp(protocole, MEILLEUR) == 0){ 
+          if(strcmp(pp_message[1], "0") == 0){ 
+            refreshIAmTheBest(true); 
+          }else{ 
+            refreshIAmTheBest(false); 
+          } 
+      	} 
 		else if(strcmp(protocole, DECONNEXION) == 0)
 		{
 			logger("Déconnexion de :",0);

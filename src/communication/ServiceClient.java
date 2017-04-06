@@ -92,10 +92,14 @@ public class ServiceClient implements Runnable{
 						System.out.println("Connexion de " + this.pseudo);
 						this.server.addClient(this);
 					}else{
-						System.out.println("Tentative de reconnexion" + this.pseudo);
+						Server.logger.warning("Tentative de reconnexion" + this.pseudo);
+						server.refus(this);
+						this.isConnected = false;
 					}
 				}catch (Exception e) {
-					System.err.println("Aucun pseudonyme fournis.");
+					Server.logger.warning("Aucun pseudonyme fournis" + this.pseudo);
+					this.isConnected = false;
+					server.refus(this);
 				}
 			}else if(Protocole.SORT.name().equals(cmd) && isAuthentified){
 				isConnected = false;
@@ -104,10 +108,11 @@ public class ServiceClient implements Runnable{
 			else if (Protocole.TROUVE.name().equals(cmd) && isAuthentified){
 				if(msgs.length > 1){
 					try {
-						server.getSession().verificationSessionForTrouve();
+						if(!server.getSession().verificationSessionForTrouve())
+							throw new ExceptionPlateau("Not in the good phase","INV");
 						Plateau plateau_tmp = new Plateau(msgs[1]);
 						String str = this.server.getSession().getPlateau().gestionPlacement(plateau_tmp);
-
+						gestionPlateauValide(str, plateau_tmp);
 					} catch (ExceptionPlateau e) {
 						server.rInValide(this, e.getCode_erreur() + e.getMessage());
 						e.printStackTrace();
@@ -127,8 +132,9 @@ public class ServiceClient implements Runnable{
 		
 		public void gestionPlateauValide(String str, Plateau plateau_tmp){
 			int score = plateau_tmp.calculScore(str, server.getSession().getListe_letters());
+			System.out.println("try my best desu");
 			if(score > plateau.getScore()){
-				server.rValide(this);
+				server.validation(this);
 				plateau_tmp.setScore(score);
 				plateau = plateau_tmp;
 				ServiceClient old = server.getSession().getPlateau().getMeilleur_joueur();
@@ -204,18 +210,7 @@ public class ServiceClient implements Runnable{
 		public void setServer(Server server) {
 			this.server = server;
 		}
-
-
-		public boolean isWaiting() {
-			return isWaiting;
-		}
-
-
-		public void setWaiting(boolean isWaiting) {
-			this.isWaiting = isWaiting;
-		}
-
-
+		
 		public void reset() {
 			this.setPlateau(new Plateau(15));
 			this.score = 0;
