@@ -16,7 +16,7 @@ import protocole.ProtocoleCreator;
 
 public class Server implements Communication {
 	
-	
+	 
 	public final static int port = 2017;
 	private ServerSocket serverSocket;
 	private ArrayList<ServiceClient> clients;
@@ -59,7 +59,10 @@ public class Server implements Communication {
 			sc.sendMessage(message);
 		}
 	}
-	
+	private void sendToAllWhithoutHim(Protocole p, ServiceClient notHim, String message) {
+		sendToAllWhithoutHim(ProtocoleCreator.create(p, message),notHim) ;
+		
+	}
 	public void sendToHim(Protocole p, String message, String name){
 		for(ServiceClient sc: this.clients){
 			if(sc.getPseudo().equals(name)){
@@ -154,6 +157,10 @@ public class Server implements Communication {
 	public void tour() {
 		logger.info("New turn");
 		this.sendToAll(ProtocoleCreator.create(Protocole.TOUR, this.session.getPlateau().toString(), this.session.getTirageCourant()));
+		session.getPlateau().reset();
+		for(ServiceClient sc: this.clients){
+			sc.setPlateau(new Plateau(session.getPlateau()));
+		}
 	}
 
 	@Override
@@ -236,6 +243,21 @@ public class Server implements Communication {
 
 	public void setSession(Session session) {
 		this.session = session;
+	}
+
+	@Override
+	public void meilleurMot(ServiceClient meilleur) {
+		meilleur.sendMessage(Protocole.MEILLEUR, "1");
+		this.sendToAllWhithoutHim(Protocole.MEILLEUR, meilleur, "0");
+		
+	}
+
+
+
+	@Override
+	public void ancienMeilleur(ServiceClient oldBest, ServiceClient newBest) {
+		oldBest.sendMessage(Protocole.MEILLEUR, "0");
+		newBest.sendMessage(Protocole.MEILLEUR, "0");
 	}
 
 }

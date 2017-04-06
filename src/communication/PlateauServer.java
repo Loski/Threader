@@ -8,11 +8,12 @@ public class PlateauServer extends Plateau {
 
 
 	public boolean empty;
-	
-	public PlateauServer(int taillePlateau) {
-		super(taillePlateau);
-		empty = true;
+	private ServiceClient meilleur_joueur;
+	public ServiceClient getMeilleur_joueur() {
+		return meilleur_joueur;
 	}
+
+
 	
 	public String gestionPlacement(Plateau plateau_joueur) throws ExceptionPlateau{
 		List<Point> points = placementValide(plateau_joueur);
@@ -69,6 +70,38 @@ public class PlateauServer extends Plateau {
 			}
 		}
 		return HORIZONTAL;
+	}
+
+	public int askSwitch(ServiceClient serviceClient) {
+		if(meilleur_joueur == null){
+			meilleur_joueur = serviceClient;
+			score = serviceClient.getPlateau().getScore();
+			return NOTIFY_ALL;
+		}else if(serviceClient.getPlateau().getScore() > this.score){
+			score = serviceClient.getPlateau().getScore();
+			if(meilleur_joueur == serviceClient){
+				return NO_NOTIFY;
+			}else{
+				return NOTIFY_ONLY_OLD;
+			}
+		}
+		return NO_NOTIFY;
+	}
+	
+	public void setMeilleur_joueur(ServiceClient meilleur_joueur) {
+		this.meilleur_joueur = meilleur_joueur;
+	}
+
+	public PlateauServer(int taillePlateau) {
+		super(taillePlateau);
+		empty = true;
+	}
+
+
+
+	public void reset() {
+		score = 0;
+		meilleur_joueur = null;
 	}
 	
 

@@ -20,7 +20,7 @@ public class ServiceClient implements Runnable{
 	private boolean isConnected; // To stop listening and stop the thread
 	private boolean isWaiting;
 	private boolean isAuthentified;
-	private Plateau plateau_courant;
+	private Plateau plateau;
 	
 	public ServiceClient(Socket s, Server server) {
 		
@@ -39,7 +39,7 @@ public class ServiceClient implements Runnable{
 		} catch (IOException e) {
 			System.out.println("(Joueur) : Obtiention inputStream de "+pseudo+" impossible.");
 		}
-		this.plateau_courant = new Plateau(server.getSession().getPlateau()); 
+		this.setPlateau(new Plateau(server.getSession().getPlateau())); 
 	}
 	
 	
@@ -104,7 +104,9 @@ public class ServiceClient implements Runnable{
 			else if (Protocole.TROUVE.name().equals(cmd) && isAuthentified){
 				if(msgs.length > 1){
 					try {
-						this.server.getSession().getPlateau().gestionPlacement(new Plateau(msgs[1]));
+						Plateau plateau_tmp = new Plateau(msgs[1]);
+						String str = this.server.getSession().getPlateau().gestionPlacement(plateau_tmp);
+
 					} catch (ExceptionPlateau e) {
 						server.rInValide(this, e.getCode_erreur() + e.getMessage());
 						e.printStackTrace();
@@ -121,7 +123,24 @@ public class ServiceClient implements Runnable{
 			}
 
 		}
-	
+		
+		public void gestionPlateauValide(String str, Plateau plateau_tmp){
+			if(plateau_tmp.calculScore(str, server.getSession().getListe_letters()) > plateau.getScore()){
+				plateau = plateau_tmp;
+				ServiceClient old = server.getSession().getPlateau().getMeilleur_joueur();
+				switch (server.getSession().getPlateau().askSwitch(this)) {
+				case Plateau.NOTIFY_ALL:
+					this.server.meilleurMot(this);
+					break;
+				case Plateau.NOTIFY_ONLY_OLD:
+					this.server.ancienMeilleur(old, this);
+				default:
+					break;
+				}
+			}else{
+				server.rInValide(this, "Moins bon score !");
+			}
+		}
 
 		public Socket getSocket() {
 			return socket;
@@ -194,8 +213,17 @@ public class ServiceClient implements Runnable{
 
 
 		public void reset() {
-			this.plateau_courant = new Plateau(15);
+			this.setPlateau(new Plateau(15));
 			this.score = 0;
+		}
+
+		public Plateau getPlateau() {
+			return plateau;
+		}
+
+
+		public void setPlateau(Plateau plateau) {
+			this.plateau = plateau;
 		}
 
 }

@@ -35,10 +35,10 @@ public class Letter {
 	public void setNombre_total(int nombre_total) {
 		this.nombre_total = nombre_total;
 	}
-	public int getPuisssance() {
+	public int getPuissance() {
 		return puissance;
 	}
-	public void setPuisssance(int puisssance) {
+	public void setPuissance(int puisssance) {
 		this.puissance = puisssance;
 	}
 	

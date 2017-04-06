@@ -26,6 +26,8 @@ public interface Communication {
 	public void sValide();
 	public void sFin();
 	public void sInvalide();
+	public void meilleurMot(ServiceClient meilleur);
+	public void ancienMeilleur(ServiceClient oldBest, ServiceClient newBest);
 	public void bilan();
 	
 	//For only one client

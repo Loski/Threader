@@ -31,6 +31,7 @@ public class Alphabet {
     private List<Letter> liste_lettre_voyelle;
     private List<Letter> liste_lettre_consonne;
     private List<Letter> tirage_courant;
+    private List<Letter> liste_all_letter;
     public static int taille_tirage;
 	private Random generator;
 
@@ -40,6 +41,7 @@ public class Alphabet {
 		tirage_courant = new ArrayList<Letter>();
 		liste_lettre_voyelle = new ArrayList<Letter>();
 		liste_lettre_consonne = new ArrayList<Letter>();
+		liste_all_letter = new ArrayList<Letter>();
 
 		generator = new Random();
 		try{
@@ -54,6 +56,7 @@ public class Alphabet {
 				}else{
 					liste_lettre_consonne.add(tmp);
 				}
+				liste_all_letter.add(tmp);
 			}
 				buff.close(); 
 			}catch (Exception e){
@@ -62,6 +65,14 @@ public class Alphabet {
 		
 	}
 	
+	public List<Letter> getListe_all_letter() {
+		return liste_all_letter;
+	}
+
+	public void setListe_all_letter(List<Letter> liste_all_letter) {
+		this.liste_all_letter = liste_all_letter;
+	}
+
 	public boolean canTirage(){
 		return tirage_courant.size() + liste_lettre_consonne.size() + liste_lettre_voyelle.size() >= taille_tirage;
 	}
@@ -114,8 +125,11 @@ public class Alphabet {
 			liste_lettre_voyelle.remove(l);
 		return new Letter(l);
 	}
-	public static int findScoreForLetter(char charAt, Alphabet tirage) {
-		// TODO Auto-generated method stub
+	public static int  findScoreForLetter(char charAt, List<Letter> liste_all_letter) {
+		for(Letter l: liste_all_letter ){
+			if(l.getLetter() == charAt)
+				return l.getPuissance();
+		}
 		return 0;
 	}
 }

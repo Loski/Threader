@@ -17,7 +17,8 @@ public class Session implements Runnable {
 	public final static int STEP_RESULTAT = 3;
 	public final static int STEP_SESSION = 0;
 
-	private Alphabet tirage;
+
+	private Alphabet liste_letters;
 	private PlateauServer plateau;
 	private List<ServiceClient> joueurs; // R�f�rence tous les joueurs de la
 											// session, actif ou non
@@ -29,7 +30,7 @@ public class Session implements Runnable {
 
 
 	public Session(List<ServiceClient> clients, Server s) {
-		this.tirage = new Alphabet(TAILLE_TIRAGE);
+		this.liste_letters = new Alphabet(TAILLE_TIRAGE);
 		this.plateau = new PlateauServer(TAILLE_PLATEAU);
 		this.joueurs = clients;
 		this.tour = 1;
@@ -96,12 +97,12 @@ public class Session implements Runnable {
 			}
 		}
 	}
-	public Alphabet getTirage() {
-		return tirage;
+	public Alphabet getListe_letters() {
+		return liste_letters;
 	}
 
-	public void setTirage(Alphabet tirage) {
-		this.tirage = tirage;
+	public void setListe_letters(Alphabet tirage) {
+		this.liste_letters = tirage;
 	}
 
 	public PlateauServer getPlateau() {
@@ -141,7 +142,7 @@ public class Session implements Runnable {
 	}
 	public String getTirageCourant() {
 		String str = "";
-		for(Letter c : this.tirage.tirage()){
+		for(Letter c : this.liste_letters.tirage()){
 			str += c.getLetter();
 		}
 		return str;

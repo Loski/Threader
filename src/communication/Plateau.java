@@ -17,10 +17,14 @@ public class Plateau {
 	public static final int HORIZONTAL = 0;
 	public static final int VERTICAL = 1;
 	public static final int NO_DIRECTION = 2;
+	
+	public final static int NOTIFY_ALL = 0;
+	public final static int NOTIFY_ONLY_OLD = 1;
+	public final static int NO_NOTIFY = 2;
 	public static int taille_plateau = 15;
 	protected char plateau[][];
 	public final static char char_empty = '0';
-	private int score;
+	protected int score;
 	
 	public Plateau(int taille){
 		Plateau.taille_plateau = taille;
@@ -182,10 +186,10 @@ public class Plateau {
 		return xml.contains("<scrabble>1</scrabble>");
 	}
 	
-	public static int calculScore(String mot, Alphabet tirage) {
+	public  int calculScore(String mot, Alphabet liste) {
 		int score = 0;
 		for(int i = 0; i < mot.length(); i++){
-			score += findScoreForLetter(mot.charAt(i), tirage);
+			score += Alphabet.findScoreForLetter(mot.charAt(i), liste.getListe_all_letter());
 		}
 		return score;
 	}
