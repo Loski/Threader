@@ -56,14 +56,8 @@ int init_session(Session * session, char * placement, char * tirage, char * list
     session->messages = malloc(sizeof(session->messages));
     session->messages->premier = NULL;
     
-    if (pthread_mutex_init(& (session->lock), NULL) != 0)
-    {
-        printf("\n mutex init failed\n");
-    }
-    
     session->temps = atoi(temps);
     print_all_joueur(session);
-    
     return 1;
 }
 
