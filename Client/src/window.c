@@ -31,7 +31,6 @@ GtkWidget * event_box_list[TAILLE_PLATEAU*TAILLE_PLATEAU];
 GtkWidget * event_box_tirage[TAILLE_TIRAGE];
 GtkWidget * tirageDisplay;
 GtkWidget * scoreDisplay = NULL;
-//GtkWidget * players[][2];
 GdkPixbuf * images[27];
 
 GtkWidget * consoleArea;
@@ -581,6 +580,8 @@ void refresh_tour()
 	strcat(tourTexte," :");
 	
 	gtk_label_set_markup(GTK_LABEL(tourDisplay), tourTexte);
+	
+	gtk_widget_show_all (p_window);
 }
 
 void reset_placement()
@@ -613,6 +614,7 @@ gboolean refresh_GUI(gpointer user_data)
 			refresh_tirage();
 			refresh_grille();
 			refresh_tour();
+			saveToLocal();
 		}else if(strcmp(protocole, MEILLEUR) == 0){ 
           if(strcmp(pp_message[1], "0") == 0){ 
             refreshIAmTheBest(true); 
