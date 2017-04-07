@@ -629,13 +629,13 @@ char * timeToString(int chrono)
 	printf("MIN : %d SEC:%d\n",minutes,seconde);
 	
 	char minutesStr[5] = "";
-	/*if(minutes<10)
-		strcpy(minutesStr, "0");*/
+	if(minutes<10)
+		strcpy(minutesStr, "0");
 	sprintf(minutesStr, "%d\0", minutes);
 	
 	char secondeStr[3] = "";
-	/*if(seconde<10)
-		strcpy(secondeStr, "0");*/
+	if(seconde<10)
+		strcpy(secondeStr, "0");
 	sprintf(secondeStr, "%d\0", seconde);
 	
 	char time_val[10];
@@ -813,6 +813,20 @@ gboolean refresh_GUI(gpointer user_data)
 					logger("Personne n'a trouvé de mot",1);
 			}
 			createScoreDisplay();
+		}
+		else if(strcmp(protocole, VAINQUEUR) == 0)
+		{
+			Joueur best = getMeilleurJoueur(&session);
+			
+			if(best.username!=NULL && best.score>-1)
+			{
+				logger("Fin de la session",1);
+				logger("Le grand gagnant est ",0);
+				logger(best.username,0);
+				logger(" avec ",0);
+				logger(best.score,0);
+				logger(" points",1);
+			}
 		}
 		else
 		{
