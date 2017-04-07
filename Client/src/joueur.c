@@ -54,7 +54,7 @@ int supprimerJoueur(char * nom_joueur, Session * session){
 }
 
 int connexion_nouveau_joueur(Session *session, char * nom_joueur){
-    Joueur * liste_joueur = realloc(session->p_liste_joueur, session->nombre_joueur + 1);
+    Joueur * liste_joueur = realloc(session->p_liste_joueur, sizeof(Joueur) * (session->nombre_joueur + 1));
     if (liste_joueur != NULL)
         session->p_liste_joueur = liste_joueur;
     initJoueur(&session->p_liste_joueur[session->nombre_joueur], nom_joueur);

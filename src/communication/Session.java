@@ -33,7 +33,7 @@ public class Session implements Runnable {
 		this.liste_letters = new Alphabet(TAILLE_TIRAGE);
 		this.plateau = new PlateauServer(TAILLE_PLATEAU);
 		this.joueurs = clients;
-		this.tour = 1;
+		this.tour = 0;
 		this.server = s;
 		this.step_actuel = STEP_SESSION;
 		this.debut_phase = -1;
@@ -87,9 +87,10 @@ public class Session implements Runnable {
 					this.debut_phase = System.currentTimeMillis();
 					this.server.bilan();
 					tour++;
+					server.gestionFinDeTour();
 					if(plateau.hadWiner())
 						setPlateau(new PlateauServer(plateau.getMeilleur_joueur().getPlateau()));
-					server.gestionFinDeTour();
+					server.resetPlayer();
 					this.step_actuel = STEP_SESSION;
 					break;
 			default:
@@ -195,6 +196,14 @@ public class Session implements Runnable {
 			return true;
 		return false;
 		
+	}
+
+	public void majLetter() {
+		liste_letters.majLetter();	
+	}
+
+	public void viderTirage(char c) {
+		liste_letters.delete(c);
 	}
 
 }

@@ -1,5 +1,6 @@
 package communication;
 
+import java.awt.Point;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -273,6 +274,26 @@ public class Server implements Communication {
 
 	public void gestionFinDeTour() {
 		
+		if(session.getListe_letters().canTirage()){
+			try {
+				ServiceClient best_player = session.getPlateau().getMeilleur_joueur();
+				Plateau best = best_player.getPlateau();
+				ArrayList<Point> pts = (ArrayList<Point>) session.getPlateau().getLettresJouees(best);
+				for(Point pt: pts){
+					session.viderTirage(session.getPlateau().getMeilleur_joueur().getPlateau().plateau[(int) pt.getX()][(int) pt.getY()]);
+				}
+			} catch (ExceptionPlateau e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			session.majLetter();
+		}
+
+		
+		
+	}
+
+	public void resetPlayer() {
 		session.getPlateau().reset();
 		for(ServiceClient sc: this.clients){
 			sc.ajouterScore();

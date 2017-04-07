@@ -88,7 +88,9 @@ public class Alphabet {
 		}
 		return tirage_courant;
 	}
-	
+	public void majLetter(){
+		this.tirage_courant = newTirage();
+	}
 
 	
 	public Letter selectionLetter(){
@@ -102,5 +104,14 @@ public class Alphabet {
 				return l.getPuissance();
 		}
 		return 0;
+	}
+
+	public void delete(char c) {
+		for(Letter l: tirage_courant){
+			if(l.getLetter() == c){
+				tirage_courant.remove(l);
+				break;
+			}
+		}
 	}
 }
