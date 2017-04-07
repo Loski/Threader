@@ -182,7 +182,7 @@ int handle_event(char * message_recu, Session * session){
         switch_phase(session,RES);
     }else if(strcmp(protocole, BILAN) == 0){
         if(count > 3){
-            refresh_score(pp_message[3], session);
+            refresh_score(session, pp_message[3]);
         }
     }else if(strcmp(protocole, VAINQUEUR) == 0){
         
