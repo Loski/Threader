@@ -40,7 +40,7 @@ struct Session{
     JoueurClient * p_client;
     int phase;
     int temps;
-    Joueur * meilleur_joueur;
+    Joueur meilleur_joueur;
     File * messages;
     GMutex mutex;
 };

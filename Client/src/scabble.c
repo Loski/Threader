@@ -135,6 +135,14 @@ int handle_connexion(char * message_recu, Session * session){
     return -1;
 }
 
+void reset_score(Session * session)
+{
+	for(int i=0;i<session->nombre_joueur;i++)
+	{
+		session->p_liste_joueur[i].score = 0 ;
+	}
+}
+
 void switch_phase(Session* session,int phase)
 {
 	
@@ -218,7 +226,9 @@ int handle_event(char * message_recu, Session * session){
             refresh_score(session, pp_message[3]);
         }
     }else if(strcmp(protocole, VAINQUEUR) == 0){
-        
+        session->tour=0;
+        session->meilleur_joueur = getMeilleurJoueur(session);
+        reset_score(session);
     }else if(strcmp(protocole, PRECEPTION) == 0){
         
     }else if(strcmp(protocole, RECEPTION) == 0){

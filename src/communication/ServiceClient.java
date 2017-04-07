@@ -117,7 +117,7 @@ public class ServiceClient implements Runnable{
 						
 						List<String> str = new ArrayList<String>();
 						
-						if(this.server.getSession().getTour()==1 || this.server.getSession().getPlateau().isEmpty())
+						if(this.server.getSession().getPlateau().isEmpty())
 						{
 							str = this.server.getSession().getPlateau().getWordOfFirstTurn(plateau_tmp);
 						}

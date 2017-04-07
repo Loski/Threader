@@ -94,10 +94,10 @@ public class PlateauServer extends Plateau {
 					words.add(mot);
 			}
 			
-			Point lettre_haut = new Point(lettre.x, lettre.y-1);
-			Point lettre_bas = new Point(lettre.x, lettre.y+1);
-			Point lettre_gauche = new Point(lettre.x-1, lettre.y);
-			Point lettre_droite = new Point(lettre.x+1, lettre.y);
+			/*Point lettre_haut = new Point(lettre.x-1, lettre.y);
+			Point lettre_bas = new Point(lettre.x+1, lettre.y);
+			Point lettre_gauche = new Point(lettre.x, lettre.y-1);
+			Point lettre_droite = new Point(lettre.x, lettre.y+1);
 			
 			Point[] lettre_a_tester = new Point[4];
 			
@@ -124,10 +124,12 @@ public class PlateauServer extends Plateau {
 				i++;
 			}
 			
-			if(!bienPlace)
-				throw new ExceptionPlateau("Les lettres ne complètent pas un mot", "POS");
+			if(!bienPlace)*/
 			
 		}
+		
+		if(words.get(0).length()<=points.size())
+			throw new ExceptionPlateau("Les lettres ne complètent pas un mot", "POS");
 		
 		System.out.println("WORD:"+words);
 		return words;

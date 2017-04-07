@@ -626,8 +626,6 @@ char * timeToString(int chrono)
 	
 	int seconde = chrono - minutes*60;
 	
-	printf("MIN : %d SEC:%d\n",minutes,seconde);
-	
 	char minutesStr[5] = "";
 	if(minutes<10)
 		strcpy(minutesStr, "0");
@@ -767,9 +765,10 @@ gboolean refresh_GUI(gpointer user_data)
 		}
 		else if(strcmp(protocole, SFIN) == 0)
 		{
+			hideTirage();
 			logger("La phase de soumission est terminée",1);
 			reset_placement();
-			hideTirage();
+			
 		}
 		else if(strcmp(protocole, RECEPTION) == 0)
 		{
@@ -815,16 +814,14 @@ gboolean refresh_GUI(gpointer user_data)
 			createScoreDisplay();
 		}
 		else if(strcmp(protocole, VAINQUEUR) == 0)
-		{
-			Joueur best = getMeilleurJoueur(&session);
-			
-			if(best.username!=NULL && best.score>-1)
+		{			
+			if(session.meilleur_joueur.username!=NULL && session.meilleur_joueur.score>-1)
 			{
 				logger("Fin de la session",1);
 				logger("Le grand gagnant est ",0);
-				logger(best.username,0);
+				logger(session.meilleur_joueur.username,0);
 				logger(" avec ",0);
-				logger(best.score,0);
+				logger(session.meilleur_joueur.score,0);
 				logger(" points",1);
 			}
 		}
