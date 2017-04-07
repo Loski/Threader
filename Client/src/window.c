@@ -611,7 +611,7 @@ void refresh_tirage()
 	{			
 		int index = 26;
 		
-		if(session.tirage[i] !='c')
+		if(session.tirage[i] !='_')
 			index = (char)session.tirage[i] - 'A';
 				
 		gtk_image_set_from_pixbuf (GTK_IMAGE(tirage[i]),images[index]);
