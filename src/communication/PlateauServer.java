@@ -25,32 +25,6 @@ public class PlateauServer extends Plateau {
 		this.meilleur_joueur = null;
 		empty = isEmpty();
 	}
-
-
-	/*public ArrayList<String> gestionPlacement(Plateau plateau_joueur) throws ExceptionPlateau{
-		List<Point> points = getLettres(plateau_joueur);
-		ArrayList<String> my_list_de_mots = new ArrayList<String>();
-		 int alignement = verificationAlignement(points);
-		 if(alignement == NO_DIRECTION){
-			 throw new ExceptionPlateau("Alignement des lettres non respecté.", "POS");
-		 }else if(alignement == NOT_FOUND && empty){
-			 my_list_de_mots.add(plateau_joueur.findMainWord(points, alignement));
-		 }else if(empty){
-			 my_list_de_mots.add(plateau_joueur.findMainWord(points, alignement));
-		 }else if(alignement == NOT_FOUND){
-			 my_list_de_mots.addAll(plateau_joueur.searchLeftRight(points));
-			 my_list_de_mots.addAll(plateau_joueur.searchUpDown(points));
-			 my_list_de_mots.add(plateau_joueur.findMainWord(points, alignement));
-		 }else{
-			 my_list_de_mots.add(plateau_joueur.findMainWord(points, alignement));
-			 my_list_de_mots.addAll(plateau_joueur.chercherAutreMots(points, alignement));
-		 }
-		 if(my_list_de_mots.isEmpty())
-			 throw new ExceptionPlateau("Aucun mot !", "POS");
-		 System.out.println(my_list_de_mots);
-		 System.out.println(alignement);
-		 return my_list_de_mots;
-	}*/
 	
 	public List<Point> verificationAlignement(Plateau plateau_joueur) throws ExceptionPlateau
 	{

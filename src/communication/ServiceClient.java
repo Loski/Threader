@@ -113,6 +113,7 @@ public class ServiceClient implements Runnable{
 						if(!server.getSession().verificationSessionForTrouve())
 							throw new ExceptionPlateau("Not in the good phase","INV");
 						Plateau plateau_tmp = new Plateau(msgs[1]);
+
 						
 						List<String> str = new ArrayList<String>();
 						
@@ -124,9 +125,7 @@ public class ServiceClient implements Runnable{
 						{
 							str = this.server.getSession().getPlateau().verificationMots(plateau_tmp);
 						}
-						
-						
-						//List<String> str = this.server.getSession().getPlateau().verifierPlateau();
+
 						gestionPlateauValide(str, plateau_tmp);
 					} catch (ExceptionPlateau e) {
 						server.invalidation(this, e.getCode_erreur() + e.getMessage());
