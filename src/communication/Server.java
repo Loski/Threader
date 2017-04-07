@@ -275,7 +275,7 @@ public class Server implements Communication {
 	@Override
 	public void ancienMeilleur(ServiceClient oldBest, ServiceClient newBest) {
 		oldBest.sendMessage(Protocole.MEILLEUR, "0");
-		newBest.sendMessage(Protocole.MEILLEUR, "0");
+		newBest.sendMessage(Protocole.MEILLEUR, "1");
 	}
 
 	public void gestionFinDeTour() {
