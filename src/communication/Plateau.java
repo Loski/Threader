@@ -253,9 +253,7 @@ public class Plateau {
 		     input = new BufferedReader(new InputStreamReader(new BufferedInputStream(urlConnection.getInputStream())));
 		     while ((ligne=input.readLine())!=null){
 				xml+=ligne;
-			}
-		     System.out.println(xml);
-		     
+			}		     
 		}catch(MalformedURLException e){} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
