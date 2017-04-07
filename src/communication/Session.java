@@ -147,6 +147,11 @@ public class Session implements Runnable {
 		return str;
 	}
 	
+	public int getTour()
+	{
+		return this.tour;
+	}
+	
 	public String getPhaseActuelleString(){
 		if(this.step_actuel == STEP_RECHERCHE)
 			return "REC";

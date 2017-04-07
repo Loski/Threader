@@ -160,6 +160,7 @@ int handle_event(char * message_recu, Session * session){
     if(strcmp(protocole, TOUR ) == 0){
 		switch_phase(session,REC);
         refresh_game(session, pp_message[1], pp_message[2]);
+        session->tour++;
     }else if(strcmp(protocole, DECONNEXION) == 0){
         supprimerJoueur(pp_message[1], session);
     }else if(strcmp(protocole, CONNECTE) == 0){

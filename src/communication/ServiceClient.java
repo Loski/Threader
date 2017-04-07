@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 
 import protocole.Protocole;
@@ -112,7 +113,19 @@ public class ServiceClient implements Runnable{
 						if(!server.getSession().verificationSessionForTrouve())
 							throw new ExceptionPlateau("Not in the good phase","INV");
 						Plateau plateau_tmp = new Plateau(msgs[1]);
-						List<String> str = this.server.getSession().getPlateau().gestionPlacement(plateau_tmp);
+
+						
+						List<String> str = new ArrayList<String>();
+						
+						if(this.server.getSession().getTour()==1 || this.server.getSession().getPlateau().isEmpty())
+						{
+							str = this.server.getSession().getPlateau().getWordOfFirstTurn(plateau_tmp);
+						}
+						else
+						{
+							str = this.server.getSession().getPlateau().verificationMots(plateau_tmp);
+						}
+
 						gestionPlateauValide(str, plateau_tmp);
 					} catch (ExceptionPlateau e) {
 						server.invalidation(this, e.getCode_erreur() + e.getMessage());
