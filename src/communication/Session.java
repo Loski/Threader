@@ -143,6 +143,8 @@ public class Session implements Runnable {
 	}
 	public String getTirageCourant() {
 		String str = "";
+		if(this.step_actuel  == STEP_SESSION || this.step_actuel  == STEP_SOUMISSION)
+			return str;
 		for(Letter c : this.liste_letters.tirage()){
 			str += c.getLetter();
 		}
@@ -204,6 +206,20 @@ public class Session implements Runnable {
 
 	public void viderTirage(char c) {
 		liste_letters.delete(c);
+	}
+
+	public void findNewBestPlayer() {
+		int score = 0;
+		ServiceClient best = null;
+		for(ServiceClient sc: joueurs){
+			int tmp = sc.getPlateau().getScore();
+			if(tmp > score){
+				best = sc;
+			}
+		}
+		plateau.setMeilleur_joueur(best);
+		plateau.setScore(score);
+		
 	}
 
 }

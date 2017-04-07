@@ -109,6 +109,12 @@ public class Server implements Communication {
 	synchronized public void removeJoueur(ServiceClient sc) {
 		logger.info(sc.getPseudo() + " leaving the server.");
 		this.clients.remove(sc);
+		if(sc == session.getPlateau().getMeilleur_joueur()){
+			session.findNewBestPlayer();
+			if(session.getPlateau().getMeilleur_joueur() != null){
+				meilleurMot(session.getPlateau().getMeilleur_joueur());
+			}
+		}
 		// Fin session??
 		this.deconnexion(sc);
 	}
@@ -269,7 +275,7 @@ public class Server implements Communication {
 	@Override
 	public void ancienMeilleur(ServiceClient oldBest, ServiceClient newBest) {
 		oldBest.sendMessage(Protocole.MEILLEUR, "0");
-		newBest.sendMessage(Protocole.MEILLEUR, "0");
+		newBest.sendMessage(Protocole.MEILLEUR, "1");
 	}
 
 	public void gestionFinDeTour() {

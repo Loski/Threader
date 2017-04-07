@@ -82,8 +82,12 @@ void change_plateau(Session * session, char * placement){
     }
 }
 void change_tirage(Session * session, char * tirage){
-    for(int i = 0; i < TAILLE_TIRAGE; i++){
+    int taille = strlen(tirage);
+    for(int i = 0; i < taille; i++){
         session->tirage[i] = tirage[i];
+    }
+    for(int i = taille; i < taille; i++){
+        session->tirage[i] = '_';
     }
 }
 void bind_joueur_to_session( JoueurClient * joueur, Session * session){
