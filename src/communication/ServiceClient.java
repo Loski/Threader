@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 import protocole.Protocole;
 import protocole.ProtocoleCreator;
@@ -111,7 +113,20 @@ public class ServiceClient implements Runnable{
 						if(!server.getSession().verificationSessionForTrouve())
 							throw new ExceptionPlateau("Not in the good phase","INV");
 						Plateau plateau_tmp = new Plateau(msgs[1]);
-						String str = this.server.getSession().getPlateau().gestionPlacement(plateau_tmp);
+						
+						List<String> str = new ArrayList<String>();
+						
+						if(this.server.getSession().getTour()==1 || this.server.getSession().getPlateau().isEmpty())
+						{
+							str = this.server.getSession().getPlateau().getWordOfFirstTurn(plateau_tmp);
+						}
+						else
+						{
+							str = this.server.getSession().getPlateau().verificationMots(plateau_tmp);
+						}
+						
+						
+						//List<String> str = this.server.getSession().getPlateau().verifierPlateau();
 						gestionPlateauValide(str, plateau_tmp);
 					} catch (ExceptionPlateau e) {
 						server.invalidation(this, e.getCode_erreur() + e.getMessage());
@@ -130,12 +145,12 @@ public class ServiceClient implements Runnable{
 
 		}
 		
-		public void gestionPlateauValide(String str, Plateau plateau_tmp){
+		public void gestionPlateauValide(List<String> str, Plateau plateau_tmp){
 			int score = plateau_tmp.calculScore(str, server.getSession().getListe_letters());
 			if(score > plateau.getScore()){
 				server.validation(this);
 				plateau_tmp.setScore(score);
-				plateau_tmp.setMot_courant(str);
+				plateau_tmp.setMy_word(str);
 				plateau = new Plateau(plateau_tmp);
 				ServiceClient old = server.getSession().getPlateau().getMeilleur_joueur();
 				switch (server.getSession().getPlateau().askSwitch(this)) {
@@ -223,6 +238,11 @@ public class ServiceClient implements Runnable{
 
 		public void setPlateau(Plateau plateau) {
 			this.plateau = plateau;
+		}
+
+
+		public void ajouterScore() {
+			score+=plateau.getScore();
 		}
 
 }

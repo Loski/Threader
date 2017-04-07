@@ -10,7 +10,7 @@ public class Session implements Runnable {
 
 	// temps en mlsecondes pour chaque phase
 	public final static int TEMPS_PHASE_DE_RECHERCHE = 30 * 1 *10000; //30sec => need 5mn
-	public final static int TEMPS_PHASE_DE_SOUMISSION = 30 * 1000; //30 seco >need 2mn
+	public final static int TEMPS_PHASE_DE_SOUMISSION = 5 * 1000; //30 seco >need 2mn
 	public final static int TEMPS_PHASE_DE_RESULTAT = 10 * 1000; //10sec
 	public final static int STEP_RECHERCHE = 1;
 	public final static int STEP_SOUMISSION = 2;
@@ -86,6 +86,9 @@ public class Session implements Runnable {
 					this.debut_phase = System.currentTimeMillis();
 					this.server.bilan();
 					tour++;
+					if(plateau.hadWiner())
+						setPlateau(new PlateauServer(plateau.getMeilleur_joueur().getPlateau()));
+					server.gestionFinDeTour();
 					this.step_actuel = STEP_SESSION;
 					break;
 			default:
@@ -142,6 +145,11 @@ public class Session implements Runnable {
 			str += c.getLetter();
 		}
 		return str;
+	}
+	
+	public int getTour()
+	{
+		return this.tour;
 	}
 	
 	public String getPhaseActuelleString(){

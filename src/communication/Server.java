@@ -156,10 +156,6 @@ public class Server implements Communication {
 	public void tour() {
 		logger.info("New turn");
 		this.sendToAll(ProtocoleCreator.create(Protocole.TOUR, this.session.getPlateau().toString(), this.session.getTirageCourant()));
-		session.getPlateau().reset();
-		for(ServiceClient sc: this.clients){
-			sc.setPlateau(new Plateau(session.getPlateau()));
-		}
 	}
 
 	@Override
@@ -273,6 +269,16 @@ public class Server implements Communication {
 	public void ancienMeilleur(ServiceClient oldBest, ServiceClient newBest) {
 		oldBest.sendMessage(Protocole.MEILLEUR, "0");
 		newBest.sendMessage(Protocole.MEILLEUR, "0");
+	}
+
+	public void gestionFinDeTour() {
+		
+		session.getPlateau().reset();
+		for(ServiceClient sc: this.clients){
+			sc.ajouterScore();
+			sc.setPlateau(new Plateau(session.getPlateau()));
+		}
+		
 	}
 
 }

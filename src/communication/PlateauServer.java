@@ -1,31 +1,166 @@
 package communication;
 
 import java.awt.Point;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PlateauServer extends Plateau {
 
 
+
 	public boolean empty;
+
 	private ServiceClient meilleur_joueur;
-	public ServiceClient getMeilleur_joueur() {
-		return meilleur_joueur;
+
+	public PlateauServer(int taillePlateau) {
+		super(taillePlateau);
+		empty = true;
 	}
 
 
-	
-	public String gestionPlacement(Plateau plateau_joueur) throws ExceptionPlateau{
-		List<Point> points = placementValide(plateau_joueur);
+
+	public PlateauServer(Plateau plateau) {
+		super(plateau);
+		this.meilleur_joueur = null;
+		empty = isEmpty();
+	}
+
+
+	/*public ArrayList<String> gestionPlacement(Plateau plateau_joueur) throws ExceptionPlateau{
+		List<Point> points = getLettres(plateau_joueur);
+		ArrayList<String> my_list_de_mots = new ArrayList<String>();
 		 int alignement = verificationAlignement(points);
 		 if(alignement == NO_DIRECTION){
 			 throw new ExceptionPlateau("Alignement des lettres non respecté.", "POS");
+		 }else if(alignement == NOT_FOUND && empty){
+			 my_list_de_mots.add(plateau_joueur.findMainWord(points, alignement));
+		 }else if(empty){
+			 my_list_de_mots.add(plateau_joueur.findMainWord(points, alignement));
+		 }else if(alignement == NOT_FOUND){
+			 my_list_de_mots.addAll(plateau_joueur.searchLeftRight(points));
+			 my_list_de_mots.addAll(plateau_joueur.searchUpDown(points));
+			 my_list_de_mots.add(plateau_joueur.findMainWord(points, alignement));
+		 }else{
+			 my_list_de_mots.add(plateau_joueur.findMainWord(points, alignement));
+			 my_list_de_mots.addAll(plateau_joueur.chercherAutreMots(points, alignement));
 		 }
-		return plateau_joueur.findMainWord(points, alignement);
+		 if(my_list_de_mots.isEmpty())
+			 throw new ExceptionPlateau("Aucun mot !", "POS");
+		 System.out.println(my_list_de_mots);
+		 System.out.println(alignement);
+		 return my_list_de_mots;
+	}*/
+	
+	public List<Point> verificationAlignement(Plateau plateau_joueur) throws ExceptionPlateau
+	{
+		List<Point> points = getLettresJouees(plateau_joueur);
+		
+		int alignement = getOrientation(points);
+		
+		if(alignement == NO_DIRECTION){
+			throw new ExceptionPlateau("Alignement des lettres non respecté.", "POS");
+		}
+		
+		return points;
+	}
+	
+	public ArrayList<String> getWordOfFirstTurn(Plateau plateau_joueur) throws ExceptionPlateau
+	{
+		List<Point> points = getLettresJouees(plateau_joueur);
+		ArrayList<String> words = new ArrayList<String>();
+		
+		int alignement = getOrientation(points);
+		
+		if(alignement==HORIZONTAL || alignement==VERTICAL)
+		{
+			words.add(Plateau.findWord(points.get(0), alignement,plateau_joueur));
+		}
+		else if(alignement == NOT_FOUND)
+		{
+			words.add(""+plateau_joueur.plateau[points.get(0).x][points.get(0).y]);
+		}
+		
+		return words;
+	}
+	
+	public ArrayList<String> verificationMots(Plateau plateau_joueur) throws ExceptionPlateau
+	{
+		List<Point> points = verificationAlignement(plateau_joueur);
+		
+		int alignement = getOrientation(points);
+		
+		ArrayList<String> words = new ArrayList<String>();
+		
+		if(alignement==HORIZONTAL || alignement==VERTICAL)
+		{
+			//Mot complété
+			words.add(Plateau.findWord(points.get(0), alignement,plateau_joueur));
+		}
+		else if(alignement == NOT_FOUND)
+		{
+			for(String mot:Plateau.getCroisement(points.get(0), plateau_joueur))
+				if(mot!="" && mot.length()>1)
+					words.add(mot);
+		}
+		
+		for(Point lettre:points)
+		{
+			int counter_alignement = NOT_FOUND;
+			
+			if(alignement==HORIZONTAL)
+				counter_alignement = VERTICAL;
+			else if (alignement==VERTICAL)
+				counter_alignement = HORIZONTAL;
+			
+			if(alignement==HORIZONTAL || alignement==VERTICAL)
+			{
+				String mot = Plateau.findWord(lettre, counter_alignement,plateau_joueur);
+				if(mot!="" && mot.length()>1)
+					words.add(mot);
+			}
+			
+			Point lettre_haut = new Point(lettre.x, lettre.y-1);
+			Point lettre_bas = new Point(lettre.x, lettre.y+1);
+			Point lettre_gauche = new Point(lettre.x-1, lettre.y);
+			Point lettre_droite = new Point(lettre.x+1, lettre.y);
+			
+			Point[] lettre_a_tester = new Point[4];
+			
+			lettre_a_tester[0] = lettre_haut;
+			lettre_a_tester[1] = lettre_bas;
+			lettre_a_tester[2] = lettre_gauche;
+			lettre_a_tester[3] = lettre_droite;
+			
+			boolean bienPlace = false;
+			
+			int i = 0;
+			while(!bienPlace && i<4)
+			{
+				Point _case = lettre_a_tester[i];
+				
+				if(_case.x>=0 && _case.x<taille_plateau && _case.y>=0 && _case.y<taille_plateau)
+				{
+					char valeur = plateau_joueur.plateau[_case.x][_case.y];
+					
+					if(valeur!=char_empty)
+						bienPlace = true;
+				}
+				
+				i++;
+			}
+			
+			if(!bienPlace)
+				throw new ExceptionPlateau("Les lettres ne complètent pas un mot", "POS");
+			
+		}
+		
+		System.out.println("WORD:"+words);
+		return words;
 	}
 
 
-	public List<Point> placementValide(Plateau plateau_joueur) throws ExceptionPlateau{
+	public List<Point> getLettresJouees(Plateau plateau_joueur) throws ExceptionPlateau{
 		boolean somethingChange = false;
 		List<Point> points = new ArrayList<Point>();
 		for(int i = 0; i < taille_plateau; i++){
@@ -35,7 +170,7 @@ public class PlateauServer extends Plateau {
 						throw new ExceptionPlateau("un joueur tente de tricher Michel", "POS");
 					}else{
 						somethingChange = true;
-						points.add(new Point(j, i));
+						points.add(new Point(i, j));
 					 }
 				 }
 			 }
@@ -51,9 +186,10 @@ public class PlateauServer extends Plateau {
 	 * @param point Coordonnés des lettres dans le tableau
 	 * @return
 	 */
-	public int verificationAlignement(List<Point> points){
-		if(points.size() <= 1)
-			return VERTICAL;
+	public int getOrientation(List<Point> points){
+		if(points.size() <= 1){
+			return NOT_FOUND;
+		}
 		// on suposse alignement en X
 		if(points.get(0).getX() == points.get(1).getX()){
 			double x = points.get(0).getX();
@@ -68,8 +204,8 @@ public class PlateauServer extends Plateau {
 				if(pt.getY() != y)
 					return NO_DIRECTION;
 			}
+			return VERTICAL;
 		}
-		return HORIZONTAL;
 	}
 
 	public synchronized int askSwitch(ServiceClient serviceClient) {
@@ -91,11 +227,11 @@ public class PlateauServer extends Plateau {
 	public void setMeilleur_joueur(ServiceClient meilleur_joueur) {
 		this.meilleur_joueur = meilleur_joueur;
 	}
-
-	public PlateauServer(int taillePlateau) {
-		super(taillePlateau);
-		empty = true;
+	public ServiceClient getMeilleur_joueur() {
+		return meilleur_joueur;
 	}
+
+
 
 
 
@@ -110,9 +246,25 @@ public class PlateauServer extends Plateau {
 		if(meilleur_joueur == null){
 			return "//";
 		}else
-			return meilleur_joueur.getPlateau().getMot_courant() + "/" +meilleur_joueur.getPseudo()+"/";
+			return meilleur_joueur.getPlateau().getMot_courantToString() + "/" +meilleur_joueur.getPseudo()+"/";
+	}
+
+
+ 
+	public boolean hadWiner() {
+		return meilleur_joueur != null;
 	}
 	
+	public boolean isEmpty() {
+		for(int i = 0; i < taille_plateau; i++)
+			for(int j = 0; j < taille_plateau; j++)
+				if(this.plateau[i][j] != char_empty)
+					return false;
+		return true;
+	}
+	public void setEmpty(boolean empty) {
+		this.empty = empty;
+	}
 
 }
 
