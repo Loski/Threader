@@ -277,10 +277,13 @@ public class Server implements Communication {
 		if(session.getListe_letters().canTirage()){
 			try {
 				ServiceClient best_player = session.getPlateau().getMeilleur_joueur();
-				Plateau best = best_player.getPlateau();
-				ArrayList<Point> pts = (ArrayList<Point>) session.getPlateau().getLettresJouees(best);
-				for(Point pt: pts){
-					session.viderTirage(session.getPlateau().getMeilleur_joueur().getPlateau().plateau[(int) pt.getX()][(int) pt.getY()]);
+				if(best_player!=null)
+				{
+					Plateau best = best_player.getPlateau();
+					ArrayList<Point> pts = (ArrayList<Point>) session.getPlateau().getLettresJouees(best);
+					for(Point pt: pts){
+						session.viderTirage(session.getPlateau().getMeilleur_joueur().getPlateau().plateau[(int) pt.getX()][(int) pt.getY()]);
+					}
 				}
 			} catch (ExceptionPlateau e) {
 				// TODO Auto-generated catch block

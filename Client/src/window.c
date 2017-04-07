@@ -427,7 +427,7 @@ void sendMessageEvent(GtkButton *button, GtkWidget * input)
 			else
 			{
 				logger("Message privé envoyé à ",0);
-				/*logger(user,1);*/
+				logger(pseudo,1);
 			}
 		}
 		else
@@ -798,9 +798,19 @@ gboolean refresh_GUI(gpointer user_data)
 		{
 			if(count>2)
 			{
-				logger(pp_message[2],0);
-				logger(" a gagné avec le mot ",0);
-				logger(pp_message[1],1);
+				if(strcmp(pp_message[2], "") != 0)
+				{
+					logger(pp_message[2],0);
+					logger(" a gagné",0);
+					
+					if(strcmp(pp_message[1], "") != 0)
+					{
+						logger(" avec le mot ",0);
+						logger(pp_message[1],1);
+					}
+				}
+				else
+					logger("Personne n'a trouvé de mot",1);
 			}
 			createScoreDisplay();
 		}
