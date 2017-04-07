@@ -9,7 +9,7 @@ public class Session implements Runnable {
 	public final static int TAILLE_TIRAGE = 7;
 
 	// temps en mlsecondes pour chaque phase
-	public final static int TEMPS_PHASE_DE_RECHERCHE = 30 * 1 *10000; //30sec => need 5mn
+	public final static int TEMPS_PHASE_DE_RECHERCHE = 30 * 1000; //30sec => need 5mn
 	public final static int TEMPS_PHASE_DE_SOUMISSION = 5 * 1000; //30 seco >need 2mn
 	public final static int TEMPS_PHASE_DE_RESULTAT = 10 * 1000; //10sec
 	public final static int STEP_RECHERCHE = 1;
@@ -46,6 +46,7 @@ public class Session implements Runnable {
 			switch (step_actuel) {
 				case STEP_SESSION:
 					try {
+						this.debut_phase = System.currentTimeMillis();
 						Thread.sleep(5*1000);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
@@ -162,7 +163,7 @@ public class Session implements Runnable {
 		return "DEB";
 	}
 	
-	public long getTempsRestant(){
+	public int getTempsRestant(){
 		long time = 0;
 		switch (step_actuel) {
 		case STEP_RECHERCHE:
@@ -170,14 +171,23 @@ public class Session implements Runnable {
 			break;
 		case STEP_SOUMISSION:
 			time = TEMPS_PHASE_DE_SOUMISSION;
+			break;
 		case STEP_RESULTAT:
 			time = TEMPS_PHASE_DE_RESULTAT;
-		case STEP_SESSION:
-			time = 0;
-		default:
 			break;
+		case STEP_SESSION:
+			time = 5 * 1000;
+			break;
+		default:
+			return 0;
 		}
-		return (time - (this.debut_phase - System.currentTimeMillis()))/1000;
+		
+		if(this.debut_phase==-1)
+			this.debut_phase=System.currentTimeMillis();
+		
+		int restant = (int) (time - (System.currentTimeMillis() - this.debut_phase))/1000;
+		
+		return restant;
 	}
 
 	public boolean verificationSessionForTrouve() {

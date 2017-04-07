@@ -260,7 +260,7 @@ void createTirageDisplay()
 		
 		int index = 26;
 		
-		if(session.phase==REC || session.phase==SOU)
+		if((session.phase==REC || session.phase==SOU) && c!='_')
 			index = (char)toupper(c) - 'A';
 			
 		tirage[i] = gtk_image_new_from_pixbuf (images[index]);
@@ -271,7 +271,8 @@ void createTirageDisplay()
 
 		gtk_container_add (GTK_CONTAINER (event_box), tirage[i]);
 		
-		g_signal_connect (G_OBJECT (event_box),"button_press_event",G_CALLBACK (selectLetter),tirage[i]);
+		if(c!='_')
+			g_signal_connect (G_OBJECT (event_box),"button_press_event",G_CALLBACK (selectLetter),tirage[i]);
 	
 		gtk_grid_attach(GTK_GRID(tirageDisplay), event_box, i, 0, 1, 1);
 		
@@ -281,8 +282,29 @@ void createTirageDisplay()
 	gtk_widget_show_all (p_window);
 }
 
+void setPhaseDisplay()
+{
+	if(session.phase==DEB)
+		gtk_label_set_markup(GTK_LABEL(phaseDisplay), "Début de Session");
+	else if(session.phase==REC)
+		gtk_label_set_markup(GTK_LABEL(phaseDisplay), "Phase de Recherche");
+	else if(session.phase==SOU)
+		gtk_label_set_markup(GTK_LABEL(phaseDisplay), "Phase de Soumission");
+	else if(session.phase==RES)
+		gtk_label_set_markup(GTK_LABEL(phaseDisplay), "Résultat");
+}
+
+void refreshTimer()
+{
+	char * time_val = timeToString(session.temps);
+	
+	gtk_label_set_markup(GTK_LABEL(timer), time_val);
+}
+
 void createPhaseDisplay()
 {
+	GtkWidget * phaseGrid = gtk_grid_new ();
+	
 	tourDisplay = gtk_label_new(NULL);
 	phaseDisplay = gtk_label_new(NULL);
 	timer = gtk_label_new(NULL);
@@ -293,11 +315,21 @@ void createPhaseDisplay()
 	
 	strcat(tourTexte,tour);
 	
-	strcat(tourTexte," :");
+	strcat(tourTexte," - ");
 	
 	gtk_label_set_markup(GTK_LABEL(tourDisplay), tourTexte);
 	
-	gtk_grid_attach(GTK_GRID(p_main_grid),tourDisplay,400,10,500,100);
+	
+	//refreshTimer();
+	setPhaseDisplay();
+	
+	gtk_widget_set_size_request(tourDisplay, 100, 10);
+	
+	gtk_grid_attach(GTK_GRID(phaseGrid),tourDisplay,0,0,1,1);
+	gtk_grid_attach(GTK_GRID(phaseGrid),phaseDisplay,1,0,1,1);
+	gtk_grid_attach(GTK_GRID(phaseGrid),timer,2,0,1,1);
+	
+	gtk_grid_attach(GTK_GRID(p_main_grid),phaseGrid,600,10,400,100);
 	
 	gtk_widget_show_all (p_window);
 }
@@ -561,12 +593,39 @@ void refresh_tirage()
 	{			
 		int index = 26;
 		
-		index = (char)session.tirage[i] - 'A';
+		if(session.tirage[i] !='c')
+			index = (char)session.tirage[i] - 'A';
 				
 		gtk_image_set_from_pixbuf (GTK_IMAGE(tirage[i]),images[index]);
 	}
 			
 	gtk_widget_show_all (p_window);
+}
+
+char * timeToString(int chrono)
+{	
+	int minutes = chrono/60;
+	
+	int seconde = chrono - minutes*60;
+	
+	printf("MIN : %d SEC:%d\n",minutes,seconde);
+	
+	char minutesStr[5] = "";
+	/*if(minutes<10)
+		strcpy(minutesStr, "0");*/
+	sprintf(minutesStr, "%d\0", minutes);
+	
+	char secondeStr[3] = "";
+	/*if(seconde<10)
+		strcpy(secondeStr, "0");*/
+	sprintf(secondeStr, "%d\0", seconde);
+	
+	char time_val[10];
+	strcpy(time_val,minutesStr);
+	strcat(time_val,":");
+	strcat(time_val,secondeStr);
+	
+	return UTF8(time_val);
 }
 
 void refresh_tour()
@@ -577,7 +636,7 @@ void refresh_tour()
 	
 	strcat(tourTexte,tour);
 	
-	strcat(tourTexte," :");
+	strcat(tourTexte," - ");
 	
 	gtk_label_set_markup(GTK_LABEL(tourDisplay), tourTexte);
 	
@@ -591,6 +650,25 @@ void reset_placement()
 	refresh_grille();
 }
 
+void hideTirage()
+{
+	for(int i=0;i<TAILLE_TIRAGE;i++)
+	{
+		int index = 26;
+		
+		gtk_image_set_from_pixbuf (GTK_IMAGE(tirage[i]),images[index]);
+		
+		tirage_local[i]='_';
+	}
+}
+
+void timer_decrement()
+{
+	session.temps--;
+	
+	refreshTimer();
+}
+
 void refreshIAmTheBest(bool imthebest){
 
 }
@@ -598,6 +676,11 @@ gboolean refresh_GUI(gpointer user_data)
 {	
 	char * message = get_message(session.messages, &session);
 	printf("Je retire :%s\n,",message);
+	
+	setPhaseDisplay();
+	
+	if(session.temps>0)
+		timer_decrement();
 	
 	if(message!=NULL)
 	{
@@ -615,6 +698,7 @@ gboolean refresh_GUI(gpointer user_data)
 			refresh_grille();
 			refresh_tour();
 			saveToLocal();
+			logger("La phase de recherche débute",1);
 		}else if(strcmp(protocole, MEILLEUR) == 0){ 
           if(strcmp(pp_message[1], "0") == 0){ 
             refreshIAmTheBest(true); 
@@ -659,10 +743,14 @@ gboolean refresh_GUI(gpointer user_data)
 		else if(strcmp(protocole, RFIN) == 0)
 		{
 			logger("La phase de recherche est terminée",1);
+			reset_placement();
+			logger("La phase de Soumission débute",1);
 		}
 		else if(strcmp(protocole, SFIN) == 0)
 		{
 			logger("La phase de soumission est terminée",1);
+			reset_placement();
+			hideTirage();
 		}
 		else if(strcmp(protocole, RECEPTION) == 0)
 		{

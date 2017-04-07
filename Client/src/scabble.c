@@ -136,6 +136,15 @@ void switch_phase(Session* session,int phase)
 {
 	
 	session->phase=phase;
+	
+	if(phase==DEB)
+		session->temps=20;
+	else if(phase==REC)
+		session->temps=5*60;
+	else if(phase==SOU)
+		session->temps=2*60;
+	else if(phase==RES)
+		session->temps=10;
 }
 
 int annoncer_placement(char * proposition,JoueurClient * client)
