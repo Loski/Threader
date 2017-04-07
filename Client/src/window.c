@@ -30,7 +30,7 @@ GtkWidget * tirage[TAILLE_TIRAGE];
 GtkWidget * event_box_list[TAILLE_PLATEAU*TAILLE_PLATEAU];
 GtkWidget * event_box_tirage[TAILLE_TIRAGE];
 GtkWidget * tirageDisplay;
-GtkWidget * scoreDisplay;
+GtkWidget * scoreDisplay = NULL;
 //GtkWidget * players[][2];
 GdkPixbuf * images[27];
 
@@ -211,14 +211,25 @@ void createGrille (){
 
 void createScoreDisplay()
 {
-	scoreDisplay = gtk_grid_new ();
+	if(scoreDisplay!=NULL)
+		gtk_widget_destroy (scoreDisplay);
+	
+	GtkWidget * scoreGrid = gtk_grid_new ();
+	
+	scoreDisplay = gtk_scrolled_window_new(NULL, NULL);
+
+    //This code sets the preferred size for the widget, so it does not ask for extra space
+    gtk_widget_set_size_request(scoreGrid, 300, 500);
 	
 	for(int i=0;i<session.nombre_joueur;i++)
 	{
 		GtkWidget * name = gtk_label_new(NULL);
 		
+		gtk_widget_set_size_request(name, 100, 100);
+		
 		gtk_label_set_markup(GTK_LABEL(name),(session.p_liste_joueur)->username);
-		gtk_grid_attach (GTK_GRID (p_main_grid), name, 600,0,400,200);
+		
+		gtk_grid_attach (GTK_GRID (scoreGrid), name, 0,0,1,1);
 		
 		GtkWidget * score = gtk_label_new(NULL);
 		
@@ -226,9 +237,16 @@ void createScoreDisplay()
 		sprintf(value, "%d", (session.p_liste_joueur)->score);
 		
 		gtk_label_set_markup(GTK_LABEL(score),value);
-		gtk_grid_attach (GTK_GRID (p_main_grid), score, 700,0,300,200);
-			
+		gtk_grid_attach (GTK_GRID (scoreGrid), score, 1,0,1,1);
 	}
+	
+	 gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scoreDisplay), GTK_POLICY_NEVER,
+                               GTK_POLICY_ALWAYS);
+	
+	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scoreDisplay), scoreGrid);
+    
+	
+	gtk_grid_attach (GTK_GRID (p_main_grid), scoreDisplay, 600,150,400,500);
 	
 	gtk_widget_show_all (p_window);
 }
@@ -280,7 +298,7 @@ void createPhaseDisplay()
 	
 	gtk_label_set_markup(GTK_LABEL(tourDisplay), tourTexte);
 	
-	gtk_grid_attach(GTK_GRID(p_main_grid),tourDisplay,600,10,500,100);
+	gtk_grid_attach(GTK_GRID(p_main_grid),tourDisplay,400,10,500,100);
 	
 	gtk_widget_show_all (p_window);
 }
@@ -606,12 +624,12 @@ gboolean refresh_GUI(gpointer user_data)
 		{
 			logger("Déconnexion de :",0);
 			logger(pp_message[1],1);
-			/* MAJ tab score*/
+			createScoreDisplay();
 		}
 		else if(strcmp(protocole, CONNECTE) == 0){
 			logger("Connexion de :",0);
 			logger(pp_message[1],1);
-			/* MAJ tab score*/
+			createScoreDisplay();
 		}
 		else if(strcmp(protocole, SESSION) == 0){
 			logger("--------- Début d'une nouvelle session -------------",1);
@@ -666,6 +684,16 @@ gboolean refresh_GUI(gpointer user_data)
 					
 				logger(pp_message[1],1);
 			}
+		}
+		else if(strcmp(protocole, BILAN) == 0)
+		{
+			if(count>2)
+			{
+				logger(pp_message[2],0);
+				logger(" a gagné avec le mot ",0);
+				logger(pp_message[1],1);
+			}
+			createScoreDisplay();
 		}
 		else
 		{
