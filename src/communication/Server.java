@@ -108,7 +108,18 @@ public class Server implements Communication {
 
 	synchronized public void removeJoueur(ServiceClient sc) {
 		logger.info(sc.getPseudo() + " leaving the server.");
-		this.clients.remove(sc);
+		if(this.clients.remove(sc)){
+			System.out.println("Remove");
+		}else{
+			System.out.println("bad remove");
+		}
+		if(clients.size() < 1){
+			synchronized (obj) {
+				obj.notifyAll();
+			}
+			return;
+		}
+			
 		if(sc == session.getPlateau().getMeilleur_joueur()){
 			session.findNewBestPlayer();
 			if(session.getPlateau().getMeilleur_joueur() != null){
@@ -279,7 +290,9 @@ public class Server implements Communication {
 	}
 
 	public void gestionFinDeTour() {
-		
+		for(ServiceClient sc: clients){
+			sc.setScore(sc.getScore() + sc.getPlateau().getScore());
+		}
 		if(session.getListe_letters().canTirage()){
 			try {
 				ServiceClient best_player = session.getPlateau().getMeilleur_joueur();
@@ -296,6 +309,8 @@ public class Server implements Communication {
 				e.printStackTrace();
 			}
 			session.majLetter();
+		}else{
+			session.setSession_over(true);
 		}
 
 		
@@ -308,6 +323,15 @@ public class Server implements Communication {
 			sc.ajouterScore();
 			sc.setPlateau(new Plateau(session.getPlateau()));
 		}
+		
+	}
+
+	public void endSession() {
+		logger.info("End of session");
+		vainqueur();
+		session.reset();
+		if(clients.size() > 1)
+			new Thread(session).start();
 		
 	}
 

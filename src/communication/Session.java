@@ -9,9 +9,9 @@ public class Session implements Runnable {
 	public final static int TAILLE_TIRAGE = 7;
 
 	// temps en mlsecondes pour chaque phase
-	public final static int TEMPS_PHASE_DE_RECHERCHE = 30 * 1000; //30sec => need 5mn
-	public final static int TEMPS_PHASE_DE_SOUMISSION = 5 * 1000; //30 seco >need 2mn
-	public final static int TEMPS_PHASE_DE_RESULTAT = 10 * 1000; //10sec
+	public final static int TEMPS_PHASE_DE_RECHERCHE = 60 * 5 * 1000; //30sec => need 5mn
+	public final static int TEMPS_PHASE_DE_SOUMISSION = 50 * 1000; //30 seco >need 2mn
+	public final static int TEMPS_PHASE_DE_RESULTAT = 10 * 100; //10sec
 	public final static int STEP_RECHERCHE = 1;
 	public final static int STEP_SOUMISSION = 2;
 	public final static int STEP_RESULTAT = 3;
@@ -25,7 +25,7 @@ public class Session implements Runnable {
 	private int tour;
 	private Server server;
 	private int step_actuel;
-	private boolean session_over;
+	private boolean session_lancer, session_over;
 	private long debut_phase;
 
 
@@ -37,24 +37,26 @@ public class Session implements Runnable {
 		this.server = s;
 		this.step_actuel = STEP_SESSION;
 		this.debut_phase = -1;
-		this.session_over = true;
+		this.session_lancer = true;
+		session_over = false;
 	}
 
 	@Override
 	public void run() {
-		while (this.joueurs.size() > 0) {
+		while (this.joueurs.size() > 0 && !session_over) {
 			switch (step_actuel) {
 				case STEP_SESSION:
-					try {
-						this.debut_phase = System.currentTimeMillis();
-						Thread.sleep(5*1000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					synchronized(Server.obj){
+						try {
+							Server.obj.wait(TEMPS_PHASE_DE_RESULTAT);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
-					if(session_over){
+					if(session_lancer){
 						this.server.debutSession();
-						session_over = false;
+						session_lancer = false;
 					}
 					this.step_actuel = STEP_RECHERCHE;
 					this.debut_phase = System.currentTimeMillis();
@@ -75,19 +77,22 @@ public class Session implements Runnable {
 					break;
 				case STEP_SOUMISSION:
 					this.debut_phase = System.currentTimeMillis();
-					try {
-						Thread.sleep(TEMPS_PHASE_DE_SOUMISSION);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
+					synchronized(Server.obj){
+						try {
+							Server.obj.wait(TEMPS_PHASE_DE_SOUMISSION);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 					this.server.sFin();
 					this.step_actuel = STEP_RESULTAT;
 					break;
 				case STEP_RESULTAT:
 					this.debut_phase = System.currentTimeMillis();
+					server.gestionFinDeTour();
 					this.server.bilan();
 					tour++;
-					server.gestionFinDeTour();
 					if(plateau.hadWiner())
 						setPlateau(new PlateauServer(plateau.getMeilleur_joueur().getPlateau()));
 					server.resetPlayer();
@@ -97,6 +102,7 @@ public class Session implements Runnable {
 				break;
 			}
 		}
+		server.endSession();
 	}
 	public Alphabet getListe_letters() {
 		return liste_letters;
@@ -166,6 +172,14 @@ public class Session implements Runnable {
 		return "DEB";
 	}
 	
+	public boolean isSession_over() {
+		return session_over;
+	}
+
+	public void setSession_over(boolean session_over) {
+		this.session_over = session_over;
+	}
+
 	public int getTempsRestant(){
 		long time = 0;
 		switch (step_actuel) {
@@ -219,6 +233,18 @@ public class Session implements Runnable {
 		}
 		plateau.setMeilleur_joueur(best);
 		plateau.setScore(score);
+		
+	}
+
+	public void reset() {
+		plateau = new PlateauServer(15);
+		session_lancer = true;
+		session_over = false;
+		tour = 0;
+		liste_letters = new Alphabet(7);
+		for(ServiceClient sc: joueurs){
+			sc.setScore(0);
+		}
 		
 	}
 

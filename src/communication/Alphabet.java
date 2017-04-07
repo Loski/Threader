@@ -71,7 +71,7 @@ public class Alphabet {
 	}
 
 	public boolean canTirage(){
-		return tirage_courant.size() + liste_all_letter.size() >= taille_tirage;
+		return liste_all_letter.size() >= 1;
 	}
 
 	public List<Letter> newTirage(){
@@ -83,7 +83,7 @@ public class Alphabet {
 		return tirage();
 	}
 	public List<Letter> tirage(){
-		while(tirage_courant.size() < taille_tirage){
+		while(tirage_courant.size() < taille_tirage && liste_all_letter.size() > 0){
 			tirage_courant.add(selectionLetter());
 		}
 		return tirage_courant;

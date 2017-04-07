@@ -144,7 +144,12 @@ public class ServiceClient implements Runnable{
 
 		}
 		
-		public void gestionPlateauValide(List<String> str, Plateau plateau_tmp){
+		public void gestionPlateauValide(List<String> str, Plateau plateau_tmp) throws ExceptionPlateau{
+			for(String s: str){
+				if(!Plateau.isRealWord(s)){
+					throw new ExceptionPlateau("Mot non présent dans la langue anglaise : " + s, "DIC");
+				}
+			}
 			int score = plateau_tmp.calculScore(str, server.getSession().getListe_letters());
 			if(score > plateau.getScore()){
 				server.validation(this);
@@ -162,7 +167,7 @@ public class ServiceClient implements Runnable{
 					break;
 				}
 			}else{
-				server.rInValide(this, "Moins bon score !");
+				throw new ExceptionPlateau("Moins bon score", "INF");
 			}
 		}
 
