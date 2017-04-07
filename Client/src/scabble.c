@@ -141,7 +141,7 @@ void switch_phase(Session* session,int phase)
 	session->phase=phase;
 	
 	if(phase==DEB)
-		session->temps=20;
+		session->temps=10;
 	else if(phase==REC)
 		session->temps=5*60;
 	else if(phase==SOU)
@@ -159,6 +159,26 @@ int annoncer_placement(char * proposition,JoueurClient * client)
     strcat(message, "/\n");
     printf("%s\n", message);
     return sendMessage(client->socket, message);
+}
+
+Joueur getMeilleurJoueur(Session * session)
+{
+	Joueur best;
+	
+	best.username=NULL;
+	best.score=-1;
+	
+	for(int i = 0;i<session->nombre_joueur;i++)
+	{
+		int score = session->p_liste_joueur[i].score;
+		
+		if(score>best.score)
+			best = session->p_liste_joueur[i];
+	}
+	
+	printf("BEST :",best.username);
+	
+	return best;
 }
 
 int handle_event(char * message_recu, Session * session){
@@ -203,6 +223,10 @@ int handle_event(char * message_recu, Session * session){
         
     }else if(strcmp(protocole, RECEPTION) == 0){
         
+    }
+    else if(strcmp(protocole, VAINQUEUR) == 0){
+      refresh_score(session, pp_message[1]);
+      getMeilleurJoueur(session);
     }
     else if(strcmp(protocole, SESSION) == 0){
         switch_phase(session,DEB);

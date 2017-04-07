@@ -40,6 +40,7 @@ struct Session{
     JoueurClient * p_client;
     int phase;
     int temps;
+    Joueur * meilleur_joueur;
     File * messages;
     GMutex mutex;
 };
@@ -57,4 +58,5 @@ int handle_connexion(char * message_recu, Session * session);
 int annoncer_placement(char * proposition,JoueurClient * client);
 void switch_phase(Session* session,int phase);
 void print_session(Session * session);
+Joueur getMeilleurJoueur(Session * session);
 #endif /* SCRABBLE_H */
