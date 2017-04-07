@@ -134,7 +134,7 @@ public class ServiceClient implements Runnable{
 				}
 			}else if(Protocole.PENVOIE.name().equals(cmd) && isAuthentified){
 				if(msgs.length > 2){
-					this.server.sendToHim(Protocole.PRECEPTION, msgs[2], msgs[1]);
+					this.server.sendToHim(Protocole.PRECEPTION, msgs[2]+"/"+msgs[1], msgs[1]);
 				}
 			}else if(Protocole.ENVOIE.name().equals(cmd) && isAuthentified){
 				if(msgs.length > 1){

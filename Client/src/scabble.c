@@ -57,7 +57,6 @@ int init_session(Session * session, char * placement, char * tirage, char * list
     session->messages->premier = NULL;
     
     session->temps = atoi(temps);
-    print_all_joueur(session);
     return 1;
 }
 
@@ -196,7 +195,12 @@ int handle_event(char * message_recu, Session * session){
         }
     }else if(strcmp(protocole, VAINQUEUR) == 0){
         
-    }else if(strcmp(protocole, SESSION) == 0){
+    }else if(strcmp(protocole, PRECEPTION) == 0){
+        
+    }else if(strcmp(protocole, RECEPTION) == 0){
+        
+    }
+    else if(strcmp(protocole, SESSION) == 0){
         switch_phase(session,DEB);
     }else{
         puts("bad param for handler");
