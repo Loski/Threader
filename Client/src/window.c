@@ -313,25 +313,55 @@ void createConsoleLog()
 
 void sendMessageEvent(GtkButton *button, GtkWidget * input)
 {
-	char **pp_message = NULL;
 	char * mess = (char*)gtk_entry_get_text(GTK_ENTRY(input));
-	//gtk_entry_set_text(GTK_ENTRY(input),"");
-	
+		
 	if(strlen(mess) < 1)
 		return;
 	else{
 		
-		int count = split(mess, ' ', &pp_message);
-		
-		if(count < 0 || (mess[0]=='/' && count<3) )
+		if(mess[0]=='/' && mess[1]=='w')
 		{
-			logger("Mauvais message",1);
-			return ;
-		}
-		
-		if(mess[0]=='/')
-		{
+			int i=2;
+			int first_espace = 0;
+			int second_espace = 0;
 			
+			while(i<strlen(mess) && second_espace==0)
+			{
+				if(mess[i]== ' ')
+				{
+					if(first_espace==0)
+						first_espace=i;
+					else second_espace=i;
+				}
+				
+				i++;
+			}
+			
+			
+			char * startUser = mess + first_espace + 1;
+			char * startMess = mess + second_espace + 1;
+			
+			char* user = malloc(sizeof(char)*(second_espace-first_espace));
+			strncpy(user, startUser, second_espace-first_espace-1);
+			strcat(user,"\0");
+			
+			char* messageToSend = malloc(sizeof(char)*strlen(mess)-(second_espace));
+			strncpy(messageToSend,startMess,strlen(mess)-(second_espace + 1));
+			strcat(messageToSend,"\0");
+			
+			char message[255] = PENVOIE;
+			strcat(message, user);
+			strcat(message, "/");
+			strcat(message, messageToSend);
+			strcat(message, "/\n");
+			
+			if(!sendMessage(client.socket, message))
+				logger("Message non envoyé",1);
+			else
+			{
+				logger("Message privé envoyé à ",0);
+				/*logger(user,1);*/
+			}
 		}
 		else
 		{
@@ -346,6 +376,8 @@ void sendMessageEvent(GtkButton *button, GtkWidget * input)
 		}
 
 	}
+	
+	gtk_entry_set_text(GTK_ENTRY(input),"");
 }
 
 void selectLetter(GtkWidget* event_box,GdkEventButton *event,gpointer data)
