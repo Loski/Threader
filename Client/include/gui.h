@@ -1,5 +1,8 @@
 #ifndef GUI_H
 #define GUI_H
+
+#define UTF8(string) g_locale_to_utf8(string, -1, NULL, NULL, NULL)
+
 #include <gtk/gtk.h>
 	GtkWidget *init_window();
 	GtkWidget * init_main_container();
@@ -20,4 +23,5 @@
 	void saveToLocal();
 	void reset_placement();
 	void sendMessageEvent(GtkButton *button, GtkWidget * input);
+	char * timeToString(int chrono);
 #endif
