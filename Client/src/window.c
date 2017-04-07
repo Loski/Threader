@@ -371,37 +371,55 @@ void sendMessageEvent(GtkButton *button, GtkWidget * input)
 		if(mess[0]=='/' && mess[1]=='w')
 		{
 			int i=2;
+			int compteurPseudo = 0;
+			int compteurMessage = 0;
 			int first_espace = 0;
 			int second_espace = 0;
-			
-			while(i<strlen(mess) && second_espace==0)
-			{
-				if(mess[i]== ' ')
-				{
-					if(first_espace==0)
-						first_espace=i;
-					else second_espace=i;
-				}
-				
+			char pseudo[1024];
+			char mess_age[1024];
+			bool pseudoBool = true;
+			while(mess[i] == ' '){
 				i++;
 			}
+			while (mess[i]!='\0')
+			{
+				if(mess[i] == ' '){
+					while(mess[i] == ' '){
+						i++;
+					}
+					if(pseudoBool){
+						pseudo[compteurPseudo] = '\0';
+						pseudoBool = false;
+						break;
+					}
+				}
+				else if(pseudoBool){
+					pseudo[compteurPseudo] = mess[i];
+					compteurPseudo++;
+				}else{
+					mess_age[compteurMessage] = mess[i];
+					compteurMessage++;
+				}
+				i++;
+										
+			}
+
+			while (mess[i]!='\0')
+			{
+				mess_age[compteurMessage] = mess[i];
+				compteurMessage++;
+				i++;
+			}
+			mess_age[compteurMessage] = '\0';
 			
-			
-			char * startUser = mess + first_espace + 1;
-			char * startMess = mess + second_espace + 1;
-			
-			char* user = malloc(sizeof(char)*(second_espace-first_espace));
-			strncpy(user, startUser, second_espace-first_espace-1);
-			strcat(user,"\0");
-			
-			char* messageToSend = malloc(sizeof(char)*strlen(mess)-(second_espace));
-			strncpy(messageToSend,startMess,strlen(mess)-(second_espace + 1));
-			strcat(messageToSend,"\0");
-			
-			char message[255] = PENVOIE;
-			strcat(message, user);
+			printf("\npseudo =%s", pseudo);
+			printf("\nmessage =%s", mess_age);
+
+
+			char message[6000] = PENVOIE;
+			strcat(message, pseudo);
 			strcat(message, "/");
-			strcat(message, messageToSend);
+			strcat(message, mess_age);
 			strcat(message, "/\n");
 			
 			if(!sendMessage(client.socket, message))
@@ -675,6 +693,7 @@ void refreshIAmTheBest(bool imthebest){
 gboolean refresh_GUI(gpointer user_data)
 {	
 	char * message = get_message(session.messages, &session);
+	if(message!=NULL)
 	printf("Je retire :%s\n,",message);
 	
 	setPhaseDisplay();
