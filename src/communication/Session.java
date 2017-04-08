@@ -21,7 +21,7 @@ public class Session implements Runnable {
 	private Alphabet liste_letters;
 	private PlateauServer plateau;
 	private List<ServiceClient> joueurs; // R�f�rence tous les joueurs de la
-											// session, actif ou non
+	VerificationMot verification;										// session, actif ou non
 	private int tour;
 	private Server server;
 	private int step_actuel;
@@ -29,7 +29,7 @@ public class Session implements Runnable {
 	private long debut_phase;
 
 
-	public Session(List<ServiceClient> clients, Server s) {
+	public Session(List<ServiceClient> clients, Server s, int langue) {
 		this.liste_letters = new Alphabet(TAILLE_TIRAGE);
 		this.plateau = new PlateauServer(TAILLE_PLATEAU);
 		this.joueurs = clients;
@@ -39,6 +39,11 @@ public class Session implements Runnable {
 		this.debut_phase = -1;
 		this.session_lancer = true;
 		session_over = false;
+		if(langue == Server.LANGUE_EN){
+			verification = new VerificationEN();
+		}else{
+			verification = new VerificationFR();
+		}
 	}
 
 	@Override
@@ -199,7 +204,7 @@ public class Session implements Runnable {
 			return 0;
 		}
 		
-		if(this.debut_phase==-1)
+		if(this.debut_phase==-1 ||time < 0)
 			this.debut_phase=System.currentTimeMillis();
 		
 		int restant = (int) (time - (System.currentTimeMillis() - this.debut_phase))/1000;
@@ -241,11 +246,17 @@ public class Session implements Runnable {
 		session_lancer = true;
 		session_over = false;
 		tour = 0;
-		liste_letters = new Alphabet(7);
+		step_actuel = STEP_SESSION;
+		debut_phase = -1;
+		liste_letters = new Alphabet(TAILLE_TIRAGE);
 		for(ServiceClient sc: joueurs){
 			sc.setScore(0);
 		}
 		
+	}
+
+	public boolean isRealWord(String s) {
+		return verification.isRealWord(s);
 	}
 
 }

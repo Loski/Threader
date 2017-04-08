@@ -4,7 +4,6 @@ public class Letter {
 	private char letter;
 	private int puissance;
 	
-	
 	public Letter(Character letter, int puisssance) {
 		super();
 		this.letter = letter;
