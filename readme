@@ -1,3 +1,7 @@
 Lancer le serveur avec java -jar ScrabbleServeur <langue>
 
 Pour le client, lancer cmake. puis make et ./client.
+Vous avez besoin de glib-2.0 ainsi que  libgtk2.0-dev
+
+sudo apt-get install libgtk2.0-dev
+sudo apt-get install libglib2.0-dev
