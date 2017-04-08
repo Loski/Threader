@@ -33,7 +33,7 @@ public class Server implements Communication {
 		this.clients = new ArrayList<>();
 		Handler fh = null; 
 		try {
-			fh = new FileHandler("TestLogging.log");
+			fh = new FileHandler("Logging.xml");
 		} catch (SecurityException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

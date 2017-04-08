@@ -20,7 +20,7 @@ public class Session implements Runnable {
 
 	private Alphabet liste_letters;
 	private PlateauServer plateau;
-	private List<ServiceClient> joueurs; // R�f�rence tous les joueurs de la
+	private List<ServiceClient> joueurs; // Référence tous les joueurs de la
 	VerificationMot verification;										// session, actif ou non
 	private int tour;
 	private Server server;
