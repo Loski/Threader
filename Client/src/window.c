@@ -725,6 +725,7 @@ gboolean refresh_GUI(gpointer user_data)
 		
 		if(strcmp(protocole, TOUR ) == 0){
 			logger("-------------------Début d'un nouveau tour-------------------",2);
+			refreshIAmTheBest(false);
 			refresh_tirage();
 			refresh_grille();
 			refresh_tour();
@@ -823,7 +824,7 @@ gboolean refresh_GUI(gpointer user_data)
 					}
 				}
 				else
-					logger("Personne n'a trouvé de mot",1);
+					logger("Personne n'a trouvé de mot",2);
 			}
 			createScoreDisplay();
 		}
@@ -896,12 +897,17 @@ void askConnexion(GtkButton *button, GtkWidget * input){
 	    	
 	    	print_session(&session);
 	    	
-	    	char str[80];
+	    	logger("BIENVENUE, ",0);
+			logger((client.p_joueur)->username,0);
+			logger("\t\t",0);
 	    	
-	    	strcpy(str, "BIENVENUE, ");
-			strcat(str, (client.p_joueur)->username);
+	    	logger("La session est en ",0);	    	
 	    	
-	    	logger(str,2);
+	    	if(strcmp(session.langue, "EN" ) == 0)
+				logger("Anglais",2);
+			else
+				logger("Français",2);
+			
 	    	
 	    	g_timeout_add (1000,refresh_GUI,NULL);
 	    	
