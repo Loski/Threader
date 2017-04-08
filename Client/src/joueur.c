@@ -8,11 +8,11 @@
 #include "../include/connexion.h"
 #include "../include/transmission.h"
 
-void initClient(JoueurClient * client,  char * name){
+void initClient(JoueurClient * client,  char * name,char * ip){
     client->socket = -1;
     client->p_joueur = malloc(sizeof(Joueur));
     initJoueur(client->p_joueur, name);
-    client->socket = connexion_socket("0.0.0.0");
+    client->socket = connexion_socket(ip);
     /*if(client->socket < 0)
         exit(EXIT_FAILURE);*/
 }

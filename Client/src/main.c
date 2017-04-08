@@ -28,7 +28,10 @@
 int main(int argc, char** argv) {
       /* Initialisation de GTK+ */
   gtk_init (&argc, &argv);
-  lancementGUI();
+  if(argc > 1)
+	lancementGUI(argv[1]);
+	else
+	lancementGUI("0.0.0.0");
    
       /* enter the GTK main loop */
     gtk_main();

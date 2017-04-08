@@ -45,7 +45,10 @@ char tirage_local[TAILLE_TIRAGE];
 
 int selectedLetter = -1;
 
-void lancementGUI(){
+char * ip;
+
+void lancementGUI(char * ip_arg){
+	ip = ip_arg;
 	init_window();
 	init_main_container();
 	loadImage();
@@ -162,14 +165,6 @@ void createGrille (){
 				gtk_button_set_relief(GTK_BUTTON(text), GTK_RELIEF_NONE); */
 
 				image = gtk_image_new_from_pixbuf (images[26]);
-
-				event_box = gtk_event_box_new ();
-				
-				event_box_list[k] = event_box;
-
-				gtk_container_add (GTK_CONTAINER (event_box), image);
-
-				g_signal_connect (G_OBJECT (event_box),"button_press_event",G_CALLBACK (editPlateau),image);
 			}
 			else
 			{
@@ -179,6 +174,14 @@ void createGrille (){
 				
 				image = gtk_image_new_from_pixbuf (images[index]);
 			}
+	
+			event_box = gtk_event_box_new ();
+				
+			event_box_list[k] = event_box;
+
+			gtk_container_add (GTK_CONTAINER (event_box), image);
+
+			g_signal_connect (G_OBJECT (event_box),"button_press_event",G_CALLBACK (editPlateau),image);
 	
 			gtk_grid_attach(GTK_GRID(grille), event_box, j, i, 1, 1);
 			
@@ -870,7 +873,7 @@ void askConnexion(GtkButton *button, GtkWidget * input){
 	if(strlen(nom) < 1)
 		return;
 	else{
-	    initClient(&client, nom);
+	    initClient(&client, nom,ip);
 	    bind_joueur_to_session(&client, &session);
 	    connexion_joueur(&client);
 	    

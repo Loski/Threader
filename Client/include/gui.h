@@ -12,7 +12,7 @@
 	void askConnexion(GtkButton *button, GtkWidget * p_input);
 	void connexion_windows();
 	void proposerMot(GtkButton *button);
-	 void lancementGUI();
+	 void lancementGUI(char * ip);
 	void editPlateau(GtkWidget* event_box,GdkEventButton *event,gpointer data);
 	void createGrille ();
 	void selectLetter(GtkWidget* event_box,GdkEventButton *event,gpointer data);
