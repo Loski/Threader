@@ -1,5 +1,5 @@
 project(Scrabble)
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 2.8)
 #set(EXECUTABLE_OUTPUT_PATH dist/${CMAKE_BUILD_TYPE})
 #set(CMAKE_CXX_FLAGS "-Wall -Wextra -std=c++11")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 -Wall -Wextra -g")
