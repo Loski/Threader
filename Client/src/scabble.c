@@ -253,6 +253,7 @@ int handle_event(char * message_recu, Session * session){
       getMeilleurJoueur(session);
     }
     else if(strcmp(protocole, SESSION) == 0){
+		session->tour=0;
         switch_phase(session,DEB);
     }else{
         puts("bad param for handler");

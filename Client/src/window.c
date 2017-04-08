@@ -224,21 +224,23 @@ void createScoreDisplay()
 	
 	for(int i=0;i<session.nombre_joueur;i++)
 	{
+				
 		GtkWidget * name = gtk_label_new(NULL);
 		
-		gtk_widget_set_size_request(name, 100, 100);
+		gtk_widget_set_size_request(name, 100, 20);
 		
-		gtk_label_set_markup(GTK_LABEL(name),(session.p_liste_joueur)->username);
+		gtk_label_set_markup(GTK_LABEL(name),session.p_liste_joueur[i].username);
 		
-		gtk_grid_attach (GTK_GRID (scoreGrid), name, 0,0,1,1);
+		gtk_grid_attach (GTK_GRID (scoreGrid), name, 0,i,1,1);
 		
 		GtkWidget * score = gtk_label_new(NULL);
 		
 		char value[5] = "";
-		sprintf(value, "%d", (session.p_liste_joueur)->score);
+		sprintf(value, "%d",session.p_liste_joueur[i].score);
 		
 		gtk_label_set_markup(GTK_LABEL(score),value);
-		gtk_grid_attach (GTK_GRID (scoreGrid), score, 1,0,1,1);
+		
+		gtk_grid_attach (GTK_GRID (scoreGrid), score, 1,i,1,1);
 	}
 	
 	 gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scoreDisplay), GTK_POLICY_NEVER,
@@ -344,12 +346,15 @@ void createConsoleLog()
 {
     consoleArea = gtk_text_view_new();
 	GtkWidget *scwin = gtk_scrolled_window_new(NULL, NULL);
-	gtk_container_add(GTK_CONTAINER(scwin), consoleArea);
+	//gtk_container_add(GTK_CONTAINER(scwin), consoleArea);
 
 	gtk_text_view_set_editable (GTK_TEXT_VIEW(consoleArea),FALSE);
     
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scwin), GTK_POLICY_AUTOMATIC,
                                GTK_POLICY_ALWAYS);
+    
+    gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scwin), consoleArea);                           
+                            
     //This code sets the preferred size for the widget, so it does not ask for extra space
     gtk_widget_set_size_request(consoleArea, 1000, 200);
     gtk_widget_set_size_request(scwin, 500, 200);
@@ -725,6 +730,7 @@ gboolean refresh_GUI(gpointer user_data)
 		
 		if(strcmp(protocole, TOUR ) == 0){
 			logger("-------------------Début d'un nouveau tour-------------------",2);
+			refreshIAmTheBest(false);
 			refresh_tirage();
 			refresh_grille();
 			refresh_tour();
@@ -823,7 +829,7 @@ gboolean refresh_GUI(gpointer user_data)
 					}
 				}
 				else
-					logger("Personne n'a trouvé de mot",1);
+					logger("Personne n'a trouvé de mot",2);
 			}
 			createScoreDisplay();
 		}
@@ -896,12 +902,17 @@ void askConnexion(GtkButton *button, GtkWidget * input){
 	    	
 	    	print_session(&session);
 	    	
-	    	char str[80];
+	    	logger("BIENVENUE, ",0);
+			logger((client.p_joueur)->username,0);
+			logger("\t\t",0);
 	    	
-	    	strcpy(str, "BIENVENUE, ");
-			strcat(str, (client.p_joueur)->username);
+	    	logger("La session est en ",0);	    	
 	    	
-	    	logger(str,2);
+	    	if(strcmp(session.langue, "EN" ) == 0)
+				logger("Anglais",2);
+			else
+				logger("Français",2);
+			
 	    	
 	    	g_timeout_add (1000,refresh_GUI,NULL);
 	    	
