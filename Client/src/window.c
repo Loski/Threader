@@ -321,8 +321,6 @@ void createPhaseDisplay()
 	
 	strcat(tourTexte,tour);
 	
-	strcat(tourTexte," - ");
-	
 	gtk_label_set_markup(GTK_LABEL(tourDisplay), tourTexte);
 	
 	
@@ -330,6 +328,8 @@ void createPhaseDisplay()
 	setPhaseDisplay();
 	
 	gtk_widget_set_size_request(tourDisplay, 100, 10);
+	gtk_widget_set_size_request(phaseDisplay, 100, 10);
+	gtk_widget_set_size_request(timer, 100, 10);
 	
 	gtk_grid_attach(GTK_GRID(phaseGrid),tourDisplay,0,0,1,1);
 	gtk_grid_attach(GTK_GRID(phaseGrid),phaseDisplay,1,0,1,1);
@@ -351,7 +351,8 @@ void createConsoleLog()
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scwin), GTK_POLICY_AUTOMATIC,
                                GTK_POLICY_ALWAYS);
     //This code sets the preferred size for the widget, so it does not ask for extra space
-    gtk_widget_set_size_request(consoleArea, 1000, 100);
+    gtk_widget_set_size_request(consoleArea, 1000, 200);
+    gtk_widget_set_size_request(scwin, 500, 200);
     
     gtk_grid_attach (GTK_GRID (p_main_grid), scwin, 0,900,1000,50);
     
@@ -515,6 +516,10 @@ void editPlateau(GtkWidget* event_box,GdkEventButton *event,gpointer data)
 				break;
 		}
 		
+		if(plateau_local[i]!='0')
+			return;
+			
+		
 		gtk_image_set_from_pixbuf (GTK_IMAGE(plateau[i]),images[index]);
 		
 		tirage_local[selectedLetter]='_';
@@ -578,10 +583,8 @@ void logger(char * message,int newline)
 				
 	gtk_text_buffer_insert(buffer, &iter, message, -1);
 	
-	if(newline>0)
-	{
-		/* int -> nombre de \n*/
-		
+	for(int i=0;i<newline;i++)
+	{		
 		gtk_text_buffer_get_end_iter (buffer,&iter);
 	
 		gtk_text_buffer_insert(buffer, &iter, "\n", -1);
@@ -634,13 +637,15 @@ char * timeToString(int chrono)
 	
 	char minutesStr[5] = "";
 	if(minutes<10)
-		strcpy(minutesStr, "0");
-	sprintf(minutesStr, "%d\0", minutes);
+		sprintf(minutesStr, "0%d", minutes);
+	else
+		sprintf(minutesStr, "%d", minutes);
 	
 	char secondeStr[3] = "";
 	if(seconde<10)
-		strcpy(secondeStr, "0");
-	sprintf(secondeStr, "%d\0", seconde);
+		sprintf(secondeStr, "0%d", seconde);
+	else
+		sprintf(secondeStr, "%d", seconde);
 	
 	char time_val[10];
 	strcpy(time_val,minutesStr);
@@ -657,8 +662,6 @@ void refresh_tour()
 	char tourTexte[11] = "TOUR ";
 	
 	strcat(tourTexte,tour);
-	
-	strcat(tourTexte," - ");
 	
 	gtk_label_set_markup(GTK_LABEL(tourDisplay), tourTexte);
 	
@@ -721,12 +724,12 @@ gboolean refresh_GUI(gpointer user_data)
 		protocole = pp_message[0];
 		
 		if(strcmp(protocole, TOUR ) == 0){
-			logger("-----------Début d'un nouveau tour---------",1);
+			logger("-------------------Début d'un nouveau tour-------------------",2);
 			refresh_tirage();
 			refresh_grille();
 			refresh_tour();
 			saveToLocal();
-			logger("La phase de recherche débute",1);
+			logger("-------------------La phase de recherche débute-------------------",2);
 		}else if(strcmp(protocole, MEILLEUR) == 0){ 
           if(strcmp(pp_message[1], "1") == 0){ 
             refreshIAmTheBest(true); 
@@ -746,7 +749,7 @@ gboolean refresh_GUI(gpointer user_data)
 			createScoreDisplay();
 		}
 		else if(strcmp(protocole, SESSION) == 0){
-			logger("--------- Début d'une nouvelle session -------------",1);
+			logger("-------------------Début d'une nouvelle session-------------------",2);
 		}
 		else if(strcmp(protocole, RVALIDE) == 0 || strcmp(protocole, SVALIDE) == 0){
 			logger("Proposition valide",1);
@@ -770,14 +773,14 @@ gboolean refresh_GUI(gpointer user_data)
 		}
 		else if(strcmp(protocole, RFIN) == 0)
 		{
-			logger("La phase de recherche est terminée",1);
+			logger("-------------------La phase de recherche est terminée-------------------",2);
 			reset_placement();
-			logger("La phase de Soumission débute",1);
+			logger("-------------------La phase de soumission débute-------------------",2);
 		}
 		else if(strcmp(protocole, SFIN) == 0)
 		{
 			hideTirage();
-			logger("La phase de soumission est terminée",1);
+			logger("-------------------La phase de soumission est terminée-------------------",2);
 			reset_placement();
 			
 		}
@@ -828,12 +831,12 @@ gboolean refresh_GUI(gpointer user_data)
 		{			
 			if(session.meilleur_joueur.username!=NULL && session.meilleur_joueur.score>-1)
 			{
-				logger("Fin de la session",1);
+				logger("-------------------Fin de la Session-------------------",2);
 				logger("Le grand gagnant est ",0);
 				logger(session.meilleur_joueur.username,0);
 				logger(" avec ",0);
 				logger(session.meilleur_joueur.score,0);
-				logger(" points",1);
+				logger(" points",2);
 			}
 		}
 		else
@@ -898,7 +901,7 @@ void askConnexion(GtkButton *button, GtkWidget * input){
 	    	strcpy(str, "BIENVENUE, ");
 			strcat(str, (client.p_joueur)->username);
 	    	
-	    	logger(str,1);
+	    	logger(str,2);
 	    	
 	    	g_timeout_add (1000,refresh_GUI,NULL);
 	    	
