@@ -55,11 +55,19 @@ int init_session(Session * session, char * placement, char * tirage, char * list
     
     session->messages = malloc(sizeof(session->messages));
     session->messages->premier = NULL;
-    
+    session->langue[0] = 'F';
+    session->langue[1] = 'R';
+    session->langue[2] = '\0';
     session->temps = atoi(temps);
     return 1;
 }
-
+void initLangue(Session * session, char * langue){
+    if(strlen(langue) < 2)
+        return;
+    session->langue[0] = langue[0];
+    session->langue[1] = langue[1];
+    session->langue[2] = '\0';
+}
 int refresh_score(Session * session, char * liste_score){
     char **score = NULL;
     int count = split(liste_score, '*', &score);
@@ -129,7 +137,13 @@ int handle_connexion(char * message_recu, Session * session){
     if(strcmp(protocole, BIENVENUE) == 0){
         if(count < 6)
             return -1;
-        return init_session(session, pp_message[1], pp_message[2], pp_message[3],pp_message[4],pp_message[5]);
+        init_session(session, pp_message[1], pp_message[2], pp_message[3],pp_message[4],pp_message[5]);
+        if(count < 7)
+            return 1;
+        else{
+            initLangue(session, pp_message[6]);
+            return 1;
+        }
     }else if(strcmp(protocole, REFUS) == 0)
         return -2;
     return -1;

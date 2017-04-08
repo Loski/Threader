@@ -53,10 +53,11 @@ struct Session{
 
     // Fifo de messages
     File * messages;
-
+    char langue[3];
     //Mutex général pour bloquer un élément de session ou la session en elle même
     GMutex mutex;
 };
+
 
 int chercher_joueur(char * nom_joueur, Session * session);
 void bind_joueur_to_session(JoueurClient * joueur, Session * session);

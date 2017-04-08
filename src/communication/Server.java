@@ -79,7 +79,11 @@ public class Server implements Communication {
 	public void sendToAll(Protocole p, String message){
 		this.sendToAll(ProtocoleCreator.create(p, message));
 	}
-	
+	public String langueToString(){
+		if(langue == LANGUE_EN)
+			return "EN";
+		return "FR";
+	}
 	public void startServer(){	
 		Runnable serverTask = new Runnable() {
             @Override
@@ -153,7 +157,7 @@ public class Server implements Communication {
 		if(clients.size() == 1)
 			new Thread(this.session).start();
 		sc.sendMessage(ProtocoleCreator.create(Protocole.BIENVENUE, this.session.getPlateau().toString(), this.session.getTirageCourant(),
-				this.session.getScore(), this.session.getPhaseActuelleString(), String.valueOf(this.session.getTempsRestant())));
+				this.session.getScore(), this.session.getPhaseActuelleString(), String.valueOf(this.session.getTempsRestant()), this.langueToString()));
 		logger.info("Bienvenue à " + sc.getPseudo());
 	}
 	
