@@ -353,4 +353,12 @@ public class Server implements Communication {
 		
 	}
 
+	public boolean isPseudoDisponible(String string) {
+		for(ServiceClient sc: clients){
+			if(sc.getPseudo().equals(string))
+				return false;
+		}
+		return true;
+	}
+
 }

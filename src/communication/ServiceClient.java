@@ -88,11 +88,17 @@ public class ServiceClient implements Runnable{
 			 
 			if (Protocole.CONNEXION.name().equals(cmd)) {
 				try{
+					if(msgs[1] == null)
+						throw new Exception();
+					else if(!server.isPseudoDisponible(msgs[1])){
+						Server.logger.warning("Pseudonyme déjà utilisé" + msgs[1]);
+						server.refus(this);
+						return;
+					}
 					if(!this.isAuthentified){
 						this.pseudo = msgs[1];
 						this.pseudo = this.pseudo.replace(' ', '_');
 						this.isAuthentified = true;
-						System.out.println("Connexion de " + this.pseudo);
 						this.server.addClient(this);
 					}else{
 						Server.logger.warning("Tentative de reconnexion" + this.pseudo);
