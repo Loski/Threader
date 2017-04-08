@@ -10,8 +10,8 @@ public class Session implements Runnable {
 
 	// temps en mlsecondes pour chaque phase
 	public final static int TEMPS_PHASE_DE_RECHERCHE = 60 * 5 * 1000; //30sec => need 5mn
-	public final static int TEMPS_PHASE_DE_SOUMISSION = 50 * 1000; //30 seco >need 2mn
-	public final static int TEMPS_PHASE_DE_RESULTAT = 10 * 100; //10sec
+	public final static int TEMPS_PHASE_DE_SOUMISSION = 60 * 2 * 1000; //30 seco >need 2mn
+	public final static int TEMPS_PHASE_DE_RESULTAT = 10 * 1000; //10sec
 	public final static int STEP_RECHERCHE = 1;
 	public final static int STEP_SOUMISSION = 2;
 	public final static int STEP_RESULTAT = 3;
