@@ -346,12 +346,15 @@ void createConsoleLog()
 {
     consoleArea = gtk_text_view_new();
 	GtkWidget *scwin = gtk_scrolled_window_new(NULL, NULL);
-	gtk_container_add(GTK_CONTAINER(scwin), consoleArea);
+	//gtk_container_add(GTK_CONTAINER(scwin), consoleArea);
 
 	gtk_text_view_set_editable (GTK_TEXT_VIEW(consoleArea),FALSE);
     
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scwin), GTK_POLICY_AUTOMATIC,
                                GTK_POLICY_ALWAYS);
+    
+    gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scwin), consoleArea);                           
+                            
     //This code sets the preferred size for the widget, so it does not ask for extra space
     gtk_widget_set_size_request(consoleArea, 1000, 200);
     gtk_widget_set_size_request(scwin, 500, 200);
