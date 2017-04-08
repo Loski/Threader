@@ -126,11 +126,11 @@ public class PlateauServer extends Plateau {
 			if(!bienPlace)*/
 			
 		}
-		if(words.isEmpty()){
+		/*if(words.isEmpty()){
 			throw new ExceptionPlateau("Aucun mot trouvé", "POS");
 
-		}
-		if(words.get(0).length()<=points.size())
+		}*/
+		if(words.isEmpty() || words.get(0).length()<=points.size())
 			throw new ExceptionPlateau("Les lettres ne complètent pas un mot", "POS");
 		
 		System.out.println("WORD:"+words);
