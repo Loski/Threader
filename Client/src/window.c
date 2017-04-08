@@ -38,6 +38,8 @@ GtkWidget * tourDisplay;
 GtkWidget * phaseDisplay;
 GtkWidget * timer;
 
+GtkWidget * MeilleurMot;
+
 char plateau_local[TAILLE_PLATEAU*TAILLE_PLATEAU];
 char tirage_local[TAILLE_TIRAGE];
 
@@ -277,8 +279,12 @@ void createTirageDisplay()
 		gtk_grid_attach(GTK_GRID(tirageDisplay), event_box, i, 0, 1, 1);
 		
 	}
-		
+	
+	MeilleurMot = gtk_label_new(NULL);
+	gtk_label_set_markup(GTK_LABEL(MeilleurMot), "Meilleur mot [ ]");
+	
 	gtk_grid_attach (GTK_GRID (p_main_grid), tirageDisplay, 0,600,1000,100);
+	gtk_grid_attach (GTK_GRID (p_main_grid), MeilleurMot, 0,800,200,100);
 	gtk_widget_show_all (p_window);
 }
 
@@ -686,8 +692,13 @@ void timer_decrement()
 }
 
 void refreshIAmTheBest(bool imthebest){
-
+	
+	if(imthebest)
+		gtk_label_set_markup(GTK_LABEL(MeilleurMot), "Meilleur mot [X]");
+	else
+		gtk_label_set_markup(GTK_LABEL(MeilleurMot), "Meilleur mot [ ]");
 }
+
 gboolean refresh_GUI(gpointer user_data)
 {	
 	char * message = get_message(session.messages, &session);
@@ -717,7 +728,7 @@ gboolean refresh_GUI(gpointer user_data)
 			saveToLocal();
 			logger("La phase de recherche débute",1);
 		}else if(strcmp(protocole, MEILLEUR) == 0){ 
-          if(strcmp(pp_message[1], "0") == 0){ 
+          if(strcmp(pp_message[1], "1") == 0){ 
             refreshIAmTheBest(true); 
           }else{ 
             refreshIAmTheBest(false); 
