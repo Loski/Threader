@@ -44,7 +44,7 @@ struct JoueurClient{
 
 #include "scrabble.h"
 
-void initClient(JoueurClient * joueur, char * name);
+void initClient(JoueurClient * joueur, char * name,char * ip);
 void initJoueur(Joueur * joueur, char * name);
 int supprimerJoueur(char * nom_joueur, Session * session);
 int connexion_nouveau_joueur(Session *session, char * nom_joueur);
