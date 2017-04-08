@@ -224,21 +224,23 @@ void createScoreDisplay()
 	
 	for(int i=0;i<session.nombre_joueur;i++)
 	{
+				
 		GtkWidget * name = gtk_label_new(NULL);
 		
-		gtk_widget_set_size_request(name, 100, 100);
+		gtk_widget_set_size_request(name, 100, 20);
 		
-		gtk_label_set_markup(GTK_LABEL(name),(session.p_liste_joueur)->username);
+		gtk_label_set_markup(GTK_LABEL(name),session.p_liste_joueur[i].username);
 		
-		gtk_grid_attach (GTK_GRID (scoreGrid), name, 0,0,1,1);
+		gtk_grid_attach (GTK_GRID (scoreGrid), name, 0,i,1,1);
 		
 		GtkWidget * score = gtk_label_new(NULL);
 		
 		char value[5] = "";
-		sprintf(value, "%d", (session.p_liste_joueur)->score);
+		sprintf(value, "%d",session.p_liste_joueur[i].score);
 		
 		gtk_label_set_markup(GTK_LABEL(score),value);
-		gtk_grid_attach (GTK_GRID (scoreGrid), score, 1,0,1,1);
+		
+		gtk_grid_attach (GTK_GRID (scoreGrid), score, 1,i,1,1);
 	}
 	
 	 gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scoreDisplay), GTK_POLICY_NEVER,
