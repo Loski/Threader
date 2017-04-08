@@ -1,0 +1,3 @@
+Lancer le serveur avec java -jar ScrabbleServeur <langue>
+
+Pour le client, lancer cmake. puis make et ./client.
