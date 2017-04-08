@@ -220,9 +220,6 @@ public class Plateau {
 			}
 			return str;
 	}*/
-	   public static void main (String[] args){
-		   System.out.println(new Plateau(15));
-	}
 
 
 	public List<String> getMy_word() {
@@ -241,31 +238,6 @@ public class Plateau {
 		this.score = score;
 	}
 	
-	public static boolean isRealWord(String s){
-		   URL url;
-		   HttpURLConnection urlConnection = null;
-		   BufferedReader input;
-		   String ligne;
-		   String xml ="";
-		try {
-			url = new URL("http://www.wordgamedictionary.com/api/v1/references/scrabble/"+s+"?key=9.320519842586974e29");
-		    urlConnection = (HttpURLConnection) url.openConnection();
-		     input = new BufferedReader(new InputStreamReader(new BufferedInputStream(urlConnection.getInputStream())));
-		     while ((ligne=input.readLine())!=null){
-				xml+=ligne;
-			}		     
-		}catch(MalformedURLException e){} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-		     urlConnection.disconnect();
-		   }
-
-		return parse(xml);	
-	}
-	public static boolean parse(String xml){
-		return xml.contains("<scrabble>1</scrabble>");
-	}
 	
 	public  int calculScore(List<String> liste, Alphabet liste_letter) {
 		int score = 0;

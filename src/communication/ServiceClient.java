@@ -90,6 +90,7 @@ public class ServiceClient implements Runnable{
 				try{
 					if(!this.isAuthentified){
 						this.pseudo = msgs[1];
+						this.pseudo = this.pseudo.replace(' ', '_');
 						this.isAuthentified = true;
 						System.out.println("Connexion de " + this.pseudo);
 						this.server.addClient(this);
@@ -146,7 +147,7 @@ public class ServiceClient implements Runnable{
 		
 		public void gestionPlateauValide(List<String> str, Plateau plateau_tmp) throws ExceptionPlateau{
 			for(String s: str){
-				if(!Plateau.isRealWord(s)){
+				if(!server.getSession().isRealWord(s)){
 					throw new ExceptionPlateau("Mot non présent dans la langue anglaise : " + s, "DIC");
 				}
 			}

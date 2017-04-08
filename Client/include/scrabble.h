@@ -31,17 +31,30 @@ typedef struct FIFO FIFO;
 #include <gtk/gtk.h>
 
 typedef struct Session Session;
+
+// Structure de données d'une session de jeu
 struct Session{
     int tour;
     char plateau[TAILLE_PLATEAU * TAILLE_PLATEAU];
+    // Liste des joueurs connectée
     Joueur * p_liste_joueur;
-    char tirage[TAILLE_TIRAGE];
     int nombre_joueur;
+
+    //Pointeur vers le client joueur.
     JoueurClient * p_client;
+
+
+    //tirage en cours
+    char tirage[TAILLE_TIRAGE];
     int phase;
     int temps;
     Joueur meilleur_joueur;
+
+
+    // Fifo de messages
     File * messages;
+
+    //Mutex général pour bloquer un élément de session ou la session en elle même
     GMutex mutex;
 };
 

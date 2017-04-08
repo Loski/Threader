@@ -28,11 +28,19 @@ struct Joueur
     char * username;
     int score;
 };
+
+// Structure de donnée représentant le joueur qui joue sur ce client.
 struct JoueurClient{
+	//Thread pour recevoir les données
     GThread * input;
+    //socket lié au serveur
     socket_t socket;
+    //Pour accéder rapidement au information du joueur
     Joueur * p_joueur;
 };
+
+
+
 
 #include "scrabble.h"
 

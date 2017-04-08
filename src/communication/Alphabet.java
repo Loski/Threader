@@ -32,6 +32,7 @@ public class Alphabet {
     private List<Letter> tirage_courant;
     private List<Letter> liste_all_letter;
     public static int taille_tirage;
+    public static ArrayList<String> liste_mot;
 	private Random generator;
 
 	
@@ -39,7 +40,6 @@ public class Alphabet {
 		Alphabet.taille_tirage = tailleTirage;
 		tirage_courant = new ArrayList<Letter>();
 		liste_all_letter = new ArrayList<Letter>();
-
 		generator = new Random();
 		try{
 			InputStream flux=new FileInputStream("ressource/alphabet.txt"); 

@@ -5,10 +5,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.logging.FileHandler;
-import java.util.logging.Formatter;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
 
@@ -17,17 +14,23 @@ import protocole.ProtocoleCreator;
 
 public class Server implements Communication {
 	
-	 
+    public static final int LANGUE_FR = 0;
+    public static final int LANGUE_EN = 1;
 	public final static int port = 2017;
 	private ServerSocket serverSocket;
 	private ArrayList<ServiceClient> clients;
     private Session session;
     public static Logger logger = Logger.getLogger(Server.class.getName());
     public final static Object obj = new Object();
-    
-	public Server(){
+    public  int langue;
+
+	public Server(String args){
+		if(args.equals("en")){
+			langue = LANGUE_EN;
+		}else{
+			langue = LANGUE_FR;
+		}
 		this.clients = new ArrayList<>();
-		this.session = new Session(clients, this);
 		Handler fh = null; 
 		try {
 			fh = new FileHandler("TestLogging.log");
@@ -36,6 +39,7 @@ public class Server implements Communication {
 			e.printStackTrace();
 		}
 		logger.addHandler(fh);
+		this.session = new Session(clients, this, langue);
 		this.startServer();
 	}
 	
@@ -138,11 +142,14 @@ public class Server implements Communication {
 	}
 	
 	public static void main (String[] args){
-		   new Server();
+		if(args.length > 0)
+		   new Server(args[0]);
+		else
+			new Server("fr");
 	}
 	
 	@Override
-	public void bienvenue(ServiceClient sc){
+	public synchronized void bienvenue(ServiceClient sc){
 		if(clients.size() == 1)
 			new Thread(this.session).start();
 		sc.sendMessage(ProtocoleCreator.create(Protocole.BIENVENUE, this.session.getPlateau().toString(), this.session.getTirageCourant(),
@@ -150,6 +157,14 @@ public class Server implements Communication {
 		logger.info("Bienvenue à " + sc.getPseudo());
 	}
 	
+    
+	public int getLangue() {
+		return langue;
+	}
+
+	public void setLangue(int langue) {
+		this.langue = langue;
+	}
 	@Override
 	public void deconnexion(ServiceClient sc) {
 		// TODO Auto-generated method stub
