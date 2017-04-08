@@ -310,7 +310,7 @@ public class Server implements Communication {
 
 	public void gestionFinDeTour() {
 		for(ServiceClient sc: clients){
-			sc.setScore(sc.getScore() + sc.getPlateau().getScore());
+			sc.ajouterScore();
 		}
 		if(session.getListe_letters().canTirage()){
 			try {
@@ -339,7 +339,6 @@ public class Server implements Communication {
 	public void resetPlayer() {
 		session.getPlateau().reset();
 		for(ServiceClient sc: this.clients){
-			sc.ajouterScore();
 			sc.setPlateau(new Plateau(session.getPlateau()));
 		}
 		

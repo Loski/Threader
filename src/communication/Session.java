@@ -67,6 +67,7 @@ public class Session implements Runnable {
 					this.debut_phase = System.currentTimeMillis();
 				break;
 				case STEP_RECHERCHE:
+					tour++;
 					this.server.tour();
 					this.debut_phase = System.currentTimeMillis();
 					synchronized(Server.obj){
@@ -97,7 +98,6 @@ public class Session implements Runnable {
 					this.debut_phase = System.currentTimeMillis();
 					server.gestionFinDeTour();
 					this.server.bilan();
-					tour++;
 					if(plateau.hadWiner())
 						setPlateau(new PlateauServer(plateau.getMeilleur_joueur().getPlateau()));
 					server.resetPlayer();

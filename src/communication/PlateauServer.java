@@ -41,7 +41,7 @@ public class PlateauServer extends Plateau {
 	
 	public ArrayList<String> getWordOfFirstTurn(Plateau plateau_joueur) throws ExceptionPlateau
 	{
-		List<Point> points = getLettresJouees(plateau_joueur);
+		List<Point> points = verificationAlignement(plateau_joueur);
 		ArrayList<String> words = new ArrayList<String>();
 		
 		int alignement = getOrientation(points);
@@ -54,7 +54,6 @@ public class PlateauServer extends Plateau {
 		{
 			words.add(""+plateau_joueur.plateau[points.get(0).x][points.get(0).y]);
 		}
-		
 		return words;
 	}
 	

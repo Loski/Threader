@@ -148,7 +148,7 @@ public class ServiceClient implements Runnable{
 		public void gestionPlateauValide(List<String> str, Plateau plateau_tmp) throws ExceptionPlateau{
 			for(String s: str){
 				if(!server.getSession().isRealWord(s)){
-					throw new ExceptionPlateau("Mot non présent dans la langue anglaise : " + s, "DIC");
+					throw new ExceptionPlateau("Mot non présent dans la langue" + server.getLangue() + " : " + s, "DIC");
 				}
 			}
 			int score = plateau_tmp.calculScore(str, server.getSession().getListe_letters());
